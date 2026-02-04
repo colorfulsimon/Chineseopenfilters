@@ -38,6 +38,13 @@ import main_directory
 import simple_parser
 import units
 
+try:
+	import builtins
+except ImportError:  # pragma: no cover - Python 2 fallback
+	import __builtin__ as builtins
+if not hasattr(builtins, "_"):
+	builtins._ = lambda text: text
+
 
 
 # The various models for the optical properties.
@@ -48,12 +55,12 @@ SELLMEIER = 3
 
 
 # A few useful dictionaries.
-KINDS = {MATERIAL_REGULAR: "Regular",
-         MATERIAL_MIXTURE: "Mixture"}
-MODELS = {CONSTANT: "Constant",
-          CAUCHY: "Cauchy",
-          TABLE: "Table",
-          SELLMEIER: "Sellmeier"}
+KINDS = {MATERIAL_REGULAR: builtins._("Regular"),
+         MATERIAL_MIXTURE: builtins._("Mixture")}
+MODELS = {CONSTANT: builtins._("Constant"),
+          CAUCHY: builtins._("Cauchy"),
+          TABLE: builtins._("Table"),
+          SELLMEIER: builtins._("Sellmeier")}
 
 
 # The material directory is relative to the filters directory.
@@ -76,9 +83,9 @@ class material_error(Exception):
 	
 	def __str__(self):
 		if self.value:
-			return "Material error (%s): %s." % (self.name, self.value)
+			return builtins._("Material error (%s): %s.") % (self.name, self.value)
 		else:
-			return "Material error (%s)." % self.name
+			return builtins._("Material error (%s).") % self.name
 
 
 
@@ -93,7 +100,7 @@ class material_does_not_exist_error(material_error):
 	
 	def __init__(self, name):
 		self.name = name
-		self.value = "Material does not exist"
+		self.value = builtins._("Material does not exist")
 
 class material_parsing_error(material_error):
 	"""An exception derived class for material with malformed files."""
@@ -1989,8 +1996,8 @@ def parse_material(name, lines):
 	
 	try:
 		keywords, values = simple_parser.parse(lines)
-	except simple_parser.parsing_error, error:
-		raise material_parsing_error("Cannot parse material because %s" % error.get_value())
+	except simple_parser.parsing_error as error:
+		raise material_parsing_error(builtins._("Cannot parse material because %s") % error.get_value())
 	
 	description = None
 	kind = None
@@ -2009,89 +2016,89 @@ def parse_material(name, lines):
 		# The description is an arbitrary single line text.
 		if keyword == "Description":
 			if description is not None:
-				raise material_parsing_error(name, "Multiple description in material")
+				raise material_parsing_error(name, builtins._("Multiple description in material"))
 			if isinstance(value, list):
-				raise material_parsing_error(name, "Description must be on a single line")
+				raise material_parsing_error(name, builtins._("Description must be on a single line"))
 			description = value
 		
 		# The kind of material is regular or mixture.
 		elif keyword == "Kind":
 			if kind is not None:
-				raise material_parsing_error(name, "Multiple definition in material")
+				raise material_parsing_error(name, builtins._("Multiple definition in material"))
 			if isinstance(value, list):
-				raise material_parsing_error(name, "Kind must be on a single line")
+				raise material_parsing_error(name, builtins._("Kind must be on a single line"))
 			kind = value.upper()
 			if not (kind == "REGULAR" or kind == "MIXTURE"):
-				raise material_parsing_error(name, "Kind must be regular or mixture")
+				raise material_parsing_error(name, builtins._("Kind must be regular or mixture"))
 		
 		# The model is constant, Cauchy or table.
 		elif keyword == "Model":
 			if model is not None:
-				raise material_parsing_error(name, "Multiple definition in material")
+				raise material_parsing_error(name, builtins._("Multiple definition in material"))
 			if isinstance(value, list):
-				raise material_parsing_error(name, "Model must be on a single line")
+				raise material_parsing_error(name, builtins._("Model must be on a single line"))
 			model = value.upper()
 			if not (model == "CONSTANT" or model == "CAUCHY" or model == "SELLMEIER" or model == "TABLE"):
-				raise material_parsing_error(name, "Unknown material model!")
+				raise material_parsing_error(name, builtins._("Unknown material model!"))
 		
 		# The properties come in multiple format and the specific
 		# verifications are done later.
 		elif keyword == "Properties":
 			if properties is not None:
-				raise material_parsing_error(name, "Multiple definition in material")
+				raise material_parsing_error(name, builtins._("Multiple definition in material"))
 			properties = value
 	
 		# The rate is a single float.
 		elif keyword == "Rate":
 			if rates is not None:
-				raise material_parsing_error(name, "Multiple definition in material")
+				raise material_parsing_error(name, builtins._("Multiple definition in material"))
 			if isinstance(value, list):
-				raise material_parsing_error(name, "Rate must be on a single line")
+				raise material_parsing_error(name, builtins._("Rate must be on a single line"))
 			try:
 				rates = float(value)
 			except ValueError:
-				raise material_parsing_error(name, "Rate must be a float")
+				raise material_parsing_error(name, builtins._("Rate must be a float"))
 	
 		# Rates are a list of floats.
 		elif keyword == "Rates":
 			if rates is not None:
-				raise material_parsing_error(name, "Multiple definition in material")
+				raise material_parsing_error(name, builtins._("Multiple definition in material"))
 			if isinstance(value, list):
-				raise material_parsing_error(name, "Rates must be on a single line")
+				raise material_parsing_error(name, builtins._("Rates must be on a single line"))
 			elements = value.split()
 			rates = []
 			for element in elements:
 				try:
 					rate = float(element)
 				except ValueError:
-					raise material_parsing_error(name, "Rates must be floats")
+					raise material_parsing_error(name, builtins._("Rates must be floats"))
 				rates.append(rate)
 		
 		# Constants are parameters that are kept constant during the
 		# deposition. Regular material only have constants.
 		elif keyword == "Constants":
 			if not isinstance(value, list):
-				raise material_parsing_error(name, "Constants must be on multiple line")
+				raise material_parsing_error(name, builtins._("Constants must be on multiple line"))
 			for line in value:
 				elements = line.split(":")
 				if len(elements) != 2:
-					raise material_parsing_error(name, "Constants must contain one description and one value")
+					raise material_parsing_error(name, builtins._("Constants must contain one description and one value"))
 				constants.append(elements[0].strip())
 				try:
 					constant_value = float(elements[1])
 				except ValueError:
-					raise material_parsing_error(name, "Constants values must be floats")
+					raise material_parsing_error(name, builtins._("Constants values must be floats"))
 				constant_values.append(constant_value)
 		
 		# Variables are parameters that are varied during the deposition of
 		# mixtures.
 		elif keyword == "Variables":
 			if not isinstance(value, list):
-				raise material_parsing_error(name, "Variables must be on multiple line")
+				raise material_parsing_error(name, builtins._("Variables must be on multiple line"))
 			for line in value:
 				elements = line.split(":")
 				if len(elements) != 2:
-					raise material_parsing_error(name, "Variables must contain one description and a list of values")
+					raise material_parsing_error(name, builtins._("Variables must contain one description and a list of values"))
 				variables.append(elements[0].strip())
 				variable_values_ = []
 				sub_elements = elements[1].split()
@@ -2099,37 +2106,37 @@ def parse_material(name, lines):
 					try:
 						variable_value = float(sub_element)
 					except ValueError:
-						raise material_parsing_error(name, "Variable values must be floats")
+						raise material_parsing_error(name, builtins._("Variable values must be floats"))
 					variable_values_.append(variable_value)
 				variable_values.append(variable_values_)
 		
 		else:
-			raise material_parsing_error(name, "Unknown keyword %s" % keyword)
+			raise material_parsing_error(name, builtins._("Unknown keyword %s") % keyword)
 	
 	if kind is None or model is None or properties is None:
-		raise material_parsing_error(name, "Missing information")
+		raise material_parsing_error(name, builtins._("Missing information"))
 	
 	for value in constant_values:
 		if isinstance(value, list):
-			raise material_parsing_error(name, "A single value is necessary for constants")
+			raise material_parsing_error(name, builtins._("A single value is necessary for constants"))
 	
 	if kind == "REGULAR":
 		if isinstance(rates, list):
-			raise material_parsing_error(name, "A single rate is necessary for regular material")
+			raise material_parsing_error(name, builtins._("A single rate is necessary for regular material"))
 		if variables:
-			raise material_parsing_error(name, "Regular material cannot have variables")
+			raise material_parsing_error(name, builtins._("Regular material cannot have variables"))
 	
 	else:
 		if rates is not None:
 			if not isinstance(rates, list):
-				raise material_parsing_error(name, "A list of rates must be provided for mixtures")
+				raise material_parsing_error(name, builtins._("A list of rates must be provided for mixtures"))
 			if len(rates) != len(properties):
-				raise material_parsing_error(name, "The number of rates must be equal to the number of properties")
+				raise material_parsing_error(name, builtins._("The number of rates must be equal to the number of properties"))
 			for values in variable_values:
 				if not isinstance(values, list):
-					raise material_parsing_error(name, "Variable values must be lists")
+					raise material_parsing_error(name, builtins._("Variable values must be lists"))
 				if len(values) != len(properties):
-					raise material_parsing_error(name, "The number of variable values must be equal to the number of properties")
+					raise material_parsing_error(name, builtins._("The number of variable values must be equal to the number of properties"))
 	
 	# Analyse the properties according to the kind and model of material.
 	if kind == "REGULAR":
@@ -2138,7 +2145,7 @@ def parse_material(name, lines):
 			try:
 				N = complex(properties)
 			except ValueError:
-				raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+				raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 		
 		elif model == "TABLE":
 			wvls = []
@@ -2146,12 +2153,12 @@ def parse_material(name, lines):
 			for line in properties:
 				elements = line.split()
 				if len(elements) != 2:
-					raise material_parsing_error(name, "Invalid property format (%s)" % line)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % line)
 				try:
 					wvls.append(float(elements[0]))
 					N.append(complex(elements[1]))
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)" % line)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % line)
 		
 		elif model == "CAUCHY":
 			parameters = properties.split()
@@ -2164,7 +2171,7 @@ def parse_material(name, lines):
 					exponent = 1.0
 					edge = 4000.0
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 			elif len(parameters) == 6:
 				try:
 					A = float(parameters[0])
@@ -2174,9 +2181,9 @@ def parse_material(name, lines):
 					exponent = float(parameters[4])
 					edge = float(parameters[5])
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 			else:
-				raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+				raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 		
 		elif model == "SELLMEIER":
 			parameters = properties.split()
@@ -2192,7 +2199,7 @@ def parse_material(name, lines):
 					exponent = 1.0
 					edge = 4000.0
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 			elif len(parameters) == 9:
 				try:
 					B1 = float(parameters[0])
@@ -2205,26 +2212,26 @@ def parse_material(name, lines):
 					exponent = float(parameters[7])
 					edge = float(parameters[8])
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 			else:
-				raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+				raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 	
 	else:
 		if model == "CONSTANT":
 			nb_mixtures = len(properties)
 			if nb_mixtures < 2:
-				raise material_parsing_error(name, "Invalid property format (there must be at least 2 mixtures)")
+				raise material_parsing_error(name, builtins._("Invalid property format (there must be at least 2 mixtures)"))
 			X = [0]*nb_mixtures
 			N = [0.0+0.0j]*nb_mixtures
 			for i in range(nb_mixtures):
 				parameters = properties[i].split()
 				if len(parameters) != 2:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 				try:
 					X[i] = int(parameters[0])
 					N[i] = complex(parameters[1])
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties)
 		
 		elif model == "TABLE":
 			# The first line represents the mixtures.
@@ -2234,7 +2241,7 @@ def parse_material(name, lines):
 			# The other lines are one by wavelength.
 			nb_wvls = len(properties)
 			if nb_mixtures < 2 or nb_wvls < 2:
-				raise material_parsing_error(name, "Invalid property format (there must be at least 2 mixtures and 2 wavelengths)")
+				raise material_parsing_error(name, builtins._("Invalid property format (there must be at least 2 mixtures and 2 wavelengths)"))
 			X = [0]*nb_mixtures
 			wvls = [0.0]*nb_wvls
 			N = [None]*nb_mixtures
@@ -2244,22 +2251,22 @@ def parse_material(name, lines):
 				try:
 					X[i_mix] = int(mixtures[i_mix])
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)", mixtures)
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)"), mixtures)
 			for i_wvl in range(nb_wvls):
 				parameters = properties[i_wvl].split()
 				if len(parameters) != nb_mixtures+1:
-					raise material_parsing_error(name, "Invalid property format (%s)", properties[i_wvl])
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)"), properties[i_wvl])
 				try:
 					wvls[i_wvl] = float(parameters[0])
 					for i_mix in range(nb_mixtures):
 						N[i_mix][i_wvl] = complex(parameters[1+i_mix])
 				except ValueError:
-					raise material_parsing_error(name, "Invalid property format (%s)", properties[i_wvl])
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)"), properties[i_wvl])
 		
 		elif model == "CAUCHY":
 			nb_mixtures = len(properties)
 			if nb_mixtures < 2:
-				raise material_parsing_error(name, "Invalid property format (there must be at least 2 mixtures)")
+				raise material_parsing_error(name, builtins._("Invalid property format (there must be at least 2 mixtures)"))
 			X = [0]*nb_mixtures
 			A = [0.0]*nb_mixtures
 			B = [0.0]*nb_mixtures
@@ -2276,7 +2283,7 @@ def parse_material(name, lines):
 						B[i] = float(parameters[2])
 						C[i] = float(parameters[3])
 					except ValueError:
-						raise material_parsing_error(name, "Invalid property format (%s)" % properties[i])
+						raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties[i])
 				elif len(parameters) == 7:
 					try:
 						X[i] = int(parameters[0])
@@ -2287,15 +2294,15 @@ def parse_material(name, lines):
 						exponent[i] = float(parameters[5])
 						edge[i] = float(parameters[6])
 					except ValueError:
-						raise material_parsing_error(name, "Invalid property format (%s)" % properties[i])
+						raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties[i])
 				else:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties[i])
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties[i])
 		
 		elif model == "SELLMEIER":
 			nb_mixtures = len(properties)
 			# It takes 3 points to define a spline
 			if nb_mixtures < 2:
-				raise material_parsing_error(name, "Invalid property format (there must be at least 2 mixtures)")
+				raise material_parsing_error(name, builtins._("Invalid property format (there must be at least 2 mixtures)"))
 			X = [0]*nb_mixtures
 			B1 = [0.0]*nb_mixtures
 			C1 = [0.0]*nb_mixtures
@@ -2318,7 +2325,7 @@ def parse_material(name, lines):
 						B3[i] = float(parameters[5])
 						C3[i] = float(parameters[6])
 					except ValueError:
-						raise material_parsing_error(name, "Invalid property format (%s)" % properties[i])
+						raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties[i])
 				elif len(parameters) == 10:
 					try:
 						X[i] = int(parameters[0])
@@ -2332,12 +2339,12 @@ def parse_material(name, lines):
 						exponent[i] = float(parameters[8])
 						edge[i] = float(parameters[9])
 					except ValueError:
-						raise material_parsing_error(name, "Invalid property format (%s)" % properties[i])
+						raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties[i])
 				else:
-					raise material_parsing_error(name, "Invalid property format (%s)" % properties[i])
+					raise material_parsing_error(name, builtins._("Invalid property format (%s)") % properties[i])
 		
 		if X[0] != 0:
-			raise material_parsing_error(name, "Invalid property format (first mixture number must be 0)")
+			raise material_parsing_error(name, builtins._("Invalid property format (first mixture number must be 0)"))
 	
 	# Create the appropriate class.
 	if kind == "REGULAR":
@@ -2642,7 +2649,7 @@ def import_material(filename, name, description, nb_header_lines, wavelength_uni
 	try:
 		file = open(filename, "r")
 	except IOError:
-		raise material_error(name, "Impossible to open the file")
+		raise material_error(name, builtins._("Impossible to open the file"))
 	
 	# Read the file
 	lines = file.readlines()
@@ -2665,12 +2672,12 @@ def import_material(filename, name, description, nb_header_lines, wavelength_uni
 		elements = line.split(None, 1)
 		
 		if len(elements) != 2:
-			raise material_parsing_error("Line %i of the file is formatted incorectly" % (i+1))
+			raise material_parsing_error(builtins._("Line %i of the file is formatted incorectly") % (i+1))
 		
 		try:
 			wvls.append(float(elements[0]))
 		except ValueError:
-			raise material_parsing_error("Line %i of the file is formatted incorectly" % (i+1))
+			raise material_parsing_error(builtins._("Line %i of the file is formatted incorectly") % (i+1))
 		
 		s = elements[1].strip()
 		
@@ -2701,7 +2708,7 @@ def import_material(filename, name, description, nb_header_lines, wavelength_uni
 		try:
 			values.append(complex(s))
 		except ValueError:
-			raise material_parsing_error("Line %i of the file is formatted incorectly" % (i+1))
+			raise material_parsing_error(builtins._("Line %i of the file is formatted incorectly") % (i+1))
 	
 	for i in range(len(values)):
 		# Convert wavelength to nanometers.
@@ -2717,7 +2724,7 @@ def import_material(filename, name, description, nb_header_lines, wavelength_uni
 	
 	# Make sure there are enough points for the spline.
 	if len(wvls) < 3:
-		raise material_parsing_error("The refractive index must be defined at least at 3 wavelengths")
+		raise material_parsing_error(builtins._("The refractive index must be defined at least at 3 wavelengths"))
 	
 	# Sort in order of wavelength
 	wvls, values = zip(*sorted(zip(wvls, values)))
@@ -2725,7 +2732,7 @@ def import_material(filename, name, description, nb_header_lines, wavelength_uni
 	# Make sure there is no repeated wavelength values.
 	for i in range(len(wvls)-1):
 		if wvls[i+1] == wvls[i]:
-			raise material_parsing_error("The refractive index is defined multiple times at the same wavelength")
+			raise material_parsing_error(builtins._("The refractive index is defined multiple times at the same wavelength"))
 	
 	new_material = material_table()
 	new_material.set_name(name)

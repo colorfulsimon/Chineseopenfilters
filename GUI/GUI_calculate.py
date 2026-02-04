@@ -30,7 +30,7 @@ from definitions import *
 import config
 import color
 
-from GUI_validators import float_validator,\
+from .GUI_validators import float_validator,\
                            illuminant_validator,\
                            observer_validator
 

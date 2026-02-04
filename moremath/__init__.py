@@ -32,17 +32,17 @@ except ImportError:
 
 # If the importation of the dll failed, load the Python versions.
 if moremath_dll_import_failed:
-	import Levenberg_Marquardt
-	import QR
-	import roots
+	from . import Levenberg_Marquardt
+	from . import QR
+	from . import roots
 
 # Those modules are not implemented in C.
-import Gauss_Jordan
-import integration
-import interpolation
-import least_squares
-import limits
-import linear_algebra
+from . import Gauss_Jordan
+from . import integration
+from . import interpolation
+from . import least_squares
+from . import limits
+from . import linear_algebra
 
 
 

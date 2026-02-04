@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Filters.py
 # 
 # Main routine for OpenFilters.
@@ -25,12 +26,28 @@
 
 import os
 
+try:
+	import builtins
+except ImportError:  # pragma: no cover - Python 2 fallback
+	import __builtin__ as builtins
+if not hasattr(builtins, "_"):
+	builtins._ = lambda text: text
+
 import config
+import i18n
 import localize
 import user_config
 
 import GUI
 
+
+
+# Initialize i18n before any GUI text is created.
+def init_i18n():
+	# 根据 user_config 初始化语言
+	i18n.init_from_config()
+	# 将 i18n._ 安装到 builtins._，后续所有模块可以直接使用 _("Text")
+	i18n.install_builtin()
 
 
 ########################################################################
@@ -57,6 +74,8 @@ def run(interface):
 
 
 if __name__ == "__main__":
+	# Initialize i18n before any user-visible text is created.
+	init_i18n()
 	
 	# Allow setting of the user material directory through a command-line
 	# argument. This way allows a workaroud for people on OSs where the
@@ -70,12 +89,12 @@ if __name__ == "__main__":
 		def directory_type(directory):
 			directory = os.path.abspath(directory)
 			if not os.path.isdir(directory):
-				raise argparse.ArgumentTypeError("%s is not a directory" % directory)
+				raise argparse.ArgumentTypeError(builtins._("%s is not a directory") % directory)
 			if not os.access(directory, os.R_OK):
-				raise argparse.ArgumentTypeError("%s is not readable" % directory)
+				raise argparse.ArgumentTypeError(builtins._("%s is not readable") % directory)
 			return directory
 		parser = argparse.ArgumentParser()
-		parser.add_argument("-u", "--user_material_directory", metavar='DIRECTORY', help = "change the user material directory", type = directory_type)
+		parser.add_argument("-u", "--user_material_directory", metavar='DIRECTORY', help = builtins._("change the user material directory"), type = directory_type)
 		args = parser.parse_args()
 		
 		if args.user_material_directory:

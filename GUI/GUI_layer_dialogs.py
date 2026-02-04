@@ -23,13 +23,14 @@
 
 
 
+import builtins
 import wx
 
 from definitions import *
 import materials
 import graded
 
-from GUI_validators import int_validator, float_validator, material_validator
+from .GUI_validators import int_validator, float_validator, material_validator
 
 
 ADD = 0
@@ -220,19 +221,19 @@ class layer_dialog(wx.Dialog):
 		
 		self.side_only = side_only
 		
-		position_static_box = wx.StaticBox(self, -1, "Side/Position" )
+		position_static_box = wx.StaticBox(self, -1, builtins._("Side/Position") )
 		
 		position_box_sizer = wx.BoxSizer(wx.VERTICAL)
 		
 		# Adding radio buttons for the side.
-		self.front_button = wx.RadioButton(self, -1, "front", style = wx.RB_GROUP)
-		self.back_button = wx.RadioButton(self, -1, "back")
+		self.front_button = wx.RadioButton(self, -1, builtins._("front"), style = wx.RB_GROUP)
+		self.back_button = wx.RadioButton(self, -1, builtins._("back"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_side_radio_button, self.front_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_side_radio_button, self.back_button)
 		
 		position_box_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		position_box_sizer_1.Add(wx.StaticText(self, -1, "Side:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		position_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Side:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		position_box_sizer_1.Add(self.front_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		position_box_sizer_1.Add(self.back_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
@@ -241,9 +242,9 @@ class layer_dialog(wx.Dialog):
 		# Adding radio buttons and a text box for specifying the
 		# position.
 		if not self.side_only:
-			self.top_button = wx.RadioButton(self, -1, "top", style = wx.RB_GROUP)
-			self.bottom_button = wx.RadioButton(self, -1, "bottom")
-			self.other_position_button = wx.RadioButton(self, -1, "at position ")
+			self.top_button = wx.RadioButton(self, -1, builtins._("top"), style = wx.RB_GROUP)
+			self.bottom_button = wx.RadioButton(self, -1, builtins._("bottom"))
+			self.other_position_button = wx.RadioButton(self, -1, builtins._("at position "))
 			self.other_position_box = wx.TextCtrl(self, -1, "", validator = int_validator(condition = self.other_position_button.GetValue))
 			self.Bind(wx.EVT_RADIOBUTTON, self.on_position_radio_button, self.top_button)
 			self.Bind(wx.EVT_RADIOBUTTON, self.on_position_radio_button, self.bottom_button)
@@ -253,7 +254,7 @@ class layer_dialog(wx.Dialog):
 			
 			position_box_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 			
-			position_box_sizer_2.Add(wx.StaticText(self, -1, "Position:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+			position_box_sizer_2.Add(wx.StaticText(self, -1, builtins._("Position:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 			position_box_sizer_2.Add(self.top_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 			position_box_sizer_2.Add(self.bottom_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 			position_box_sizer_2.Add(self.other_position_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -613,7 +614,7 @@ class layer_dialog(wx.Dialog):
 class simple_layer_dialog(layer_dialog):
 	"""A dialog to add or modify an homogeneous layer"""
 	
-	title = "Simple layer"
+	title = builtins._("Simple layer")
 	
 	operation = ADD
 	
@@ -645,21 +646,21 @@ class simple_layer_dialog(layer_dialog):
 		
 		self.index = None
 		
-		layer_static_box = wx.StaticBox(self, -1, "Layer" )
+		layer_static_box = wx.StaticBox(self, -1, builtins._("Layer") )
 		
 		layer_box_sizer_1 = wx.FlexGridSizer(2, 5, 5, 0)
 		
 		# Adding the text box for specifying the material.
 		self.create_material_box()
-		layer_box_sizer_1.Add(wx.StaticText(self, -1, "Material:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Material:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		layer_box_sizer_1.Add(self.material_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		thickness_list = ["nm", "nm OT", "QWOT"]
+		thickness_list = [builtins._("nm"), builtins._("nm OT"), builtins._("QWOT")]
 		
 		# Adding the text box for specifying the thickness.
 		self.create_thickness_box()
 		self.thickness_choice = wx.Choice(self, -1, (-1, -1), choices = thickness_list)
-		layer_box_sizer_1.Add(wx.StaticText(self, -1, "Thickness:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
+		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Thickness:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		layer_box_sizer_1.Add(self.thickness_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		layer_box_sizer_1.Add(self.thickness_choice, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		self.Bind(wx.EVT_CHOICE, self.on_choice, self.thickness_choice)
@@ -667,7 +668,7 @@ class simple_layer_dialog(layer_dialog):
 		# Adding the text box for specifying the index. The value is
 		# validated only when the index box is editable.
 		self.create_index_box()
-		layer_box_sizer_1.Add(wx.StaticText(self, -1, "Index:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Index:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		layer_box_sizer_1.Add(self.index_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		# Arrange in the static box.
@@ -750,8 +751,8 @@ class simple_layer_dialog(layer_dialog):
 		try:
 			material_nb = self.filter.get_material_nb(material_name)
 			material = self.filter.get_material(material_nb)
-		except materials.material_error, error:
-			wx.MessageBox("This material cannot be used.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+		except materials.material_error as error:
+			wx.MessageBox(builtins._("This material cannot be used.\n\n%s") % error, builtins._("Error"), wx.ICON_ERROR|wx.OK)
 			
 			self.material_box.SetFocus()
 			self.material_box.SetSelection(0, len(material_name))
@@ -923,9 +924,9 @@ class import_layer_error(Exception):
 	
 	def __str__(self):
 		if self.value:
-			return "Layer import error: %s." % self.value
+			return builtins._("Layer import error: %s.") % self.value
 		else:
-			return "Layer import error."
+			return builtins._("Layer import error.")
 
 
 
@@ -938,7 +939,7 @@ class import_layer_dialog(layer_dialog):
 	"""A dialog to add add a graded-index layer while reading its index
 	profile in a text file"""
 	
-	title = "Import layer"
+	title = builtins._("Import layer")
 	
 	operation = ADD
 	
@@ -966,24 +967,24 @@ class import_layer_dialog(layer_dialog):
 		This method adds controls to specify the layer material, and the
 		file where to read the index profile."""
 		
-		layer_static_box = wx.StaticBox(self, -1, "Layer" )
+		layer_static_box = wx.StaticBox(self, -1, builtins._("Layer") )
 		
 		layer_box_sizer_1 = wx.BoxSizer(wx.VERTICAL)
 		layer_box_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		layer_box_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		self.file_browse_button = wx.lib.filebrowsebutton.FileBrowseButton(self, -1, size=(450, -1), labelText = "Input file:")
+		self.file_browse_button = wx.lib.filebrowsebutton.FileBrowseButton(self, -1, size=(450, -1), labelText = builtins._("Input file:"))
 		layer_box_sizer_1.Add(self.file_browse_button, 0, wx.ALIGN_LEFT|wx.TOP, 5)
 		
 		# A text box for the number of header lines.
 		self.header_lines_box = wx.TextCtrl(self, -1, "", validator = int_validator(0))
-		layer_box_sizer_2.Add(wx.StaticText(self, -1, "Nb header lines:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_2.Add(wx.StaticText(self, -1, builtins._("Nb header lines:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		layer_box_sizer_2.Add(self.header_lines_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		layer_box_sizer_1.Add(layer_box_sizer_2, 0, wx.ALIGN_LEFT|wx.TOP, 5)
 		
 		# Adding the text box for specifying the material.
 		self.create_material_box(MATERIAL_MIXTURE)
-		layer_box_sizer_3.Add(wx.StaticText(self, -1, "Material:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_3.Add(wx.StaticText(self, -1, builtins._("Material:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		layer_box_sizer_3.Add(self.material_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		layer_box_sizer_1.Add(layer_box_sizer_3, 0, wx.ALIGN_LEFT|wx.TOP, 5)
 		
@@ -1016,7 +1017,7 @@ class import_layer_dialog(layer_dialog):
 		try:
 			file = open(filename, "r")
 		except IOError:
-			raise import_layer_error("Impossible to open the file")
+			raise import_layer_error(builtins._("Impossible to open the file"))
 		
 		# Read the file
 		lines = file.readlines()
@@ -1032,17 +1033,17 @@ class import_layer_dialog(layer_dialog):
 					thickness.append(float(elements[0]))
 					profile.append(float(elements[1]))
 				except ValueError:
-					raise import_layer_error("The file is incorectly formatted")
+					raise import_layer_error(builtins._("The file is incorectly formatted"))
 			# Don't bug if a line is empty.
 			elif len(elements) == 0:
 				pass
 			else:
-				raise import_layer_error("The file is incorectly formatted")
+				raise import_layer_error(builtins._("The file is incorectly formatted"))
 		
 		try:
 			self.filter.add_graded_layer(material_name, profile, thickness, position, side)
-		except graded.grading_error, error:
-			raise import_layer_error("Improper grading (%s)" % error.value)
+		except graded.grading_error as error:
+			raise import_layer_error(builtins._("Improper grading (%s)") % error.value)
 
 
 
@@ -1054,7 +1055,7 @@ class import_layer_dialog(layer_dialog):
 class remove_layer_dialog(layer_dialog):
 	"""A dialog to remove a layer from a filter"""
 	
-	title = "Remove layer"
+	title = builtins._("Remove layer")
 	
 	operation = REMOVE
 	

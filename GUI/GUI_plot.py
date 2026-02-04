@@ -40,7 +40,7 @@ from wx.lib.dialogs import ScrolledMessageDialog
 
 from moremath import limits
 
-import GUI_validators
+from . import GUI_validators
 
 
 # Default behaviour is to use buffered drawing.

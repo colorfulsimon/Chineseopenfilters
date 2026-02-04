@@ -25,21 +25,21 @@
 
 import wx
 
-import GUI_calculate
-import GUI_color
-import GUI_filter_grid
-import GUI_filter_properties
-import GUI_layer_dialogs
-import GUI_layer_grid
-import GUI_main_window
-import GUI_materials
-import GUI_optimization
-import GUI_plot
-import GUI_preproduction
-import GUI_stack
-import GUI_target_grid
-import GUI_targets
-import GUI_validators
+from . import GUI_calculate
+from . import GUI_color
+from . import GUI_filter_grid
+from . import GUI_filter_properties
+from . import GUI_layer_dialogs
+from . import GUI_layer_grid
+from . import GUI_main_window
+from . import GUI_materials
+from . import GUI_optimization
+from . import GUI_plot
+from . import GUI_preproduction
+from . import GUI_stack
+from . import GUI_target_grid
+from . import GUI_targets
+from . import GUI_validators
 
 
 

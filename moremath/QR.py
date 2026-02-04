@@ -33,7 +33,7 @@
 
 from math import sqrt
 
-import limits
+from . import limits
 
 
 
@@ -133,13 +133,13 @@ def QR(A, diag, perm, norms = None):
 			norm = -norm
 		
 		# The Householder vector u is any multiple of
-		#   A[k][k:] ± norm(A[k][k:])*e_1
+		#   A[k][k:] ï¿½ norm(A[k][k:])*e_1
 		# where e_1 is a unit vector and the sign is chosen in fonction of
 		# the sign of A[k][k] to avoid the substraction of two similar
 		# values. The Householder matrix, acting on the n - k last columns
 		# is P_k =  1 - 2*u*u'/u'*u. To save some calculation time, it
 		# would be good to store u'*u. A clever way to do that is to divide
-		# all elements of u by ±norm(A[k][k:]); the first element of this
+		# all elements of u by ï¿½norm(A[k][k:]); the first element of this
 		# vector is then equal to half its norm. The u vector is stored in
 		# the lower triangular part of A since the elements of the R matrix
 		# at those positions are null; The diagonal elements of the R

@@ -46,8 +46,8 @@ import optimization_steps
 import optimization_Fourier
 from moremath import Levenberg_Marquardt
 
-from GUI_plot import plot, plot_curve, plot_curve_segmented, plot_curve_style, TOP
-from GUI_validators import float_validator, int_validator
+from .GUI_plot import plot, plot_curve, plot_curve_segmented, plot_curve_style, TOP
+from .GUI_validators import float_validator, int_validator
 
 
 

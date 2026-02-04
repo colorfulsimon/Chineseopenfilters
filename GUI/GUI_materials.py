@@ -31,8 +31,8 @@ import abeles
 import materials
 import units
 
-from GUI_validators import int_validator, float_validator
-from GUI_plot import plot, plot_curve, plot_curve_style
+from .GUI_validators import int_validator, float_validator
+from .GUI_plot import plot, plot_curve, plot_curve_style
 
 
 

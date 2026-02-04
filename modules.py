@@ -30,6 +30,13 @@ import glob
 import config
 import main_directory
 
+try:
+	import builtins
+except ImportError:  # pragma: no cover - Python 2 fallback
+	import __builtin__ as builtins
+if not hasattr(builtins, "_"):
+	builtins._ = lambda text: text
+
 
 
 base_directory = main_directory.get_main_directory()
@@ -186,11 +193,11 @@ class module(object):
 			except Exception:
 				self.error = True
 				type_of_exception, value = sys.exc_info()[:2]
-				self.error_message += "It was impossible to load the module %s. An exception occured and returned the value: %s.\n" % (self.name, value)
+				self.error_message += builtins._("It was impossible to load the module %s. An exception occured and returned the value: %s.\n") % (self.name, value)
 		
 		except ImportError:
 			self.error = True
-			self.error_message += "Could not find module %s. An exception occured and returned the value: %s.\n" % (self.name, value)
+			self.error_message += builtins._("Could not find module %s. An exception occured and returned the value: %s.\n") % (self.name, value)
 		else:
 			file.close()
 		
@@ -217,7 +224,7 @@ class module(object):
 			self.description = self.module.description
 		except AttributeError:
 			self.error = True
-			self.error_message += "Could not extract the description from the module %s.\n"
+			self.error_message += builtins._("Could not extract the description from the module %s.\n")
 			return
 		
 		# Analyse the description to create submodules.
@@ -231,7 +238,7 @@ class module(object):
 			except (AttributeError, IndexError):
 				self.error = True
 				type_of_exception, value = sys.exc_info()[:2]
-				self.error_message += "An error occured while creating the submodule %s of the module %s. An exception occured and returned the value:%s. Check that the description given in the module correspond to the functions.\n" % (submodule_name, self.name, value)
+				self.error_message += builtins._("An error occured while creating the submodule %s of the module %s. An exception occured and returned the value:%s. Check that the description given in the module correspond to the functions.\n") % (submodule_name, self.name, value)
 	
 	
 	######################################################################

@@ -31,7 +31,7 @@ import wx
 import color
 from moremath import interpolation
 
-import GUI_plot
+from . import GUI_plot
 
 
 

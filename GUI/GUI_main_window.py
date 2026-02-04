@@ -34,6 +34,7 @@ try:
 except ImportError:
 	pass
 import ConfigParser
+import builtins
 
 import wx
 
@@ -52,10 +53,10 @@ import export
 import abeles
 import moremath
 
-from GUI_filter_grid import filter_grid
-from GUI_layer_grid import layer_grid
-from GUI_target_grid import target_grid
-from GUI_targets import reflection_target_dialog,\
+from .GUI_filter_grid import filter_grid
+from .GUI_layer_grid import layer_grid
+from .GUI_target_grid import target_grid
+from .GUI_targets import reflection_target_dialog,\
                         transmission_target_dialog,\
                         absorption_target_dialog,\
                         reflection_spectrum_target_dialog,\
@@ -76,13 +77,13 @@ from GUI_targets import reflection_target_dialog,\
                         reflection_color_target_dialog,\
                         transmission_color_target_dialog,\
                         read_target_from_file_dialog
-from GUI_filter_properties import filter_property_dialog
-from GUI_layer_dialogs import simple_layer_dialog,\
+from .GUI_filter_properties import filter_property_dialog
+from .GUI_layer_dialogs import simple_layer_dialog,\
                               import_layer_dialog,\
                               remove_layer_dialog,\
                               import_layer_error
-from GUI_stack import stack_dialog
-from GUI_calculate import calculate_reflection_dialog,\
+from .GUI_stack import stack_dialog
+from .GUI_calculate import calculate_reflection_dialog,\
                           calculate_transmission_dialog,\
                           calculate_absorption_dialog,\
                           calculate_ellipsometry_dialog,\
@@ -100,15 +101,15 @@ from GUI_calculate import calculate_reflection_dialog,\
                           calculate_reflection_monitoring_dialog,\
                           calculate_transmission_monitoring_dialog,\
                           calculate_ellipsometry_monitoring_dialog
-from GUI_preproduction import random_errors_dialog
-from GUI_optimization import optimization_Fourier_dialog,\
+from .GUI_preproduction import random_errors_dialog
+from .GUI_optimization import optimization_Fourier_dialog,\
                              optimization_refinement_dialog,\
                              optimization_needles_dialog,\
                              optimization_steps_dialog
-from GUI_materials import user_material_directory_dialog,\
+from .GUI_materials import user_material_directory_dialog,\
                           manage_materials_dialog
-from GUI_color import color_window
-import GUI_plot
+from .GUI_color import color_window
+from . import GUI_plot
 
 
 
@@ -414,29 +415,29 @@ class main_window(wx.Frame):
 		
 		# Add the items of the menu
 		self.new_project_ID = wx.NewId()
-		self.file_menu.Append(self.new_project_ID, "&New Project\tCtrl+N", "Create a new project")
+		self.file_menu.Append(self.new_project_ID, builtins._("&New Project\tCtrl+N"), builtins._("Create a new project"))
 		self.Bind(wx.EVT_MENU, self.on_new_project, id = self.new_project_ID)
 		
 		self.open_project_ID = wx.NewId()
-		self.file_menu.Append(self.open_project_ID, "&Open Project\tCtrl+O", "Open an existing project")
+		self.file_menu.Append(self.open_project_ID, builtins._("&Open Project\tCtrl+O"), builtins._("Open an existing project"))
 		self.Bind(wx.EVT_MENU, self.on_open_project, id = self.open_project_ID)
 		
 		self.close_project_ID = wx.NewId()
-		self.file_menu.Append(self.close_project_ID, "&Close Project\tCtrl+W", "Close the project")
+		self.file_menu.Append(self.close_project_ID, builtins._("&Close Project\tCtrl+W"), builtins._("Close the project"))
 		self.Bind(wx.EVT_MENU, self.on_close_project, id = self.close_project_ID)
 		
 		self.file_menu.AppendSeparator()
 		
 		self.save_project_ID = wx.NewId()
-		self.file_menu.Append(self.save_project_ID, "&Save Project\tCtrl+S", "Save the project")
+		self.file_menu.Append(self.save_project_ID, builtins._("&Save Project\tCtrl+S"), builtins._("Save the project"))
 		self.Bind(wx.EVT_MENU, self.on_save_project, id = self.save_project_ID)
 		
 		self.save_project_as_ID = wx.NewId()
-		self.file_menu.Append(self.save_project_as_ID, "Save Project &As\tShift+Ctrl+S", "Save the project under a new name")
+		self.file_menu.Append(self.save_project_as_ID, builtins._("Save Project &As\tShift+Ctrl+S"), builtins._("Save the project under a new name"))
 		self.Bind(wx.EVT_MENU, self.on_save_project_as, id = self.save_project_as_ID)
 		
 		self.revert_ID = wx.NewId()
-		self.file_menu.Append(self.revert_ID, "Revert", "Revert the project to the last saved version")
+		self.file_menu.Append(self.revert_ID, builtins._("Revert"), builtins._("Revert the project to the last saved version"))
 		self.Bind(wx.EVT_MENU, self.on_revert, id = self.revert_ID)
 		
 		self.file_menu.AppendSeparator()
@@ -449,11 +450,11 @@ class main_window(wx.Frame):
 		
 		self.file_menu.AppendSeparator()
 		
-		self.file_menu.Append(wx.ID_EXIT, "&Quit\tCtrl+Q", "Quit the application")
+		self.file_menu.Append(wx.ID_EXIT, builtins._("&Quit\tCtrl+Q"), builtins._("Quit the application"))
 		self.Bind(wx.EVT_MENU, self.on_quit, id = wx.ID_EXIT)
 		
 		# Add the File menu to the menu bar.
-		self.main_menu.Append(self.file_menu, "&File")
+		self.main_menu.Append(self.file_menu, builtins._("&File"))
 		
 		# Make the Project menu
 		self.project_menu = wx.Menu()                                 
@@ -462,19 +463,19 @@ class main_window(wx.Frame):
 		
 		# Add the items of the menu
 		self.add_filter_ID = wx.NewId()
-		self.project_menu.Append(self.add_filter_ID, "&Add Filter\tCtrl+F", "Add a filter to the project")
+		self.project_menu.Append(self.add_filter_ID, builtins._("&Add Filter\tCtrl+F"), builtins._("Add a filter to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_filter, id = self.add_filter_ID)
 		
 		self.remove_filter_ID = wx.NewId()
-		self.project_menu.Append(self.remove_filter_ID, "&Remove Filter", "Remove the selected filter from the project")
+		self.project_menu.Append(self.remove_filter_ID, builtins._("&Remove Filter"), builtins._("Remove the selected filter from the project"))
 		self.Bind(wx.EVT_MENU, self.on_remove_filter, id = self.remove_filter_ID)
 		
 		self.modify_filter_ID = wx.NewId()
-		self.project_menu.Append(self.modify_filter_ID, "&Modify Filter", "Modify the selected filter")
+		self.project_menu.Append(self.modify_filter_ID, builtins._("&Modify Filter"), builtins._("Modify the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_modify_filter, id = self.modify_filter_ID)
 		
 		self.copy_filter_ID = wx.NewId()
-		self.project_menu.Append(self.copy_filter_ID, "&Copy Filter", "Make a copy of the selected filter")
+		self.project_menu.Append(self.copy_filter_ID, builtins._("&Copy Filter"), builtins._("Make a copy of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_copy_filter, id = self.copy_filter_ID)
 		
 		self.project_menu.AppendSeparator()
@@ -482,116 +483,116 @@ class main_window(wx.Frame):
 		# Create a submenu for the addition of targets.
 		self.add_target_menu = wx.Menu()
 		self.add_target_menu_ID = wx.NewId()
-		self.project_menu.AppendMenu(self.add_target_menu_ID, "Add &Target", self.add_target_menu)
+		self.project_menu.AppendMenu(self.add_target_menu_ID, builtins._("Add &Target"), self.add_target_menu)
 		
 		self.add_reflection_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_target_ID, "Add &Reflection Target\tCtrl+R", "Add a reflection target to the project")
+		self.add_target_menu.Append(self.add_reflection_target_ID, builtins._("Add &Reflection Target\tCtrl+R"), builtins._("Add a reflection target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_target_ID)
 		
 		self.add_transmission_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_target_ID, "Add &Transmission Target\tCtrl+T", "Add a transmission target to the project")
+		self.add_target_menu.Append(self.add_transmission_target_ID, builtins._("Add &Transmission Target\tCtrl+T"), builtins._("Add a transmission target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_target_ID)
 		
 		self.add_absorption_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_absorption_target_ID, "Add &Absorption Target", "Add a absorption target to the project")
+		self.add_target_menu.Append(self.add_absorption_target_ID, builtins._("Add &Absorption Target"), builtins._("Add a absorption target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_absorption_target_ID)
 		
 		self.add_target_menu.AppendSeparator()
 		
 		self.add_reflection_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_spectrum_target_ID, "Add Reflection &Spectrum Target\tShift+Ctrl+R", "Add a reflection spectrum target to the project")
+		self.add_target_menu.Append(self.add_reflection_spectrum_target_ID, builtins._("Add Reflection &Spectrum Target\tShift+Ctrl+R"), builtins._("Add a reflection spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_spectrum_target_ID)
 		
 		self.add_transmission_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_spectrum_target_ID, "Add Transmission &Spectrum Target\tShift+Ctrl+T", "Add a transmission spectrum target to the project")
+		self.add_target_menu.Append(self.add_transmission_spectrum_target_ID, builtins._("Add Transmission &Spectrum Target\tShift+Ctrl+T"), builtins._("Add a transmission spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_spectrum_target_ID)
 		
 		self.add_absorption_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_absorption_spectrum_target_ID, "Add Absorption &Spectrum Target", "Add a absorption spectrum target to the project")
+		self.add_target_menu.Append(self.add_absorption_spectrum_target_ID, builtins._("Add Absorption &Spectrum Target"), builtins._("Add a absorption spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_absorption_spectrum_target_ID)
 		
 		self.add_target_menu.AppendSeparator()
 		
 		self.add_reflection_phase_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_phase_target_ID, "Add Reflection &Phase Target", "Add a reflection phase target to the project")
+		self.add_target_menu.Append(self.add_reflection_phase_target_ID, builtins._("Add Reflection &Phase Target"), builtins._("Add a reflection phase target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_phase_target_ID)
 		
 		self.add_transmission_phase_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_phase_target_ID, "Add Transmission &Phase Target", "Add a transmission phase target to the project")
+		self.add_target_menu.Append(self.add_transmission_phase_target_ID, builtins._("Add Transmission &Phase Target"), builtins._("Add a transmission phase target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_phase_target_ID)
 		
 		self.add_reflection_GD_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_GD_target_ID, "Add Reflection &GD Target", "Add a reflection GD target to the project")
+		self.add_target_menu.Append(self.add_reflection_GD_target_ID, builtins._("Add Reflection &GD Target"), builtins._("Add a reflection GD target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_GD_target_ID)
 		
 		self.add_transmission_GD_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_GD_target_ID, "Add Transmission &GD Target", "Add a transmission GD target to the project")
+		self.add_target_menu.Append(self.add_transmission_GD_target_ID, builtins._("Add Transmission &GD Target"), builtins._("Add a transmission GD target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_GD_target_ID)
 		
 		self.add_reflection_GDD_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_GDD_target_ID, "Add Reflection &GDD Target", "Add a reflection GDD target to the project")
+		self.add_target_menu.Append(self.add_reflection_GDD_target_ID, builtins._("Add Reflection &GDD Target"), builtins._("Add a reflection GDD target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_GDD_target_ID)
 		
 		self.add_transmission_GDD_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_GDD_target_ID, "Add Transmission &GDD Target", "Add a transmission GDD target to the project")
+		self.add_target_menu.Append(self.add_transmission_GDD_target_ID, builtins._("Add Transmission &GDD Target"), builtins._("Add a transmission GDD target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_GDD_target_ID)
 		
 		self.add_target_menu.AppendSeparator()
 		
 		self.add_reflection_phase_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_phase_spectrum_target_ID, "Add Reflection &Phase Spectrum Target", "Add a reflection phase spectrum target to the project")
+		self.add_target_menu.Append(self.add_reflection_phase_spectrum_target_ID, builtins._("Add Reflection &Phase Spectrum Target"), builtins._("Add a reflection phase spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_phase_spectrum_target_ID)
 		
 		self.add_transmission_phase_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_phase_spectrum_target_ID, "Add Transmission &Phase Spectrum Target", "Add a transmission phase spectrum target to the project")
+		self.add_target_menu.Append(self.add_transmission_phase_spectrum_target_ID, builtins._("Add Transmission &Phase Spectrum Target"), builtins._("Add a transmission phase spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_phase_spectrum_target_ID)
 		
 		self.add_reflection_GD_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_GD_spectrum_target_ID, "Add Reflection &GD Spectrum Target", "Add a reflection GD spectrum target to the project")
+		self.add_target_menu.Append(self.add_reflection_GD_spectrum_target_ID, builtins._("Add Reflection &GD Spectrum Target"), builtins._("Add a reflection GD spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_GD_spectrum_target_ID)
 		
 		self.add_transmission_GD_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_GD_spectrum_target_ID, "Add Transmission &GD Spectrum Target", "Add a transmission GD spectrum target to the project")
+		self.add_target_menu.Append(self.add_transmission_GD_spectrum_target_ID, builtins._("Add Transmission &GD Spectrum Target"), builtins._("Add a transmission GD spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_GD_spectrum_target_ID)
 		
 		self.add_reflection_GDD_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_GDD_spectrum_target_ID, "Add Reflection &GDD Spectrum Target", "Add a reflection GDD spectrum target to the project")
+		self.add_target_menu.Append(self.add_reflection_GDD_spectrum_target_ID, builtins._("Add Reflection &GDD Spectrum Target"), builtins._("Add a reflection GDD spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_GDD_spectrum_target_ID)
 		
 		self.add_transmission_GDD_spectrum_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_GDD_spectrum_target_ID, "Add Transmission &GDD Spectrum Target", "Add a transmission GDD spectrum target to the project")
+		self.add_target_menu.Append(self.add_transmission_GDD_spectrum_target_ID, builtins._("Add Transmission &GDD Spectrum Target"), builtins._("Add a transmission GDD spectrum target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_GDD_spectrum_target_ID)
 		
 		self.add_target_menu.AppendSeparator()
 		
 		self.add_reflection_color_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_reflection_color_target_ID, "Add Reflection &Color Target", "Add a reflection color target to the project")
+		self.add_target_menu.Append(self.add_reflection_color_target_ID, builtins._("Add Reflection &Color Target"), builtins._("Add a reflection color target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_reflection_color_target_ID)
 		
 		self.add_transmission_color_target_ID = wx.NewId()
-		self.add_target_menu.Append(self.add_transmission_color_target_ID, "Add Transmission &Color Target", "Add a transmission color target to the project")
+		self.add_target_menu.Append(self.add_transmission_color_target_ID, builtins._("Add Transmission &Color Target"), builtins._("Add a transmission color target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_add_target, id = self.add_transmission_color_target_ID)
 		
 		self.add_target_menu.AppendSeparator()
 		
 		self.read_target_from_file_ID = wx.NewId()
-		self.add_target_menu.Append(self.read_target_from_file_ID, "Read Target from &File", "Read a spectrum in a file and add it as a target to the project")
+		self.add_target_menu.Append(self.read_target_from_file_ID, builtins._("Read Target from &File"), builtins._("Read a spectrum in a file and add it as a target to the project"))
 		self.Bind(wx.EVT_MENU, self.on_read_target_from_file, id = self.read_target_from_file_ID)
 		
 		self.remove_target_ID = wx.NewId()
-		self.project_menu.Append(self.remove_target_ID, "&Remove Target", "Remove the selected target from the project")
+		self.project_menu.Append(self.remove_target_ID, builtins._("&Remove Target"), builtins._("Remove the selected target from the project"))
 		self.Bind(wx.EVT_MENU, self.on_remove_target, id = self.remove_target_ID)
 		
 		self.modify_target_ID = wx.NewId()
-		self.project_menu.Append(self.modify_target_ID, "&Modify Target", "Modify the selected target")
+		self.project_menu.Append(self.modify_target_ID, builtins._("&Modify Target"), builtins._("Modify the selected target"))
 		self.Bind(wx.EVT_MENU, self.on_modify_target, id = self.modify_target_ID)
 		
 		self.copy_target_ID = wx.NewId()
-		self.project_menu.Append(self.copy_target_ID, "&Copy Target", "Make a copy of the selected target")
+		self.project_menu.Append(self.copy_target_ID, builtins._("&Copy Target"), builtins._("Make a copy of the selected target"))
 		self.Bind(wx.EVT_MENU, self.on_copy_target, id = self.copy_target_ID)
 		
 		# Add the Project menu to the menu bar.
-		self.main_menu.Append(self.project_menu, "&Project")
+		self.main_menu.Append(self.project_menu, builtins._("&Project"))
 		
 		# Make the Filter menu
 		self.filter_menu = wx.Menu()                                 
@@ -600,43 +601,43 @@ class main_window(wx.Frame):
 		
 		# Add the items of the menu
 		self.filter_properties_ID = wx.NewId()
-		self.filter_menu.Append(self.filter_properties_ID, "&Properties\tAlt+Enter", "Show and modify the filter properties")
+		self.filter_menu.Append(self.filter_properties_ID, builtins._("&Properties\tAlt+Enter"), builtins._("Show and modify the filter properties"))
 		self.Bind(wx.EVT_MENU, self.on_filter_properties, id = self.filter_properties_ID)
 		
 		self.filter_menu.AppendSeparator()
 		
 		self.add_layer_ID = wx.NewId()
-		self.filter_menu.Append(self.add_layer_ID, "&Add layer\tAlt+Ins", "Add a layer to the selected filter")
+		self.filter_menu.Append(self.add_layer_ID, builtins._("&Add layer\tAlt+Ins"), builtins._("Add a layer to the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_add_layer, id = self.add_layer_ID)
 		
 		self.remove_layer_ID = wx.NewId()
-		self.filter_menu.Append(self.remove_layer_ID, "&Remove layer\tAlt+Del", "Remove a layer from the selected filter")
+		self.filter_menu.Append(self.remove_layer_ID, builtins._("&Remove layer\tAlt+Del"), builtins._("Remove a layer from the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_remove_layer, id = self.remove_layer_ID)
 		
 		self.filter_menu.AppendSeparator()
 		
 		self.stack_formula_ID = wx.NewId()
-		self.filter_menu.Append(self.stack_formula_ID, "&Stack Formula\tAlt+S", "Design the selected filter using a stack formula")
+		self.filter_menu.Append(self.stack_formula_ID, builtins._("&Stack Formula\tAlt+S"), builtins._("Design the selected filter using a stack formula"))
 		self.Bind(wx.EVT_MENU, self.on_stack_formula, id = self.stack_formula_ID)
 		
 		self.filter_menu.AppendSeparator()
 		
 		self.import_layer_ID = wx.NewId()
-		self.filter_menu.Append(self.import_layer_ID, "&Import layer", "Import the index profile of a layer from a text file")
+		self.filter_menu.Append(self.import_layer_ID, builtins._("&Import layer"), builtins._("Import the index profile of a layer from a text file"))
 		self.Bind(wx.EVT_MENU, self.on_import_layer, id = self.import_layer_ID)
 		
 		self.filter_menu.AppendSeparator()
 		
 		self.merge_layers_ID = wx.NewId()
-		self.filter_menu.Append(self.merge_layers_ID, "&Merge layers", "Merge identical layers of the selected filter")
+		self.filter_menu.Append(self.merge_layers_ID, builtins._("&Merge layers"), builtins._("Merge identical layers of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_merge_layers, id = self.merge_layers_ID)
 		
 		self.convert_layers_ID = wx.NewId()
-		self.filter_menu.Append(self.convert_layers_ID, "&Convert mixture to steps", "Convert mixture layers into steps in the selected filter")
+		self.filter_menu.Append(self.convert_layers_ID, builtins._("&Convert mixture to steps"), builtins._("Convert mixture layers into steps in the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_convert_layers, id = self.convert_layers_ID)
 		
 		self.swap_sides_ID = wx.NewId()
-		self.filter_menu.Append(self.swap_sides_ID, "&Swap sides", "Swap sides of the selected filter")
+		self.filter_menu.Append(self.swap_sides_ID, builtins._("&Swap sides"), builtins._("Swap sides of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_swap_sides, id = self.swap_sides_ID)
 		
 		self.filter_menu.AppendSeparator()
@@ -644,20 +645,20 @@ class main_window(wx.Frame):
 		# Create a submenu for modules.
 		self.modules_menu = wx.Menu()
 		self.modules_menu_ID = wx.NewId()
-		self.filter_menu.AppendMenu(self.modules_menu_ID, "M&odules", self.modules_menu)
+		self.filter_menu.AppendMenu(self.modules_menu_ID, builtins._("M&odules"), self.modules_menu)
 		
 		self.filter_menu.AppendSeparator()
 		
 		self.export_front_index_profile_ID = wx.NewId()
-		self.filter_menu.Append(self.export_front_index_profile_ID, "E&xport front index profile", "Export the front index profile of the selected filter")
+		self.filter_menu.Append(self.export_front_index_profile_ID, builtins._("E&xport front index profile"), builtins._("Export the front index profile of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_export_index_profile, id = self.export_front_index_profile_ID)
 		
 		self.export_back_index_profile_ID = wx.NewId()
-		self.filter_menu.Append(self.export_back_index_profile_ID, "E&xport back index profile", "Export the back index profile of the selected filter")
+		self.filter_menu.Append(self.export_back_index_profile_ID, builtins._("E&xport back index profile"), builtins._("Export the back index profile of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_export_index_profile, id = self.export_back_index_profile_ID)
 		
 		# Add the Layers menu to the menu bar.
-		self.main_menu.Append(self.filter_menu, "F&ilter")
+		self.main_menu.Append(self.filter_menu, builtins._("F&ilter"))
 		
 		# Make the Analyse menu
 		self.analyse_menu = wx.Menu()                                 
@@ -666,85 +667,85 @@ class main_window(wx.Frame):
 		
 		# Add the items of the menu
 		self.calculate_reflection_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_reflection_ID, "Calculate &Reflection\tAlt+R", "Calculate the reflection spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_reflection_ID, builtins._("Calculate &Reflection\tAlt+R"), builtins._("Calculate the reflection spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_reflection_ID)
 		
 		self.calculate_transmission_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_transmission_ID, "Calculate &Transmission\tAlt+T", "Calculate the transmission spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_transmission_ID, builtins._("Calculate &Transmission\tAlt+T"), builtins._("Calculate the transmission spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_transmission_ID)
 		
 		self.calculate_absorption_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_absorption_ID, "Calculate &Absorption", "Calculate the absorption spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_absorption_ID, builtins._("Calculate &Absorption"), builtins._("Calculate the absorption spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_absorption_ID)
 		
 		self.analyse_menu.AppendSeparator()
 		
 		self.calculate_reflection_phase_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_reflection_phase_ID, "Calculate Reflection &Phase", "Calculate the reflection phase spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_reflection_phase_ID, builtins._("Calculate Reflection &Phase"), builtins._("Calculate the reflection phase spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_reflection_phase_ID)
 		
 		self.calculate_transmission_phase_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_transmission_phase_ID, "Calculate Transmission &Phase", "Calculate the transmission phase spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_transmission_phase_ID, builtins._("Calculate Transmission &Phase"), builtins._("Calculate the transmission phase spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_transmission_phase_ID)
 		
 		self.calculate_reflection_GD_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_reflection_GD_ID, "Calculate Reflection &GD", "Calculate the reflection GD spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_reflection_GD_ID, builtins._("Calculate Reflection &GD"), builtins._("Calculate the reflection GD spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_reflection_GD_ID)
 		
 		self.calculate_transmission_GD_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_transmission_GD_ID, "Calculate Transmission &GD", "Calculate the transmission GD spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_transmission_GD_ID, builtins._("Calculate Transmission &GD"), builtins._("Calculate the transmission GD spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_transmission_GD_ID)
 		
 		self.calculate_reflection_GDD_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_reflection_GDD_ID, "Calculate Reflection GD&D", "Calculate the reflection GDD spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_reflection_GDD_ID, builtins._("Calculate Reflection GD&D"), builtins._("Calculate the reflection GDD spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_reflection_GDD_ID)
 		
 		self.calculate_transmission_GDD_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_transmission_GDD_ID, "Calculate Transmission GD&D", "Calculate the transmission GDD spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_transmission_GDD_ID, builtins._("Calculate Transmission GD&D"), builtins._("Calculate the transmission GDD spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_transmission_GDD_ID)
 		
 		self.analyse_menu.AppendSeparator()
 		
 		self.calculate_ellipsometry_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_ellipsometry_ID, "Calculate &Ellipsometry\tAlt+E", "Calculate the ellipsometric spectrum of the selected filter")
+		self.analyse_menu.Append(self.calculate_ellipsometry_ID, builtins._("Calculate &Ellipsometry\tAlt+E"), builtins._("Calculate the ellipsometric spectrum of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_ellipsometry_ID)
 		
 		self.analyse_menu.AppendSeparator()
 		
 		self.calculate_color_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_color_ID, "Calculate &Color\tAlt+C", "Calculate the color of the selected filter")
+		self.analyse_menu.Append(self.calculate_color_ID, builtins._("Calculate &Color\tAlt+C"), builtins._("Calculate the color of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_color_ID)
 		
 		self.calculate_color_trajectory_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_color_trajectory_ID, "Calculate &Color Trajectory\tShift+Alt+C", "Calculate the color trajectory of the selected filter")
+		self.analyse_menu.Append(self.calculate_color_trajectory_ID, builtins._("Calculate &Color Trajectory\tShift+Alt+C"), builtins._("Calculate the color trajectory of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_color_trajectory_ID)
 		
 		self.analyse_menu.AppendSeparator()
 		
 		self.calculate_admittance_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_admittance_ID, "Calculate A&dmittance Diagram", "Calculate the admittance diagram of the selected filter")
+		self.analyse_menu.Append(self.calculate_admittance_ID, builtins._("Calculate A&dmittance Diagram"), builtins._("Calculate the admittance diagram of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_admittance_ID)
 		
 		self.calculate_circle_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_circle_ID, "Calculate C&ircle Diagram", "Calculate the circle diagram of the selected filter")
+		self.analyse_menu.Append(self.calculate_circle_ID, builtins._("Calculate C&ircle Diagram"), builtins._("Calculate the circle diagram of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_circle_ID)
 		
 		self.calculate_electric_field_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_electric_field_ID, "Calculate Electric &Field", "Calculate the electric field distribution in the selected filter")
+		self.analyse_menu.Append(self.calculate_electric_field_ID, builtins._("Calculate Electric &Field"), builtins._("Calculate the electric field distribution in the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_electric_field_ID)
 		
 		self.analyse_menu.AppendSeparator()
 		
 		self.calculate_reflection_monitoring_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_reflection_monitoring_ID, "Calculate Reflection &Monitoring\tShift+Alt+R", "Calculate the reflection monitoring curve of the selected filter")
+		self.analyse_menu.Append(self.calculate_reflection_monitoring_ID, builtins._("Calculate Reflection &Monitoring\tShift+Alt+R"), builtins._("Calculate the reflection monitoring curve of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_reflection_monitoring_ID)
 		
 		self.calculate_transmission_monitoring_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_transmission_monitoring_ID, "Calculate Transmission &Monitoring\tShift+Alt+T", "Calculate the transmission monitoring curve of the selected filter")
+		self.analyse_menu.Append(self.calculate_transmission_monitoring_ID, builtins._("Calculate Transmission &Monitoring\tShift+Alt+T"), builtins._("Calculate the transmission monitoring curve of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_transmission_monitoring_ID)
 		
 		self.calculate_ellipsometry_monitoring_ID = wx.NewId()
-		self.analyse_menu.Append(self.calculate_ellipsometry_monitoring_ID, "Calculate Ellipsometric &Monitoring\tShift+Alt+E", "Calculate the ellipsometric monitoring curve of the selected filter")
+		self.analyse_menu.Append(self.calculate_ellipsometry_monitoring_ID, builtins._("Calculate Ellipsometric &Monitoring\tShift+Alt+E"), builtins._("Calculate the ellipsometric monitoring curve of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_ellipsometry_monitoring_ID)
 		
 		self.analyse_menu.AppendSeparator()
@@ -752,72 +753,72 @@ class main_window(wx.Frame):
 		# Create a submenu for calculations in reverse direction.
 		self.reverse_direction_menu = wx.Menu()
 		self.reverse_direction_menu_ID = wx.NewId()
-		self.analyse_menu.AppendMenu(self.reverse_direction_menu_ID, "Re&verse direction", self.reverse_direction_menu)
+		self.analyse_menu.AppendMenu(self.reverse_direction_menu_ID, builtins._("Re&verse direction"), self.reverse_direction_menu)
 		
 		self.calculate_reflection_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_reflection_reverse_ID, "Calculate &Reflection\tCtrl+Alt+R", "Calculate the reflection spectrum in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_reflection_reverse_ID, builtins._("Calculate &Reflection\tCtrl+Alt+R"), builtins._("Calculate the reflection spectrum in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_reflection_reverse_ID)
 		
 		self.calculate_transmission_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_transmission_reverse_ID, "Calculate &Transmission\tCtrl+Alt+T", "Calculate the transmission spectrum in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_transmission_reverse_ID, builtins._("Calculate &Transmission\tCtrl+Alt+T"), builtins._("Calculate the transmission spectrum in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_transmission_reverse_ID)
 		
 		self.calculate_absorption_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_absorption_reverse_ID, "Calculate &Absorption", "Calculate the absorption in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_absorption_reverse_ID, builtins._("Calculate &Absorption"), builtins._("Calculate the absorption in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_absorption_reverse_ID)
 		
 		self.reverse_direction_menu.AppendSeparator()
 		
 		self.calculate_ellipsometry_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_ellipsometry_reverse_ID, "Calculate &Ellipsometry\tCtrl+Alt+E", "Calculate the ellipsometric spectrum in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_ellipsometry_reverse_ID, builtins._("Calculate &Ellipsometry\tCtrl+Alt+E"), builtins._("Calculate the ellipsometric spectrum in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_ellipsometry_reverse_ID)
 		
 		self.reverse_direction_menu.AppendSeparator()
 		
 		self.calculate_color_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_color_reverse_ID, "Calculate &Color\tCtrl+Alt+C", "Calculate the color in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_color_reverse_ID, builtins._("Calculate &Color\tCtrl+Alt+C"), builtins._("Calculate the color in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_color_reverse_ID)
 		
 		self.calculate_color_trajectory_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_color_trajectory_reverse_ID, "Calculate &Color Trajectory\tCtrl+Shift+Alt+C", "Calculate the color trajectory in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_color_trajectory_reverse_ID, builtins._("Calculate &Color Trajectory\tCtrl+Shift+Alt+C"), builtins._("Calculate the color trajectory in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_color_trajectory_reverse_ID)
 		
 		self.reverse_direction_menu.AppendSeparator()
 		
 		self.calculate_reflection_monitoring_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_reflection_monitoring_reverse_ID, "Calculate Reflection &Monitoring\tCtrl+Shift+Alt+R", "Calculate the reflection monitoring curve in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_reflection_monitoring_reverse_ID, builtins._("Calculate Reflection &Monitoring\tCtrl+Shift+Alt+R"), builtins._("Calculate the reflection monitoring curve in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_reflection_monitoring_reverse_ID)
 		
 		self.calculate_transmission_monitoring_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_transmission_monitoring_reverse_ID, "Calculate Transmission &Monitoring\tCtrl+Shift+Alt+T", "Calculate the transmission monitoring curve in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_transmission_monitoring_reverse_ID, builtins._("Calculate Transmission &Monitoring\tCtrl+Shift+Alt+T"), builtins._("Calculate the transmission monitoring curve in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_transmission_monitoring_reverse_ID)
 		
 		self.calculate_ellipsometry_monitoring_reverse_ID = wx.NewId()
-		self.reverse_direction_menu.Append(self.calculate_ellipsometry_monitoring_reverse_ID, "Calculate Ellipsometric &Monitoring\tCtrl+Shift+Alt+E", "Calculate the ellipsometric monitoring curve in reverse direction of the selected filter")
+		self.reverse_direction_menu.Append(self.calculate_ellipsometry_monitoring_reverse_ID, builtins._("Calculate Ellipsometric &Monitoring\tCtrl+Shift+Alt+E"), builtins._("Calculate the ellipsometric monitoring curve in reverse direction of the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_calculate, id = self.calculate_ellipsometry_monitoring_reverse_ID)
 		
 		self.analyse_menu.AppendSeparator()
 		
 		self.show_targets_ID = wx.NewId()
-		self.analyse_menu.Append(self.show_targets_ID, "Show targets", "Show the targets in the plots", wx.ITEM_CHECK)
+		self.analyse_menu.Append(self.show_targets_ID, builtins._("Show targets"), builtins._("Show the targets in the plots"), wx.ITEM_CHECK)
 		self.Bind(wx.EVT_MENU, self.on_show_targets, id = self.show_targets_ID)
 		
 		self.show_all_results_ID = wx.NewId()
-		self.analyse_menu.Append(self.show_all_results_ID, "Show all results", "Show the results for all filters", wx.ITEM_CHECK)
+		self.analyse_menu.Append(self.show_all_results_ID, builtins._("Show all results"), builtins._("Show the results for all filters"), wx.ITEM_CHECK)
 		self.Bind(wx.EVT_MENU, self.on_show_all_results, id = self.show_all_results_ID)
 		
 		self.analyse_menu.AppendSeparator()
 		
 		self.export_results_as_text_ID = wx.NewId()
-		self.analyse_menu.Append(self.export_results_as_text_ID, "Export results as text", "Export the results to a text file")
+		self.analyse_menu.Append(self.export_results_as_text_ID, builtins._("Export results as text"), builtins._("Export the results to a text file"))
 		self.Bind(wx.EVT_MENU, self.on_export_results_as_text, id = self.export_results_as_text_ID)
 		
 		self.export_results_as_figure_ID = wx.NewId()
-		self.analyse_menu.Append(self.export_results_as_figure_ID, "Export results as figure", "Export the results to a figure file")
+		self.analyse_menu.Append(self.export_results_as_figure_ID, builtins._("Export results as figure"), builtins._("Export the results to a figure file"))
 		self.Bind(wx.EVT_MENU, self.on_export_results_as_figure, id = self.export_results_as_figure_ID)
 		
 		# Add the Analyse menu to the menu bar.
-		self.main_menu.Append(self.analyse_menu, "&Analyse")
+		self.main_menu.Append(self.analyse_menu, builtins._("&Analyse"))
 		
 		# Make the Optimize menu
 		self.optimize_menu = wx.Menu()                                 
@@ -825,25 +826,25 @@ class main_window(wx.Frame):
 		menu_nb += 1
 		
 		self.optimize_refinement_ID = wx.NewId()
-		self.optimize_menu.Append(self.optimize_refinement_ID, "&Refine\tF1", "Refine the selected filter")
+		self.optimize_menu.Append(self.optimize_refinement_ID, builtins._("&Refine\tF1"), builtins._("Refine the selected filter"))
 		self.Bind(wx.EVT_MENU, self.on_optimize, id = self.optimize_refinement_ID)
 		
 		self.optimize_needles_ID = wx.NewId()
-		self.optimize_menu.Append(self.optimize_needles_ID, "&Needles / Refine\tF2", "Synthesize the selected filter with the needle method")
+		self.optimize_menu.Append(self.optimize_needles_ID, builtins._("&Needles / Refine\tF2"), builtins._("Synthesize the selected filter with the needle method"))
 		self.Bind(wx.EVT_MENU, self.on_optimize, id = self.optimize_needles_ID)
 		
 		self.optimize_steps_ID = wx.NewId()
-		self.optimize_menu.Append(self.optimize_steps_ID, "&Steps / Refine\tF3", "Synthesize the selected filter with the step method")
+		self.optimize_menu.Append(self.optimize_steps_ID, builtins._("&Steps / Refine\tF3"), builtins._("Synthesize the selected filter with the step method"))
 		self.Bind(wx.EVT_MENU, self.on_optimize, id = self.optimize_steps_ID)
 		
 		self.optimize_menu.AppendSeparator()
 		
 		self.design_Fourier_ID = wx.NewId()
-		self.optimize_menu.Append(self.design_Fourier_ID, "&Fourier transform method\tF4", "Design the selected filter by the Fourier transform method")
+		self.optimize_menu.Append(self.design_Fourier_ID, builtins._("&Fourier transform method\tF4"), builtins._("Design the selected filter by the Fourier transform method"))
 		self.Bind(wx.EVT_MENU, self.on_optimize, id = self.design_Fourier_ID)
 		
 		# Add the Optimize menu to the menu bar.
-		self.main_menu.Append(self.optimize_menu, "&Design/Optimize")
+		self.main_menu.Append(self.optimize_menu, builtins._("&Design/Optimize"))
 		
 		# Make a Pre-production menu.
 		self.preproduction_menu = wx.Menu()
@@ -851,11 +852,11 @@ class main_window(wx.Frame):
 		menu_nb += 1
 		
 		self.random_errors_ID = wx.NewId()
-		self.preproduction_menu.Append(self.random_errors_ID, "Simulate &random errors\tAlt+F1", "Simulate the effect of random deposition errors")
+		self.preproduction_menu.Append(self.random_errors_ID, builtins._("Simulate &random errors\tAlt+F1"), builtins._("Simulate the effect of random deposition errors"))
 		self.Bind(wx.EVT_MENU, self.on_random_errors, id = self.random_errors_ID)
 		
 		# Add the Pre-production menu to the menu bar.
-		self.main_menu.Append(self.preproduction_menu, "Preprod&uction")
+		self.main_menu.Append(self.preproduction_menu, builtins._("Preprod&uction"))
 		
 		# Make the Materials menu
 		self.materials_menu = wx.Menu()                                 
@@ -864,15 +865,15 @@ class main_window(wx.Frame):
 		
 		# Add the items of the menu
 		self.manage_materials_ID = wx.NewId()
-		self.materials_menu.Append(self.manage_materials_ID, "&Manage", "Manage the materials")
+		self.materials_menu.Append(self.manage_materials_ID, builtins._("&Manage"), builtins._("Manage the materials"))
 		self.Bind(wx.EVT_MENU, self.on_manage_materials, id = self.manage_materials_ID)
 		
 		self.change_user_material_directory_ID = wx.NewId()
-		self.materials_menu.Append(self.change_user_material_directory_ID, "&Change user material directory", "Change the directory where user specific materials are saved.")
+		self.materials_menu.Append(self.change_user_material_directory_ID, builtins._("&Change user material directory"), builtins._("Change the directory where user specific materials are saved."))
 		self.Bind(wx.EVT_MENU, self.on_change_user_material_directory, id = self.change_user_material_directory_ID)
 		
 		# Add the Materials menu to the menu bar.
-		self.main_menu.Append(self.materials_menu, "&Materials")
+		self.main_menu.Append(self.materials_menu, builtins._("&Materials"))
 		
 		# Make the About menu
 		self.help_menu = wx.Menu()                                 
@@ -882,7 +883,7 @@ class main_window(wx.Frame):
 		# Create a submenu for example projects.
 		self.example_menu = wx.Menu()
 		self.example_menu_ID = wx.NewId()
-		self.help_menu.AppendMenu(self.example_menu_ID, "&Open Example Project", self.example_menu)
+		self.help_menu.AppendMenu(self.example_menu_ID, builtins._("&Open Example Project"), self.example_menu)
 		
 		# Add all examples to the submenu.
 		example_directory = os.path.join(main_directory.get_main_directory(), "examples")
@@ -904,11 +905,11 @@ class main_window(wx.Frame):
 		self.help_menu.AppendSeparator()
 		
 		# Add the items of the menu
-		self.help_menu.Append(wx.ID_ABOUT, "About OpenFilters", "Display program version, copyright and license information")
+		self.help_menu.Append(wx.ID_ABOUT, builtins._("About OpenFilters"), builtins._("Display program version, copyright and license information"))
 		self.Bind(wx.EVT_MENU, self.on_about, id = wx.ID_ABOUT)
 		
 		# Add the About menu to the menu bar.
-		self.main_menu.Append(self.help_menu, "&Help")
+		self.main_menu.Append(self.help_menu, builtins._("&Help"))
 		
 		if config.DEBUG:
 			# Make the Debug menu.
@@ -918,11 +919,11 @@ class main_window(wx.Frame):
 			
 			# Add the items of the menu.
 			self.raise_exception_ID = wx.NewId()
-			self.debug_menu.Append(self.raise_exception_ID, "Raise Exception", "Raise an exception")
+			self.debug_menu.Append(self.raise_exception_ID, builtins._("Raise Exception"), builtins._("Raise an exception"))
 			self.Bind(wx.EVT_MENU, self.on_raise_exception, id = self.raise_exception_ID)
 			
 			# Add the Debug menu to the menu bar.
-			self.main_menu.Append(self.debug_menu, "Debug")
+			self.main_menu.Append(self.debug_menu, builtins._("Debug"))
 		
 		# Attach the menu bar to the window.
 		self.SetMenuBar(self.main_menu)
@@ -1440,7 +1441,7 @@ class main_window(wx.Frame):
 			material_catalog = self.get_material_catalog()
 			try:
 				self.project = project.read_project(filename, material_catalog)
-			except (project.project_error, optical_filter.filter_error, targets.target_error, materials.material_error), error:
+			except (project.project_error, optical_filter.filter_error, targets.target_error, materials.material_error) as error:
 				if filename in self.recently_opened_projects:
 					self.recently_opened_projects.remove(filename)
 				wx.MessageBox("An error occured while opening the project.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
@@ -1578,7 +1579,7 @@ class main_window(wx.Frame):
 		# Verify that the file still exist.
 		try:
 			saved_version = project.read_project(self.project_filename)
-		except (project.project_error, optical_filter.filter_error, materials.material_error), error:
+		except (project.project_error, optical_filter.filter_error, materials.material_error) as error:
 			wx.MessageBox("It is impossible to reopen the project.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 			return
 		
@@ -1661,10 +1662,10 @@ class main_window(wx.Frame):
 		
 		try:
 			nb = self.project.add_filter()
-		except materials.material_error, error:
+		except materials.material_error as error:
 			wx.MessageBox("It is impossible to create a new filter because there is a problem with one of the default materials.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 			return
-		except optical_filter.filter_error, error:
+		except optical_filter.filter_error as error:
 			wx.MessageBox("It is impossible to create a new filter.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 			return
 		
@@ -1769,7 +1770,7 @@ class main_window(wx.Frame):
 		if answer == wx.ID_OK:
 			try:
 				target = window.get_target()
-			except targets.target_error, error:
+			except targets.target_error as error:
 				wx.MessageBox("Error while reading the target.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 		
 		window.Destroy()
@@ -1982,7 +1983,7 @@ class main_window(wx.Frame):
 		if answer == wx.ID_OK:
 			try:
 				window.apply()
-			except import_layer_error, error:
+			except import_layer_error as error:
 				wx.MessageBox("Error while importing layer.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 			else:
 				self.filter_grid.reset_filter(self.selected_filter_nb)
@@ -2297,7 +2298,7 @@ class main_window(wx.Frame):
 			
 			try:
 				export.export_results_to_text(filename, data)
-			except IOError, error:
+			except IOError as error:
 				wx.MessageBox("Exportation failed.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 			
 			self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
@@ -2328,7 +2329,7 @@ class main_window(wx.Frame):
 				self.pages[selected_page_nb].save_to_file(filename)
 			except KeyError:
 				wx.MessageBox("Invalid file extension.", "Error", wx.ICON_ERROR|wx.OK)
-			except IOError, error:
+			except IOError as error:
 				wx.MessageBox("Exportation failed.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 			
 			self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))

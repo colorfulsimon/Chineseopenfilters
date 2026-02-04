@@ -42,24 +42,24 @@ except ImportError:
 
 # If the importation of the dll failed, load the Python versions.
 if abeles_dll_import_failed:
-	from definitions import *
-	from wvls import *
-	from N import *
-	from N_mixture import *
-	from dispersion import *
-	from dispersion_mixtures import *
-	from sin2 import *
-	from matrices import *
-	from r_and_t import *
-	from spectro import *
-	from phase import *
-	from ellipso import *
-	from admittance import *
-	from circle import *
-	from electric_field import *
-	from monitoring import *
-	from derivatives import *
-	from needles import *
+	from .definitions import *
+	from .wvls import *
+	from .N import *
+	from .N_mixture import *
+	from .dispersion import *
+	from .dispersion_mixtures import *
+	from .sin2 import *
+	from .matrices import *
+	from .r_and_t import *
+	from .spectro import *
+	from .phase import *
+	from .ellipso import *
+	from .admittance import *
+	from .circle import *
+	from .electric_field import *
+	from .monitoring import *
+	from .derivatives import *
+	from .needles import *
 
 
 

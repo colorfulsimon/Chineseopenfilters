@@ -31,8 +31,8 @@ import wx
 from definitions import *
 from stack import stack, analyse_stack_formula, stack_error, MIN, MAX
 
-from GUI_layer_dialogs import layer_dialog
-from GUI_validators import float_validator, material_validator
+from .GUI_layer_dialogs import layer_dialog
+from .GUI_validators import float_validator, material_validator
 
 
 

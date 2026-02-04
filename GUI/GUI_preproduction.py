@@ -39,9 +39,9 @@ import data_holder
 import targets
 import color
 
-import GUI_plot
-import GUI_color
-from GUI_validators import int_validator, float_validator,\
+from . import GUI_plot
+from . import GUI_color
+from .GUI_validators import int_validator, float_validator,\
                            illuminant_validator, observer_validator
 
 

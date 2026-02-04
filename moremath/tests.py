@@ -280,7 +280,7 @@ if "Levenberg_Marquardt" in tests:
 	from moremath import Levenberg_Marquardt
 	
 	import math
-	import StRD
+	from . import StRD
 	
  	# Stop criteria.
 	max_iterations = 2000
@@ -427,7 +427,7 @@ if "Newton_polynomials" in tests:
 	from moremath import Newton_polynomials
 	
 	import random
-	import linear_algebra
+	from . import linear_algebra
 	
 	print ""
 	print "----- Linear -----"
@@ -478,8 +478,8 @@ if "QR" in tests:
 	
 	import copy
 	import random
-	import linear_algebra
-	import random_system
+	from . import linear_algebra
+	from . import random_system
 	
 	# Square system.
 	print ""

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # user_config.py
 # 
 # Manage, read, and write user configurations.
@@ -25,7 +26,14 @@
 
 import sys
 import os
-import ConfigParser
+try:
+	import configparser as ConfigParser
+except ImportError:
+	import ConfigParser
+
+
+# Interface language: "en" or "zh_CN"
+language = "zh_CN"
 
 
 
