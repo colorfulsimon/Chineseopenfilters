@@ -1263,7 +1263,7 @@ class main_window(wx.Frame):
 		self.filter_panel_sizer_1.Add(wx.StaticText(self.filter_panel, -1, "Description:"),
 		                              0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		self.filter_panel_sizer_1.Add(self.filter_description_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 5)
-		self.filter_panel_sizer_1.Add(close_botton, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, 5)
+		self.filter_panel_sizer_1.Add(close_botton, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, 5)
 		
 		self.filter_panel_sizer.Add(self.filter_panel_sizer_1, 0, wx.EXPAND|wx.TOP, 5)
 		self.filter_panel_sizer.Add(self.filter_notebook, 1, wx.EXPAND|wx.ALL, 5)

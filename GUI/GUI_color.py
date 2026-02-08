@@ -696,8 +696,8 @@ class color_trajectory_panel(wx.Panel):
 		bar = event.GetEventObject()
 		
 		# Get the current position in pixels.
-		bar_position = bar.GetPositionTuple()
-		mouse_position = event.GetPositionTuple()
+		bar_position = bar.GetPosition()
+		mouse_position = event.GetPosition()
 		text_position = (bar_position[0]+mouse_position[0]+5, bar_position[1]+mouse_position[1]-5)
 		
 		# Convert it to a position in the list of angles.
@@ -790,7 +790,7 @@ class color_bar(wx.Window):
 		self.y_top = 1.0
 		
 		# Create and initialize a buffer to avoir flicker.
-		self.width, self.height = self.GetClientSizeTuple()
+		self.width, self.height = self.GetClientSize()
 		self.buffer = wx.EmptyBitmap(self.width, self.height)
 		
 		self.update()
@@ -829,7 +829,7 @@ class color_bar(wx.Window):
 		This method takes a single argument:
 		  event              the event."""
 		
-		self.width, self.height = self.GetClientSizeTuple()
+		self.width, self.height = self.GetClientSize()
 		self.buffer = wx.EmptyBitmap(self.width, self.height)
 		
 		self.update()

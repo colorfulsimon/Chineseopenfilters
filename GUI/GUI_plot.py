@@ -1768,8 +1768,10 @@ class plot(wx.Window):
 		self.clicked_curve = 0
 		
 		# Create and initialize a buffer to avoir flicker.
-		self.width, self.height = self.GetClientSizeTuple()
-		self.buffer = wx.EmptyBitmap(self.width, self.height)
+		self.width, self.height = self.GetClientSize()
+		w = max(1, self.width)
+		h = max(1, self.height)
+		self.buffer = wx.EmptyBitmap(w, h)
 	
 	
 	######################################################################
@@ -1880,8 +1882,10 @@ class plot(wx.Window):
 		
 		This method redraws the window when its size changes."""
 		
-		self.width, self.height = self.GetClientSizeTuple()
-		self.buffer = wx.EmptyBitmap(self.width, self.height)
+		self.width, self.height = self.GetClientSize()
+		w = max(1, self.width)
+		h = max(1, self.height)
+		self.buffer = wx.EmptyBitmap(w, h)
 		
 		self.update()
 	
@@ -1912,11 +1916,13 @@ class plot(wx.Window):
 			DC = wx.MemoryDC()
 			DC.SelectObject(self.buffer)
 		
-		DC.BeginDrawing()
+		if hasattr(DC, "BeginDrawing"):
+			DC.BeginDrawing()
 		
 		function(DC, *args)
 		
-		DC.EndDrawing()
+		if hasattr(DC, "EndDrawing"):
+			DC.EndDrawing()
 		
 		if not self.use_buffered_drawing:
 			wx.ClientDC(self).Blit(0, 0, self.width, self.height, DC, 0, 0)
@@ -2505,7 +2511,7 @@ class plot(wx.Window):
 			return
 		
 		# Get the size of the window.
-		(width, height) = self.GetClientSizeTuple()
+		(width, height) = self.GetClientSize()
 		
 		# Set the font.
 		font = DC.GetFont()
@@ -2601,7 +2607,7 @@ class plot(wx.Window):
 		DC.SetFont(font)
 		
 		# Get the size of the window.
-		(width, height) = self.GetClientSizeTuple()
+		(width, height) = self.GetClientSize()
 		
 		# Get the bounding box of the curves.
 		x_min, x_max, y_min, y_max = self.bounding_box()
@@ -3160,7 +3166,7 @@ class plot(wx.Window):
 			return
 		
 		# Check were the click was done.
-		(x, y) = event.GetPositionTuple()
+		(x, y) = event.GetPosition()
 		
 		# Determine if the click was on a legend and on which legend.
 		self.clicked_curve = -1
