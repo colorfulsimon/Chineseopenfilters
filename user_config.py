@@ -26,10 +26,7 @@
 
 import sys
 import os
-try:
-	import configparser as ConfigParser
-except ImportError:
-	import ConfigParser
+import configparser
 
 
 # Interface language: "en" or "zh_CN"
@@ -72,12 +69,12 @@ else:
 
 # Create a config object and try read the user config file.
 
-user_config = ConfigParser.RawConfigParser()
+user_config = configparser.RawConfigParser()
 
 if user_config_filename:
 	try:
 		user_config.read(user_config_filename)
-	except ConfigParser.ParsingError:
+	except configparser.ParsingError:
 		pass
 
 

@@ -6442,7 +6442,7 @@ def parse_filter(lines, file_version, material_catalog = None):
 	# Parse the file.
 	try:
 		keywords, values = simple_parser.parse(lines)
-	except simple_parser.parsing_error, error:
+	except simple_parser.parsing_error as error:
 		raise filter_error("Cannot parse filter because %s" % error.get_value())
 	
 	description = None
@@ -6790,7 +6790,7 @@ def parse_filter(lines, file_version, material_catalog = None):
 		elif keyword == "FrontStackFormula" or keyword == "BackStackFormula":
 			try:
 				sub_keywords, sub_values = simple_parser.parse(value)
-			except simple_parser.parsing_error, error:
+			except simple_parser.parsing_error as error:
 				raise filter_error(str(error))
 			if sub_keywords[0] != "Formula":
 				raise filter_error("%s must begin by the formula" % keyword)
@@ -7294,7 +7294,7 @@ def write_filter(filter, outfile, prefix = ""):
 			for line in lines:
 				outfile.write(prefix + "\t\t%s\n" % line)
 			outfile.write(prefix + "\tEnd\n")
-		for (symbol, material) in stack_materials.iteritems():
+		for (symbol, material) in stack_materials.items():
 			if material[1] is None:
 				outfile.write(prefix + "\t%s: %s\n" % (symbol, material[0]))
 			elif material[1] == stack.MIN:
@@ -7308,7 +7308,7 @@ def write_filter(filter, outfile, prefix = ""):
 	if stack_formula:
 		outfile.write(prefix + "BackStackFormula:\n")
 		outfile.write(prefix + "\tFormula: %s\n" % stack_formula)
-		for (symbol, material) in stack_materials.iteritems():
+		for (symbol, material) in stack_materials.items():
 			if material[1] is None:
 				outfile.write(prefix + "\t%s: %s\n" % (symbol, material[0]))
 			elif material[1] == stack.MIN:

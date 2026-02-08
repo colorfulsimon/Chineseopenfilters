@@ -568,15 +568,15 @@ class optimization_Fourier(optimization):
 		
 		else:
 			self.status = Levenberg_Marquardt.DELTA_IS_TOO_SMALL
- 		
- 		# Stop if the solution is not improving.
- 		if self.status != Levenberg_Marquardt.IMPROVING:
+		
+		# Stop if the solution is not improving.
+		if self.status != Levenberg_Marquardt.IMPROVING:
 			self.stop_criteria_met = True
- 		
- 		# Verify if the maximum number of iterations has been reached (when
- 		# specified).
- 		if self.max_iterations and self.iteration >= self.max_iterations:
- 			self.max_iterations_reached = True
+		
+		# Verify if the maximum number of iterations has been reached (when
+		# specified).
+		if self.max_iterations and self.iteration >= self.max_iterations:
+			self.max_iterations_reached = True
 	
 	
 	######################################################################

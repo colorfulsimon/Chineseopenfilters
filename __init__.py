@@ -30,7 +30,7 @@ __all__ = ["abeles",
            "main_directory",
            "materials",
            "modules",
-           "moremath".
+           "moremath",
            "optical_filter",
            "optimization",
            "optimization_Fourier",

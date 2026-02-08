@@ -511,7 +511,7 @@ def write_project(project, filename):
 	
 	try:
 		os.remove(filename)
-except (OSError, WindowsError):
+	except OSError:
 		pass
 	
 	os.rename(temporary_file_name, filename)

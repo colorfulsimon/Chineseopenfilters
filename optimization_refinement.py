@@ -832,12 +832,12 @@ class optimization_refinement(optimization.optimization):
 		# provide it with fit parameters. During preparation, it will
 		# calculate the values for a first time.
 		self.optimizer = Levenberg_Marquardt.Levenberg_Marquardt(self.calculate_values, self.calculate_derivatives, self.parameter_values[:], self.all_target_values, self.all_tolerances)
- 		self.optimizer.set_stop_criteria(self.min_gradient, self.acceptable_chi_2, self.min_chi_2_change)
+		self.optimizer.set_stop_criteria(self.min_gradient, self.acceptable_chi_2, self.min_chi_2_change)
 		self.optimizer.set_limits(self.parameter_min, self.parameter_max)
 		self.optimizer.set_inequalities(self.all_inequalities)
 		self.optimizer.prepare()
- 		self.status = Levenberg_Marquardt.IMPROVING
- 		self.chi_2 = self.optimizer.get_chi_2()
+		self.status = Levenberg_Marquardt.IMPROVING
+		self.chi_2 = self.optimizer.get_chi_2()
 	
 	
 	######################################################################
@@ -934,12 +934,12 @@ class optimization_refinement(optimization.optimization):
 		
 		By default, the parameters kept in the instance attributes are
 		used."""
- 		
- 		# Change the parameter values.
- 		if parameter_values and parameter_values != self.parameter_values:
+		
+		# Change the parameter values.
+		if parameter_values and parameter_values != self.parameter_values:
 			self.parameter_values[:] = parameter_values
 			
-	 		for i_parameter in range(self.nb_parameters):
+			for i_parameter in range(self.nb_parameters):
 				parameter_kind, layer_nb = self.parameters[i_parameter]
 				if parameter_kind == THICKNESS:
 					self.front_thickness[layer_nb] = self.parameter_values[i_parameter]
@@ -1105,10 +1105,10 @@ class optimization_refinement(optimization.optimization):
 		
 		By default, the parameters kept in the instance attributes are
 		used."""
- 		
- 		# If parameters changed, recalculate values.
- 		if parameter_values and parameter_values != self.parameter_values:
-	 		self.calculate_values(parameter_values)
+		
+		# If parameters changed, recalculate values.
+		if parameter_values and parameter_values != self.parameter_values:
+			self.calculate_values(parameter_values)
 		
 		# Calculate derivatives.
 		for i_target in range(self.nb_targets):
@@ -1453,12 +1453,12 @@ class optimization_refinement(optimization.optimization):
 		# Create a new instance of the Levenberg-Marquardt optimization
 		# class.
 		self.optimizer = Levenberg_Marquardt.Levenberg_Marquardt(self.calculate_values, self.calculate_derivatives, self.parameter_values[:], self.all_target_values, self.all_tolerances)
- 		self.optimizer.set_stop_criteria(self.min_gradient, self.acceptable_chi_2, self.min_chi_2_change)
+		self.optimizer.set_stop_criteria(self.min_gradient, self.acceptable_chi_2, self.min_chi_2_change)
 		self.optimizer.set_limits(self.parameter_min, self.parameter_max)
 		self.optimizer.set_inequalities(self.all_inequalities)
 		self.optimizer.prepare()
- 		self.status = Levenberg_Marquardt.IMPROVING
- 		self.chi_2 = self.optimizer.get_chi_2()
+		self.status = Levenberg_Marquardt.IMPROVING
+		self.chi_2 = self.optimizer.get_chi_2()
 		
 		# Reset the number of iterations.
 		self.reset_iterations()
@@ -1707,12 +1707,12 @@ class optimization_refinement(optimization.optimization):
 		# Create a new instance of the Levenberg-Marquardt optimization
 		# class.
 		self.optimizer = Levenberg_Marquardt.Levenberg_Marquardt(self.calculate_values, self.calculate_derivatives, self.parameter_values[:], self.all_target_values, self.all_tolerances)
- 		self.optimizer.set_stop_criteria(self.min_gradient, self.acceptable_chi_2, self.min_chi_2_change)
+		self.optimizer.set_stop_criteria(self.min_gradient, self.acceptable_chi_2, self.min_chi_2_change)
 		self.optimizer.set_limits(self.parameter_min, self.parameter_max)
 		self.optimizer.set_inequalities(self.all_inequalities)
 		self.optimizer.prepare()
- 		self.status = Levenberg_Marquardt.IMPROVING
- 		self.chi_2 = self.optimizer.get_chi_2()
+		self.status = Levenberg_Marquardt.IMPROVING
+		self.chi_2 = self.optimizer.get_chi_2()
 		
 		# Reset the number of iterations.
 		self.reset_iterations()
@@ -1730,21 +1730,21 @@ class optimization_refinement(optimization.optimization):
 		"""Do one iteration"""
 		
 		# Execute one Levenberg-Marquardt iteration.
- 		self.status = self.optimizer.iterate()
+		self.status = self.optimizer.iterate()
 		
 		# Get chi square.
- 		self.chi_2 = self.optimizer.get_chi_2()
+		self.chi_2 = self.optimizer.get_chi_2()
 		
 		self.iteration += 1
- 		
- 		# Stop if the solution is not improving.
- 		if self.status != Levenberg_Marquardt.IMPROVING:
+		
+		# Stop if the solution is not improving.
+		if self.status != Levenberg_Marquardt.IMPROVING:
 			self.stop_criteria_met = True
- 		
- 		# Verify if the maximum number of iterations has been reached (when
- 		# specified).
- 		if self.max_iterations and self.iteration >= self.max_iterations:
- 			self.max_iterations_reached = True
+		
+		# Verify if the maximum number of iterations has been reached (when
+		# specified).
+		if self.max_iterations and self.iteration >= self.max_iterations:
+			self.max_iterations_reached = True
 		
 		self.just_removed_thin_layers = False
 	

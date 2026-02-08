@@ -33,10 +33,7 @@ try:
 	import threading
 except ImportError:
 	pass
-try:
-	import configparser as ConfigParser
-except ImportError:
-	import ConfigParser
+import configparser
 import builtins
 
 import wx
@@ -121,7 +118,7 @@ project_wildcard = "OpenFilters projects (*.ofp)|*.ofp|"\
 
 # Constants that represent what to update when a update event is
 # called.
-UPDATE_ALL = sys.maxint
+UPDATE_ALL = sys.maxsize
 UPDATE_MENU = 1
 UPDATE_STATUS_BAR = 2
 UPDATE_CURSOR = 4
@@ -361,24 +358,24 @@ class main_window(wx.Frame):
 			self.user_config.add_section("GUI")
 		
 		try:
-			last_used_directory = self.user_config.get("GUI", "lastuseddirectory").decode('utf-8')
+			last_used_directory = self.user_config.get("GUI", "lastuseddirectory")
 			os.chdir(last_used_directory)
-		except (ConfigParser.NoOptionError, OSError):
+		except (configparser.NoOptionError, OSError):
 			os.chdir(os.path.expanduser("~"))
 		
 		self.recently_opened_projects = []
 		for i in range(config.NB_RECENTLY_OPENED_PROJECTS):
 			try:
-				self.recently_opened_projects.append(self.user_config.get("GUI", "recentlyopenedproject%i" % i).decode('utf-8'))
-			except ConfigParser.NoOptionError:
+				self.recently_opened_projects.append(self.user_config.get("GUI", "recentlyopenedproject%i" % i))
+			except configparser.NoOptionError:
 				break
 		
 		if not self.user_config.has_section("Directories"):
 			self.user_config.add_section("Directories")
 		
 		try:
-			self.user_material_directory = self.user_config.get("Directories", "usermaterialdirectory").decode('utf-8')
-		except (ConfigParser.NoOptionError):
+			self.user_material_directory = self.user_config.get("Directories", "usermaterialdirectory")
+		except (configparser.NoOptionError):
 			self.user_material_directory = None
 	
 	
@@ -390,10 +387,10 @@ class main_window(wx.Frame):
 	def save_configuration(self):
 		"""Save the user configuration"""
 		
-		self.user_config.set("GUI", "lastuseddirectory", os.getcwd().encode('utf-8'))
+		self.user_config.set("GUI", "lastuseddirectory", os.getcwd())
 		
 		for i in range(min(config.NB_RECENTLY_OPENED_PROJECTS, len(self.recently_opened_projects))):
-			self.user_config.set("GUI", "recentlyopenedproject%i" % i, self.recently_opened_projects[i].encode('utf-8'))
+			self.user_config.set("GUI", "recentlyopenedproject%i" % i, self.recently_opened_projects[i])
 		
 		user_config.save_user_config()
 	
@@ -1354,7 +1351,7 @@ class main_window(wx.Frame):
 			answer = dialog.ShowModal()
 			if answer == wx.ID_OK:
 				self.user_material_directory = dialog.get_directory()
-				self.user_config.set("Directories", "usermaterialdirectory", self.user_material_directory.encode('utf-8'))
+				self.user_config.set("Directories", "usermaterialdirectory", self.user_material_directory)
 			dialog.Destroy()
 	
 	
@@ -2415,7 +2412,7 @@ class main_window(wx.Frame):
 		answer = dialog.ShowModal()
 		if answer == wx.ID_OK:
 			self.user_material_directory = dialog.get_directory()
-			self.user_config.set("Directories", "usermaterialdirectory", self.user_material_directory.encode('utf-8'))
+			self.user_config.set("Directories", "usermaterialdirectory", self.user_material_directory)
 		dialog.Destroy()
 		
 		self.update_menu()

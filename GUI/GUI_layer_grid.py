@@ -154,7 +154,7 @@ class layer_grid(wx.grid.Grid):
 		self.menu_col = 0
 		
 		# Call a method when a cell is changed.
-		self.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.on_cell_change)
+		self.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.on_cell_change)
 		
 		# Disable resizing of the grid.
 		self.DisableDragColSize()
