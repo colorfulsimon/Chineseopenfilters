@@ -33,7 +33,10 @@ try:
 	import threading
 except ImportError:
 	pass
-import ConfigParser
+try:
+	import configparser as ConfigParser
+except ImportError:
+	import ConfigParser
 import builtins
 
 import wx

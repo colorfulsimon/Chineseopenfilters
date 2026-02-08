@@ -108,7 +108,8 @@ max_marker_size = 100
 
 # The canvas size if limited to C longs. To allow markers, it is
 # reduced by the maximum marker size.
-maxint = sys.maxint - max_marker_size
+_maxint = getattr(sys, "maxint", sys.maxsize)
+maxint = _maxint - max_marker_size
 minint = -maxint - 1 + max_marker_size
 
 # Zero and negative value cannot be handled correctly in log scale. The

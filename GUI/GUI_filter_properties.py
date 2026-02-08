@@ -673,14 +673,14 @@ class filter_property_dialog(wx.Dialog):
 			try:
 				self.filter.set_step_spacing(step_spacing)
 				modified = True
-			except graded.grading_error, error:
+			except graded.grading_error as error:
 				wx.MessageBox("Could not change the step spacing.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 		
 		if minimum_thickness != self.filter.get_minimum_thickness():
 			try:
 				self.filter.set_minimum_thickness(minimum_thickness)
 				modified = True
-			except graded.grading_error, error:
+			except graded.grading_error as error:
 				wx.MessageBox("Could not change the sublayer minimum thickness.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
 		
 		if illuminant != self.filter.get_illuminant():
