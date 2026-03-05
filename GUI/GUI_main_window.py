@@ -150,6 +150,9 @@ class update_event(wx.PyCommandEvent):
 	def get_what(self):
 		return self.what
 
+	def Clone(self):
+		return self.__class__(self.GetId(), self.what)
+
 
 
 ########################################################################
@@ -171,7 +174,7 @@ class progress_event(wx.PyCommandEvent):
 		self.progress = progress
 	
 	def Clone(self):
-		self.__class__(self.GetId())
+		return self.__class__(self.GetId(), self.progress)
 	
 	def get_progress(self):
 		return self.progress
@@ -208,6 +211,9 @@ class message_event(wx.PyCommandEvent):
 	def get_icon(self):
 		return self.icon
 
+	def Clone(self):
+		return self.__class__(self.GetId(), self.message, self.title, self.icon)
+
 
 
 ########################################################################
@@ -235,6 +241,9 @@ class data_event(wx.PyCommandEvent):
 	
 	def get_data(self):
 		return self.data
+
+	def Clone(self):
+		return self.__class__(self.GetId(), self.filter_nb, self.data)
 
 
 
@@ -1076,11 +1085,11 @@ class main_window(wx.Frame):
 		self.filter_tab_sizer.Hide(self.filter_panel)
 		self.filter_tab_sizer.Layout()
 		
-		self.upper_notebook.AddPage(self.filter_tab, "Filters")
+		self.upper_notebook.AddPage(self.filter_tab, builtins._("Filters"))
 		
 		# Create a grid for the targets and add it to the upper notebook.
 		self.target_grid = target_grid(self.upper_notebook, self)
-		self.upper_notebook.AddPage(self.target_grid, "Targets")
+		self.upper_notebook.AddPage(self.target_grid, builtins._("Targets"))
 		
 		# Create a page for the comment.
 		self.comment_box = wx.TextCtrl(self.upper_notebook, -1, "", style = wx.TE_MULTILINE)
@@ -1088,7 +1097,7 @@ class main_window(wx.Frame):
 		self.Bind(wx.EVT_TEXT, self.on_comment, self.comment_box)
 		self.comment_box.SetEditable(False)
 		
-		self.upper_notebook.AddPage(self.comment_box, "Comment")
+		self.upper_notebook.AddPage(self.comment_box, builtins._("Comment"))
 		
 		page_nb = 0
 		
@@ -1098,7 +1107,7 @@ class main_window(wx.Frame):
 		self.photometry_plot.set_xlabel("Wavelength (nm)")
 		self.photometry_plot.set_ylabel("R, T, or A")
 		self.photometry_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.photometry_plot, "Photometric")
+		self.lower_notebook.AddPage(self.photometry_plot, builtins._("Photometric"))
 		self.photometry_plot_page_nb = page_nb
 		
 		page_nb += 1
@@ -1109,7 +1118,7 @@ class main_window(wx.Frame):
 		self.phase_plot.set_xlabel("Wavelength (nm)")
 		self.phase_plot.set_ylabel("phase (deg.), GD (fs), or GDD (fs^2)")
 		self.phase_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.phase_plot, "Phase")
+		self.lower_notebook.AddPage(self.phase_plot, builtins._("Phase"))
 		self.phase_plot_page_nb = page_nb
 		
 		page_nb += 1
@@ -1120,14 +1129,14 @@ class main_window(wx.Frame):
 		self.ellipso_plot.set_xlabel("Wavelength (nm)")
 		self.ellipso_plot.set_ylabel("Psi or Delta (deg.)")
 		self.ellipso_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.ellipso_plot, "Ellipso.")
+		self.lower_notebook.AddPage(self.ellipso_plot, builtins._("Ellipso."))
 		self.ellipso_plot_page_nb = page_nb
 		
 		page_nb += 1
 		
 		# Create a panel for the colors.
 		self.color_window = color_window(self.lower_notebook)
-		self.lower_notebook.AddPage(self.color_window, "Color")
+		self.lower_notebook.AddPage(self.color_window, builtins._("Color"))
 		self.color_window_page_nb = page_nb
 		
 		page_nb += 1
@@ -1138,7 +1147,7 @@ class main_window(wx.Frame):
 		self.admittance_plot.set_xlabel("Real part")
 		self.admittance_plot.set_ylabel("Imag. part")
 		self.admittance_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.admittance_plot, "Admittance diagram")
+		self.lower_notebook.AddPage(self.admittance_plot, builtins._("Admittance diagram"))
 		self.admittance_plot_page_nb = page_nb
 		
 		page_nb += 1
@@ -1149,7 +1158,7 @@ class main_window(wx.Frame):
 		self.circle_plot.set_xlabel("Real part")
 		self.circle_plot.set_ylabel("Imag. part")
 		self.circle_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.circle_plot, "Circle diagram")
+		self.lower_notebook.AddPage(self.circle_plot, builtins._("Circle diagram"))
 		self.circle_plot_page_nb = page_nb
 		
 		page_nb += 1
@@ -1160,7 +1169,7 @@ class main_window(wx.Frame):
 		self.electric_field_plot.set_xlabel("Distance from substrate (nm)")
 		self.electric_field_plot.set_ylabel("Field")
 		self.electric_field_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.electric_field_plot, "Electric field")
+		self.lower_notebook.AddPage(self.electric_field_plot, builtins._("Electric field"))
 		self.electric_field_plot_page_nb = page_nb
 		
 		page_nb += 1
@@ -1171,7 +1180,7 @@ class main_window(wx.Frame):
 		self.photometric_monitoring_plot.set_xlabel("Thickness (nm)")
 		self.photometric_monitoring_plot.set_ylabel("R or T")
 		self.photometric_monitoring_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.photometric_monitoring_plot, "Photometric monitoring")
+		self.lower_notebook.AddPage(self.photometric_monitoring_plot, builtins._("Photometric monitoring"))
 		self.photometric_monitoring_plot_page_nb = page_nb
 		
 		page_nb += 1
@@ -1182,7 +1191,7 @@ class main_window(wx.Frame):
 		self.ellipso_monitoring_plot.set_xlabel("Thickness (nm)")
 		self.ellipso_monitoring_plot.set_ylabel("Psi or Delta (deg.)")
 		self.ellipso_monitoring_plot.set_legend_position(GUI_plot.TOP)
-		self.lower_notebook.AddPage(self.ellipso_monitoring_plot, "Ellipso. monitoring")
+		self.lower_notebook.AddPage(self.ellipso_monitoring_plot, builtins._("Ellipso. monitoring"))
 		self.ellipso_monitoring_plot_page_nb = page_nb
 		
 		self.nb_pages = page_nb + 1
@@ -1234,7 +1243,7 @@ class main_window(wx.Frame):
 		
 		self.filter_description_box = wx.TextCtrl(self.filter_panel, -1)
 		
-		close_botton = wx.Button(self.filter_panel, wx.ID_CLOSE, "Back to filter list")
+		close_botton = wx.Button(self.filter_panel, wx.ID_CLOSE, _("Back to filter list"))
 		
 		self.filter_notebook = wx.Notebook(self.filter_panel, -1)
 		
@@ -1260,7 +1269,7 @@ class main_window(wx.Frame):
 		
 		self.filter_panel_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		self.filter_panel_sizer_1.Add(wx.StaticText(self.filter_panel, -1, "Description:"),
+		self.filter_panel_sizer_1.Add(wx.StaticText(self.filter_panel, -1, _("Description:")),
 		                              0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		self.filter_panel_sizer_1.Add(self.filter_description_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 5)
 		self.filter_panel_sizer_1.Add(close_botton, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, 5)
@@ -1284,20 +1293,22 @@ class main_window(wx.Frame):
 		
 		# if an error occured, show the error message.
 		if error:
-			wx.MessageBox("Some module(s) failed to load.\n\n%s" % error_message, "Module(s) failed to load", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox("Some module(s) failed to load.\n\n%s" % error_message, _("Module(s) failed to load"), wx.ICON_ERROR|wx.OK)
 		
 		# Make menus for the modules and to reload modules.
 		reload_modules_menu_IDs = []
 		for module in self.modules:
 			module_menu_ID = wx.NewId()
 			module_menu = wx.Menu()
-			self.modules_menu.AppendMenu(module_menu_ID, module.get_name(), module_menu)
+			module_label = builtins._(module.get_name())
+			self.modules_menu.AppendMenu(module_menu_ID, module_label, module_menu)
 			module.set_menu_ID(module_menu_ID)
 			
 			submodule_IDs = []
 			for submodule in module.get_submodule():
 				submodule_ID = wx.NewId()
-				module_menu.Append(submodule_ID, submodule.get_name(), submodule.get_name())
+				submodule_label = builtins._(submodule.get_name())
+				module_menu.Append(submodule_ID, submodule_label, submodule_label)
 				submodule_IDs.append(submodule_ID)
 				wx.EVT_MENU(self, submodule_ID, self.on_execute_module)
 			module.set_submodule_IDs(submodule_IDs)
@@ -1317,7 +1328,7 @@ class main_window(wx.Frame):
 		try:
 			import threading
 		except ImportError:
-			wx.MessageBox("OpenFilters requires multithreading\n\n Multithreading is not available on your system and OpenFilters cannot run.", "OpenFilters requires multithreading", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox(_("OpenFilters requires multithreading\n\n Multithreading is not available on your system and OpenFilters cannot run."), _("OpenFilters requires multithreading"), wx.ICON_ERROR|wx.OK)
 			
 			self.Hide()
 			self.Destroy()
@@ -1326,27 +1337,27 @@ class main_window(wx.Frame):
 		
 		message = ""
 		if not abeles.get_abeles_dll_import_success():
-			message += "Abeles dynamic library import failed, calculations will be approximatly 10 times slower and more memory will be used."
+			message += builtins._("Abeles dynamic library import failed, calculations will be approximatly 10 times slower and more memory will be used.")
 		if not moremath.get_moremath_dll_import_success():
 			if message: message += "\n\n"
-			message += "Moremath dynamic library import failed, refinement will be approximatly 4 times slower."
+			message += builtins._("Moremath dynamic library import failed, refinement will be approximatly 4 times slower.")
 		if message:
-			message = "OpenFilters will be slow!\n\n" + message
-			wx.MessageBox(message, "Dynamic library import failed", wx.ICON_INFORMATION|wx.OK)
+			message = builtins._("OpenFilters will be slow!\n\n") + message
+			wx.MessageBox(message, _("Dynamic library import failed"), wx.ICON_INFORMATION|wx.OK)
 		
 		try:
 			from ast import literal_eval as _eval
 		except ImportError:
-			wx.MessageBox("Do not open files from untrusted sources!\n\nYou are running OpenFilters with a version of Python older than 2.6 and project files can be used to execute arbitrary code on your computer: DO NO OPEN PROJECT FILES FROM UNTRUSTED SOURCES. (See release notes for details.)", "Security alert", wx.ICON_WARNING|wx.OK)
+			wx.MessageBox(_("Do not open files from untrusted sources!\n\nYou are running OpenFilters with a version of Python older than 2.6 and project files can be used to execute arbitrary code on your computer: DO NO OPEN PROJECT FILES FROM UNTRUSTED SOURCES. (See release notes for details.)"), _("Security alert"), wx.ICON_WARNING|wx.OK)
 		
 		message = ""
 		
 		if self.user_material_directory and not os.path.isdir(self.user_material_directory):
 			self.user_material_directory = None
-			message = "The previously selected user material directory has been removed or renamed. "
+			message = builtins._("The previously selected user material directory has been removed or renamed. ")
 		
 		if not self.user_material_directory:
-			message += "OpenFilters requires the selection of a user material directory. All the materials you create are saved in this directory. If you don't choose one, you will not be able to create new materials."
+			message += builtins._("OpenFilters requires the selection of a user material directory. All the materials you create are saved in this directory. If you don't choose one, you will not be able to create new materials.")
 			dialog = user_material_directory_dialog(self, message = message)
 			answer = dialog.ShowModal()
 			if answer == wx.ID_OK:
@@ -1418,7 +1429,7 @@ class main_window(wx.Frame):
 		if id in self.recently_opened_project_IDs:
 			filename = self.recently_opened_projects[self.recently_opened_project_IDs.index(id)]
 			try:
-				directory, _ = os.path.split(filename)
+				directory, _filename = os.path.split(filename)
 				os.chdir(directory)
 			except OSError:
 				pass
@@ -1427,7 +1438,7 @@ class main_window(wx.Frame):
 			filename = self.open_example_IDs[id]
 		
 		else:
-			window = wx.FileDialog(self, "Open Project", os.getcwd(), "", project_wildcard, style = wx.OPEN|wx.CHANGE_DIR)
+			window = wx.FileDialog(self, _("Open Project"), os.getcwd(), "", project_wildcard, style = wx.OPEN|wx.CHANGE_DIR)
 			
 			answer = window.ShowModal()
 			if answer == wx.ID_OK:
@@ -1444,7 +1455,7 @@ class main_window(wx.Frame):
 			except (project.project_error, optical_filter.filter_error, targets.target_error, materials.material_error) as error:
 				if filename in self.recently_opened_projects:
 					self.recently_opened_projects.remove(filename)
-				wx.MessageBox("An error occured while opening the project.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("An error occured while opening the project.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 		
 		if self.project:
 			if id not in self.open_example_IDs:
@@ -1483,7 +1494,7 @@ class main_window(wx.Frame):
 		
 		# Offer the user the possibility to save a modified project.
 		if self.project.get_modified():
-			dialog = wx.MessageDialog(self, "The project has been modified, do you want to save it before closing it?", "Save project?", wx.ICON_EXCLAMATION|wx.YES_NO|wx.CANCEL|wx.YES_DEFAULT)
+			dialog = wx.MessageDialog(self, _("The project has been modified, do you want to save it before closing it?"), _("Save project?"), wx.ICON_EXCLAMATION|wx.YES_NO|wx.CANCEL|wx.YES_DEFAULT)
 			answer = dialog.ShowModal()
 			if answer == wx.ID_CANCEL:
 				return
@@ -1545,7 +1556,7 @@ class main_window(wx.Frame):
 		This method takes a single argument:
 		  event              the event."""
 		
-		window = wx.FileDialog(self, "Save Project as", os.getcwd(), os.path.basename(self.project_filename), project_wildcard, style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Save Project as"), os.getcwd(), os.path.basename(self.project_filename), project_wildcard, style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
@@ -1580,7 +1591,7 @@ class main_window(wx.Frame):
 		try:
 			saved_version = project.read_project(self.project_filename)
 		except (project.project_error, optical_filter.filter_error, materials.material_error) as error:
-			wx.MessageBox("It is impossible to reopen the project.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox("It is impossible to reopen the project.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 			return
 		
 		self.project = saved_version
@@ -1635,7 +1646,7 @@ class main_window(wx.Frame):
 		
 		# Offer the user the possibility to save a modified project.
 		if self.project and self.project.get_modified():
-			dialog = wx.MessageDialog(self, "The project has been modified, do you want to save it before quitting?", "Save project?", wx.ICON_EXCLAMATION|wx.YES_NO|wx.CANCEL|wx.YES_DEFAULT)
+			dialog = wx.MessageDialog(self, _("The project has been modified, do you want to save it before quitting?"), _("Save project?"), wx.ICON_EXCLAMATION|wx.YES_NO|wx.CANCEL|wx.YES_DEFAULT)
 			answer = dialog.ShowModal()
 			if answer == wx.ID_CANCEL:
 				return
@@ -1663,10 +1674,10 @@ class main_window(wx.Frame):
 		try:
 			nb = self.project.add_filter()
 		except materials.material_error as error:
-			wx.MessageBox("It is impossible to create a new filter because there is a problem with one of the default materials.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox("It is impossible to create a new filter because there is a problem with one of the default materials.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 			return
 		except optical_filter.filter_error as error:
-			wx.MessageBox("It is impossible to create a new filter.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox("It is impossible to create a new filter.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 			return
 		
 		self.data.append([[] for i_page in range(self.nb_pages)])
@@ -1771,7 +1782,7 @@ class main_window(wx.Frame):
 			try:
 				target = window.get_target()
 			except targets.target_error as error:
-				wx.MessageBox("Error while reading the target.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Error while reading the target.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 		
 		window.Destroy()
 		
@@ -1984,7 +1995,7 @@ class main_window(wx.Frame):
 			try:
 				window.apply()
 			except import_layer_error as error:
-				wx.MessageBox("Error while importing layer.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Error while importing layer.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 			else:
 				self.filter_grid.reset_filter(self.selected_filter_nb)
 				side = window.get_side()
@@ -2114,7 +2125,7 @@ class main_window(wx.Frame):
 		
 		except Exception:
 			type_of_exception, value = sys.exc_info()[:2]
-			wx.MessageBox("An error occured while executing the dialog of submodule %s of module %s.\n\n%s." % (submodule.name, module.name, value), "Module error", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox("An error occured while executing the dialog of submodule %s of module %s.\n\n%s." % (submodule.name, module.name, value), _("Module error"), wx.ICON_ERROR|wx.OK)
 			
 			return
 		
@@ -2154,7 +2165,7 @@ class main_window(wx.Frame):
 		elif id == self.export_back_index_profile_ID:
 			side = BACK
 		
-		window = wx.FileDialog(self, "Export index profile", os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Export index profile"), os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
@@ -2280,7 +2291,7 @@ class main_window(wx.Frame):
 		This method takes a single argument:
 		  event              the event."""
 		
-		window = wx.FileDialog(self, "Export results as text", os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Export results as text"), os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
 			self.SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
@@ -2299,7 +2310,7 @@ class main_window(wx.Frame):
 			try:
 				export.export_results_to_text(filename, data)
 			except IOError as error:
-				wx.MessageBox("Exportation failed.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Exportation failed.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 			
 			self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 	
@@ -2316,7 +2327,7 @@ class main_window(wx.Frame):
 		This method takes a single argument:
 		  event              the event."""
 		
-		window = wx.FileDialog(self, "Export results as figure", os.getcwd(), "", GUI_plot.FIGURE_WILDCARD, style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Export results as figure"), os.getcwd(), "", GUI_plot.FIGURE_WILDCARD, style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
 			self.SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
@@ -2328,9 +2339,9 @@ class main_window(wx.Frame):
 			try:
 				self.pages[selected_page_nb].save_to_file(filename)
 			except KeyError:
-				wx.MessageBox("Invalid file extension.", "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox(_("Invalid file extension."), _("Error"), wx.ICON_ERROR|wx.OK)
 			except IOError as error:
-				wx.MessageBox("Exportation failed.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Exportation failed.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 			
 			self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 	
@@ -3009,7 +3020,7 @@ class main_window(wx.Frame):
 				if submodule:
 					break
 			else:
-				wx.MessageBox("The module used to design that layer is not present on this system.", "Unknown module", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox(_("The module used to design that layer is not present on this system."), _("Unknown module"), wx.ICON_ERROR|wx.OK)
 				return
 			
 			try:
@@ -3022,7 +3033,7 @@ class main_window(wx.Frame):
 			
 			except Exception:
 				type_of_exception, value = sys.exc_info()[:2]
-				wx.MessageBox("An error occured while executing the submodule %s of module %s.\n\n%s." % (submodule.name, module.name, value), "Module error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("An error occured while executing the submodule %s of module %s.\n\n%s." % (submodule.name, module.name, value), _("Module error"), wx.ICON_ERROR|wx.OK)
 				return
 			
 			if answer == wx.ID_OK and new_parameters != parameters:

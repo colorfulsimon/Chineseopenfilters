@@ -96,26 +96,42 @@ class filter_property_dialog_validator(wx.PyValidator):
 		and it returns True if the range of wavelengths is correctly
 		defined or False otherwise."""
 		
+		def validator_is_silent():
+			try:
+				return wx.Validator.IsSilent()
+			except AttributeError:
+				try:
+					return wx.Validator_IsSilent()
+				except AttributeError:
+					return False
+
+		# In wxPython Phoenix, validators attached to buttons can receive the
+		# button as parent. Walk up to the owning dialog.
+		dialog = parent
+		if not hasattr(dialog, "from_wavelength_box"):
+			window = self.GetWindow()
+			dialog = window.GetParent() if window is not None else parent
+
 		# Verify that to_wavelength is larger that from_wavelength.
-		from_wavelength = float(parent.from_wavelength_box.GetValue())
-		to_wavelength = float(parent.to_wavelength_box.GetValue())
+		from_wavelength = float(dialog.from_wavelength_box.GetValue())
+		to_wavelength = float(dialog.to_wavelength_box.GetValue())
 		if to_wavelength < from_wavelength:
-			if not wx.Validator_IsSilent():
+			if not validator_is_silent():
 				wx.Bell()
-			parent.to_wavelength_box.SetFocus()
-			parent.to_wavelength_box.SetSelection(0, 1000)
-			parent.Refresh()
+			dialog.to_wavelength_box.SetFocus()
+			dialog.to_wavelength_box.SetSelection(0, 1000)
+			dialog.Refresh()
 			return False
 		
 		# Verify that by_wavelength is smaller than the difference between
 		# from_wavelength and to_wavelength.
-		by_wavelength = float(parent.by_wavelength_box.GetValue())
+		by_wavelength = float(dialog.by_wavelength_box.GetValue())
 		if by_wavelength >= (to_wavelength - from_wavelength):
-			if not wx.Validator_IsSilent():
+			if not validator_is_silent():
 				wx.Bell()
-			parent.by_wavelength_box.SetFocus()
-			parent.by_wavelength_box.SetSelection(0, 1000)
-			parent.Refresh()
+			dialog.by_wavelength_box.SetFocus()
+			dialog.by_wavelength_box.SetSelection(0, 1000)
+			dialog.Refresh()
 			return False
 		
 		return True
@@ -185,7 +201,7 @@ class filter_property_dialog(wx.Dialog):
 		material_catalog = self.filter.get_material_catalog()
 		
 		# A static box for the substrate and mediums.
-		substrate_and_medium_static_box = wx.StaticBox(self, -1, "Substrate and mediums" )
+		substrate_and_medium_static_box = wx.StaticBox(self, -1, _("Substrate and mediums") )
 		
 		# Boxes to specify the substrate and its thickness.
 		self.substrate_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = material_validator(material_catalog, MATERIAL_REGULAR))
@@ -200,11 +216,11 @@ class filter_property_dialog(wx.Dialog):
 		self.back_medium_box.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		
 		# Check box for substrate and mediums consideration.
-		self.dont_consider_substrate_box = wx.CheckBox(self, -1, "Don't consider substrate and mediums")
+		self.dont_consider_substrate_box = wx.CheckBox(self, -1, _("Don't consider substrate and mediums"))
 		self.Bind(wx.EVT_CHECKBOX, self.on_dont_consider_substrate, self.dont_consider_substrate_box)
 		
 		# A static box for the wavelengths.
-		wavelengths_static_box = wx.StaticBox(self, -1, "Wavelengths")
+		wavelengths_static_box = wx.StaticBox(self, -1, _("Wavelengths"))
 		
 		# A box to specify the center wavelength.
 		self.center_wavelength_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, None, include_minimum = False))
@@ -219,10 +235,10 @@ class filter_property_dialog(wx.Dialog):
 		self.by_wavelength_box.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		
 		# A static box for specification of graded-index layers.
-		graded_index_static_box = wx.StaticBox(self, -1, "Graded-index layers" )
+		graded_index_static_box = wx.StaticBox(self, -1, _("Graded-index layers") )
 		
 		# Buttons and a box to specify the step spacing.
-		self.step_spacing_deposition_button = wx.RadioButton(self, -1, "deposition", style = wx.RB_GROUP)
+		self.step_spacing_deposition_button = wx.RadioButton(self, -1, _("deposition"), style = wx.RB_GROUP)
 		self.step_spacing_other_button = wx.RadioButton(self, -1, "")
 		self.step_spacing_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, None, self.step_spacing_other_button.GetValue))
 		self.step_spacing_box.Bind(wx.EVT_TEXT, self.on_step_spacing_box)
@@ -233,37 +249,37 @@ class filter_property_dialog(wx.Dialog):
 		self.minimum_thickness_box.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		
 		# A static box for the the illuminant and observer.
-		color_static_box = wx.StaticBox(self, -1, "Color" )
+		color_static_box = wx.StaticBox(self, -1, _("Color") )
 		
 		# Choices to specify the illuminant and the observer.
 		self.illuminant_choice = wx.Choice(self, -1, (-1, -1), choices = color.get_illuminant_names(), validator = illuminant_validator())
 		self.observer_choice = wx.Choice(self, -1, (-1, -1), choices = color.get_observer_names(), validator = observer_validator())
 		
 		# A static box for the analysis.
-		analysis_static_box = wx.StaticBox(self, -1, "Analysis" )
+		analysis_static_box = wx.StaticBox(self, -1, _("Analysis") )
 		
 		# Check box for backside consideration.
-		self.consider_backside_box = wx.CheckBox(self, -1, "Consider backside")
+		self.consider_backside_box = wx.CheckBox(self, -1, _("Consider backside"))
 		
 		# Buttons for the ellipsometer type.
-		self.RAE_button = wx.RadioButton(self, -1, "RAE", style = wx.RB_GROUP)
-		self.RPE_button = wx.RadioButton(self, -1, "RPE")
-		self.RCE_button = wx.RadioButton(self, -1, "RCE")
+		self.RAE_button = wx.RadioButton(self, -1, _("RAE"), style = wx.RB_GROUP)
+		self.RPE_button = wx.RadioButton(self, -1, _("RPE"))
+		self.RCE_button = wx.RadioButton(self, -1, _("RCE"))
 		
 		# Box for the Delta min.
 		self.Delta_min_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(-360.0, 0.0))
 		self.Delta_min_box.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		
 		# A static box for the monitoring.
-		monitoring_static_box = wx.StaticBox(self, -1, "Monitoring" )
+		monitoring_static_box = wx.StaticBox(self, -1, _("Monitoring") )
 		
 		# Check box for backside consideration on monitoring.
-		self.consider_backside_on_monitoring_box = wx.CheckBox(self, -1, "Consider backside")
+		self.consider_backside_on_monitoring_box = wx.CheckBox(self, -1, _("Consider backside"))
 		
 		# Buttons for the monitoring ellipsometer type.
-		self.monitoring_RAE_button = wx.RadioButton(self, -1, "RAE", style = wx.RB_GROUP)
-		self.monitoring_RPE_button = wx.RadioButton(self, -1, "RPE")
-		self.monitoring_RCE_button = wx.RadioButton(self, -1, "RCE")
+		self.monitoring_RAE_button = wx.RadioButton(self, -1, _("RAE"), style = wx.RB_GROUP)
+		self.monitoring_RPE_button = wx.RadioButton(self, -1, _("RPE"))
+		self.monitoring_RCE_button = wx.RadioButton(self, -1, _("RCE"))
 		
 		# Box for the monitoring Delta min.
 		self.monitoring_Delta_min_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(-360.0, 0.0))
@@ -281,22 +297,22 @@ class filter_property_dialog(wx.Dialog):
 		substrate_and_medium_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		substrate_and_medium_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		substrate_and_medium_sizer_1.Add(wx.StaticText(self, -1, "Substrate:"),
+		substrate_and_medium_sizer_1.Add(wx.StaticText(self, -1, _("Substrate:")),
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		substrate_and_medium_sizer_1.Add(self.substrate_box,
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		substrate_and_medium_sizer_1.Add(wx.StaticText(self, -1, "Thickness:"),
+		substrate_and_medium_sizer_1.Add(wx.StaticText(self, -1, _("Thickness:")),
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		substrate_and_medium_sizer_1.Add(self.substrate_thickness_box,
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		substrate_and_medium_sizer_1.Add(wx.StaticText(self, -1, "mm"),
+		substrate_and_medium_sizer_1.Add(wx.StaticText(self, -1, _("mm")),
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		substrate_and_medium_sizer_2.Add(wx.StaticText(self, -1, "Front medium:"),
+		substrate_and_medium_sizer_2.Add(wx.StaticText(self, -1, _("Front medium:")),
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		substrate_and_medium_sizer_2.Add(self.front_medium_box,
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		substrate_and_medium_sizer_2.Add(wx.StaticText(self, -1, "Back medium:"),
+		substrate_and_medium_sizer_2.Add(wx.StaticText(self, -1, _("Back medium:")),
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		substrate_and_medium_sizer_2.Add(self.back_medium_box,
 		                                 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -310,26 +326,26 @@ class filter_property_dialog(wx.Dialog):
 		wavelengths_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		wavelengths_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		wavelengths_sizer_1.Add(wx.StaticText(self, -1, "Reference wavelength:"),
+		wavelengths_sizer_1.Add(wx.StaticText(self, -1, _("Reference wavelength:")),
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		wavelengths_sizer_1.Add(self.center_wavelength_box,
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelengths_sizer_1.Add(wx.StaticText(self, -1, "nm"),
+		wavelengths_sizer_1.Add(wx.StaticText(self, -1, _("nm")),
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		wavelengths_sizer_2.Add(wx.StaticText(self, -1, "Wavelengths:"),
+		wavelengths_sizer_2.Add(wx.StaticText(self, -1, _("Wavelengths:")),
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		wavelengths_sizer_2.Add(self.from_wavelength_box,
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelengths_sizer_2.Add(wx.StaticText(self, -1, "to"),
+		wavelengths_sizer_2.Add(wx.StaticText(self, -1, _("to")),
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		wavelengths_sizer_2.Add(self.to_wavelength_box,
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelengths_sizer_2.Add(wx.StaticText(self, -1, "every"),
+		wavelengths_sizer_2.Add(wx.StaticText(self, -1, _("every")),
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		wavelengths_sizer_2.Add(self.by_wavelength_box,
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelengths_sizer_2.Add(wx.StaticText(self, -1, "nm"),
+		wavelengths_sizer_2.Add(wx.StaticText(self, -1, _("nm")),
 		                        0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		wavelengths_sizer.Add(wavelengths_sizer_1, 0, wx.TOP|wx.LEFT|wx.RIGHT, 5)
@@ -340,7 +356,7 @@ class filter_property_dialog(wx.Dialog):
 		graded_index_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		graded_index_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		graded_index_sizer_1.Add(wx.StaticText(self, -1, "Step spacing:"),
+		graded_index_sizer_1.Add(wx.StaticText(self, -1, _("Step spacing:")),
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		graded_index_sizer_1.Add(self.step_spacing_deposition_button,
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -349,11 +365,11 @@ class filter_property_dialog(wx.Dialog):
 		graded_index_sizer_1.Add(self.step_spacing_box,
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		graded_index_sizer_2.Add(wx.StaticText(self, -1, "Sublayer minimum thickness:"),
+		graded_index_sizer_2.Add(wx.StaticText(self, -1, _("Sublayer minimum thickness:")),
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		graded_index_sizer_2.Add(self.minimum_thickness_box,
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		graded_index_sizer_2.Add(wx.StaticText(self, -1, "nm"),
+		graded_index_sizer_2.Add(wx.StaticText(self, -1, _("nm")),
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		graded_index_sizer.Add(graded_index_sizer_1, 0, wx.TOP|wx.LEFT|wx.RIGHT, 5)
@@ -363,11 +379,11 @@ class filter_property_dialog(wx.Dialog):
 		color_sizer = wx.StaticBoxSizer(color_static_box, wx.VERTICAL)
 		color_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		color_sizer_1.Add(wx.StaticText(self, -1, "Illuminant:"),
+		color_sizer_1.Add(wx.StaticText(self, -1, _("Illuminant:")),
 		                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		color_sizer_1.Add(self.illuminant_choice,
 		                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		color_sizer_1.Add(wx.StaticText(self, -1, "Observer:"),
+		color_sizer_1.Add(wx.StaticText(self, -1, _("Observer:")),
 		                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		color_sizer_1.Add(self.observer_choice,
 		                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -379,7 +395,7 @@ class filter_property_dialog(wx.Dialog):
 		analysis_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		analysis_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		analysis_sizer_1.Add(wx.StaticText(self, -1, "Ellipsometer type:"),
+		analysis_sizer_1.Add(wx.StaticText(self, -1, _("Ellipsometer type:")),
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		analysis_sizer_1.Add(self.RAE_button,
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -388,11 +404,11 @@ class filter_property_dialog(wx.Dialog):
 		analysis_sizer_1.Add(self.RCE_button,
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		analysis_sizer_2.Add(wx.StaticText(self, -1, "Delta min:"),
+		analysis_sizer_2.Add(wx.StaticText(self, -1, _("Delta min:")),
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		analysis_sizer_2.Add(self.Delta_min_box,
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		analysis_sizer_2.Add(wx.StaticText(self, -1, "degrees"),
+		analysis_sizer_2.Add(wx.StaticText(self, -1, _("degrees")),
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		analysis_sizer.Add(self.consider_backside_box,
@@ -408,7 +424,7 @@ class filter_property_dialog(wx.Dialog):
 		monitoring_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		monitoring_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		monitoring_sizer_1.Add(wx.StaticText(self, -1, "Ellipsometer type:"),
+		monitoring_sizer_1.Add(wx.StaticText(self, -1, _("Ellipsometer type:")),
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		monitoring_sizer_1.Add(self.monitoring_RAE_button,
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -417,19 +433,19 @@ class filter_property_dialog(wx.Dialog):
 		monitoring_sizer_1.Add(self.monitoring_RCE_button,
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		monitoring_sizer_2.Add(wx.StaticText(self, -1, "Delta min:"),
+		monitoring_sizer_2.Add(wx.StaticText(self, -1, _("Delta min:")),
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		monitoring_sizer_2.Add(self.monitoring_Delta_min_box,
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		monitoring_sizer_2.Add(wx.StaticText(self, -1, "degrees"),
+		monitoring_sizer_2.Add(wx.StaticText(self, -1, _("degrees")),
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		monitoring_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
-		monitoring_sizer_3.Add(wx.StaticText(self, -1, "Sublayer thickness:"),
+		monitoring_sizer_3.Add(wx.StaticText(self, -1, _("Sublayer thickness:")),
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		monitoring_sizer_3.Add(self.monitoring_sublayer_thickness_box,
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		monitoring_sizer_3.Add(wx.StaticText(self, -1, "nm"),
+		monitoring_sizer_3.Add(wx.StaticText(self, -1, _("nm")),
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		monitoring_sizer.Add(self.consider_backside_on_monitoring_box,
@@ -663,7 +679,7 @@ class filter_property_dialog(wx.Dialog):
 				self.filter.set_center_wavelength(center_wavelength)
 				modified = True
 			except (graded.grading_error, materials.material_error) as error:
-				wx.MessageBox("Could not change the reference wavelength.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Could not change the reference wavelength.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 		
 		if (from_wavelength, to_wavelength, by_wavelength) != self.filter.get_wavelengths_by_range():
 			self.filter.set_wavelengths_by_range(from_wavelength, to_wavelength, by_wavelength)
@@ -674,14 +690,14 @@ class filter_property_dialog(wx.Dialog):
 				self.filter.set_step_spacing(step_spacing)
 				modified = True
 			except graded.grading_error as error:
-				wx.MessageBox("Could not change the step spacing.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Could not change the step spacing.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 		
 		if minimum_thickness != self.filter.get_minimum_thickness():
 			try:
 				self.filter.set_minimum_thickness(minimum_thickness)
 				modified = True
 			except graded.grading_error as error:
-				wx.MessageBox("Could not change the sublayer minimum thickness.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Could not change the sublayer minimum thickness.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 		
 		if illuminant != self.filter.get_illuminant():
 			self.filter.set_illuminant(illuminant)

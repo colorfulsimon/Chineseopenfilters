@@ -125,26 +125,42 @@ class calculate_color_trajectory_dialog_validator(calculate_dialog_validator):
 		and it returns True if the range of angles is correctly defined or
 		False otherwise."""
 		
+		def validator_is_silent():
+			try:
+				return wx.Validator.IsSilent()
+			except AttributeError:
+				try:
+					return wx.Validator_IsSilent()
+				except AttributeError:
+					return False
+
+		# In wxPython Phoenix validators attached to buttons may receive the
+		# button as parent. Walk up to the dialog instance.
+		dialog = parent
+		if not hasattr(dialog, "from_angle_box"):
+			window = self.GetWindow()
+			dialog = window.GetParent() if window is not None else parent
+
 		# Verify that to_angle is larger than from_angle.
-		from_angle = float(parent.from_angle_box.GetValue())
-		to_angle = float(parent.to_angle_box.GetValue())
+		from_angle = float(dialog.from_angle_box.GetValue())
+		to_angle = float(dialog.to_angle_box.GetValue())
 		if to_angle < from_angle:
-			if not wx.Validator_IsSilent():
+			if not validator_is_silent():
 				wx.Bell()
-			parent.to_angle_box.SetFocus()
-			parent.to_angle_box.SetSelection(0, 1000)
-			parent.Refresh()
+			dialog.to_angle_box.SetFocus()
+			dialog.to_angle_box.SetSelection(0, 1000)
+			dialog.Refresh()
 			return False
 		
 		# Verify that by_angle is smaller than the difference between
 		# from_angle and to_angle.
-		by_angle = float(parent.by_angle_box.GetValue())
+		by_angle = float(dialog.by_angle_box.GetValue())
 		if by_angle >= (to_angle - from_angle):
-			if not wx.Validator_IsSilent():
+			if not validator_is_silent():
 				wx.Bell()
-			parent.by_angle_box.SetFocus()
-			parent.by_angle_box.SetSelection(0, 1000)
-			parent.Refresh()
+			dialog.by_angle_box.SetFocus()
+			dialog.by_angle_box.SetSelection(0, 1000)
+			dialog.Refresh()
 			return False
 		
 		return True
@@ -182,7 +198,7 @@ class calculate_dialog(wx.Dialog):
 		self.parent = parent
 		self.filter = filter
 		
-		wx.Dialog.__init__(self, parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -225,20 +241,20 @@ class calculate_dialog(wx.Dialog):
 		self.wavelength_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER)
 		if self.include_spectroscopic:
 			self.single_wvl_button = wx.RadioButton(self, -1, "", style = wx.RB_GROUP)
-			self.spectroscopic_button = wx.RadioButton(self, -1, "spectroscopic")
+			self.spectroscopic_button = wx.RadioButton(self, -1, _("spectroscopic"))
 			self.wavelength_box.SetValidator(float_validator(0.0, None, self.single_wvl_button.GetValue, include_minimum = False))
 		else:
 			self.wavelength_box.SetValidator(float_validator(0.0, None, include_minimum = False))
 		self.wavelength_box.Bind(wx.EVT_TEXT, self.on_wavelength_box)
 		self.wavelength_box.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		
-		self.content_sizer.Add(wx.StaticText(self, -1, "Wavelength:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		self.content_sizer.Add(wx.StaticText(self, -1, _("Wavelength:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		wavelength_sizer_1 = wx.BoxSizer(wx.VERTICAL)
 		wavelength_sizer_1_1 = wx.BoxSizer(wx.HORIZONTAL)
 		if self.include_spectroscopic:
 			wavelength_sizer_1_1.Add(self.single_wvl_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, 5)
 		wavelength_sizer_1_1.Add(self.wavelength_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-		wavelength_sizer_1_1.Add(wx.StaticText(self, -1, "nm"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		wavelength_sizer_1_1.Add(wx.StaticText(self, -1, _("nm")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		wavelength_sizer_1.Add(wavelength_sizer_1_1, 0, wx.ALIGN_LEFT, 5)
 		if self.include_spectroscopic:
 			wavelength_sizer_1.Add(self.spectroscopic_button, 0, wx.ALIGN_LEFT|wx.TOP, 5)
@@ -261,10 +277,10 @@ class calculate_dialog(wx.Dialog):
 		self.angle_box.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		
 		angle_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
-		angle_sizer_1.Add(self.angle_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-		angle_sizer_1.Add(wx.StaticText(self, -1, "degrees"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		self.content_sizer.Add(wx.StaticText(self, -1, "Angle:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-		self.content_sizer.Add(angle_sizer_1, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		angle_sizer_1.Add(self.angle_box, 0, wx.ALIGN_CENTER_VERTICAL)
+		angle_sizer_1.Add(wx.StaticText(self, -1, _("degrees")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		self.content_sizer.Add(wx.StaticText(self, -1, _("Angle:")), 1, wx.ALIGN_CENTER_VERTICAL)
+		self.content_sizer.Add(angle_sizer_1, 1, wx.ALIGN_CENTER_VERTICAL)
 		
 		# The default value.
 		self.angle_box.SetValue("0.0")
@@ -287,12 +303,12 @@ class calculate_dialog(wx.Dialog):
 		
 		angle_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		angle_sizer_1.Add(self.from_angle_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-		angle_sizer_1.Add(wx.StaticText(self, -1, "to"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		angle_sizer_1.Add(wx.StaticText(self, -1, _("to")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		angle_sizer_1.Add(self.to_angle_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		angle_sizer_1.Add(wx.StaticText(self, -1, "every"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		angle_sizer_1.Add(wx.StaticText(self, -1, _("every")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		angle_sizer_1.Add(self.by_angle_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		angle_sizer_1.Add(wx.StaticText(self, -1, "degrees"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		self.content_sizer.Add(wx.StaticText(self, -1, "Angles:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		angle_sizer_1.Add(wx.StaticText(self, -1, _("degrees")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		self.content_sizer.Add(wx.StaticText(self, -1, _("Angles:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		self.content_sizer.Add(angle_sizer_1, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
 		# The default values.
@@ -309,12 +325,12 @@ class calculate_dialog(wx.Dialog):
 	def add_polarization_choice(self):
 		"""Add polarization choices to the dialog"""
 		
-		self.s_polarized_button = wx.RadioButton(self, -1, "s", style = wx.RB_GROUP)
-		self.p_polarized_button = wx.RadioButton(self, -1, "p")
+		self.s_polarized_button = wx.RadioButton(self, -1, _("s"), style = wx.RB_GROUP)
+		self.p_polarized_button = wx.RadioButton(self, -1, _("p"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_polarization_radio_button, self.s_polarized_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_polarization_radio_button, self.p_polarized_button)
 		if not self.s_and_p_only:
-			self.unpolarized_button = wx.RadioButton(self, -1, "unpolarized")
+			self.unpolarized_button = wx.RadioButton(self, -1, _("unpolarized"))
 			self.other_polarizations_button = wx.RadioButton(self, -1, "")
 			self.other_polarizations_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, 90.0, self.other_polarizations_button.GetValue))
 			self.Bind(wx.EVT_RADIOBUTTON, self.on_polarization_radio_button, self.unpolarized_button)
@@ -322,7 +338,7 @@ class calculate_dialog(wx.Dialog):
 			self.other_polarizations_box.Bind(wx.EVT_TEXT, self.on_other_polarizations_box)
 			self.other_polarizations_box.Bind(wx.EVT_TEXT_ENTER, self.on_enter)
 		
-		self.content_sizer.Add(wx.StaticText(self, -1, "Polarization:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_TOP)
+		self.content_sizer.Add(wx.StaticText(self, -1, _("Polarization:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_TOP)
 		polarization_choices_sizer_1 = wx.BoxSizer(wx.VERTICAL)
 		polarization_choices_sizer_1_1 = wx.BoxSizer(wx.HORIZONTAL)
 		polarization_choices_sizer_1_1.Add(self.s_polarized_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
@@ -335,7 +351,7 @@ class calculate_dialog(wx.Dialog):
 			polarization_choices_sizer_1_2 = wx.BoxSizer(wx.HORIZONTAL)
 			polarization_choices_sizer_1_2.Add(self.other_polarizations_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 			polarization_choices_sizer_1_2.Add(self.other_polarizations_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-			polarization_choices_sizer_1_2.Add(wx.StaticText(self, -1, "degrees"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+			polarization_choices_sizer_1_2.Add(wx.StaticText(self, -1, _("degrees")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 			polarization_choices_sizer_1.Add(polarization_choices_sizer_1_2, 0, wx.ALIGN_LEFT|wx.TOP, 5)
 		
 		self.content_sizer.Add(polarization_choices_sizer_1, wx.ALIGN_LEFT|wx.ALIGN_TOP)
@@ -355,9 +371,9 @@ class calculate_dialog(wx.Dialog):
 		self.illuminant_choice = wx.Choice(self, -1, (-1, -1), choices = color.get_illuminant_names(), validator = illuminant_validator())
 		self.observer_choice = wx.Choice(self, -1, (-1, -1), choices = color.get_observer_names(), validator = observer_validator())
 		
-		self.content_sizer.Add(wx.StaticText(self, -1, "Illuminant:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		self.content_sizer.Add(wx.StaticText(self, -1, _("Illuminant:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		self.content_sizer.Add(self.illuminant_choice, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-		self.content_sizer.Add(wx.StaticText(self, -1, "Observer:"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		self.content_sizer.Add(wx.StaticText(self, -1, _("Observer:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		self.content_sizer.Add(self.observer_choice, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
 		# The default values.

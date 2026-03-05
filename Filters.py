@@ -26,6 +26,11 @@
 
 import os
 
+# wxPython Phoenix performs strict runtime checks on sizer flags used by this
+# legacy UI codebase. Suppress those assertions by default during migration so
+# dialogs remain usable.
+os.environ.setdefault("WXSUPPRESS_SIZER_FLAGS_CHECK", "1")
+
 try:
 	import builtins
 except ImportError:  # pragma: no cover - Python 2 fallback
@@ -37,10 +42,6 @@ import config
 import i18n
 import localize
 import user_config
-
-import GUI
-
-
 
 # Initialize i18n before any GUI text is created.
 def init_i18n():
@@ -64,10 +65,16 @@ def run(interface):
 	
 	If the GUI interface is selected, a GUI is started."""
 	
+	# Ensure i18n is installed before importing GUI modules.
+	init_i18n()
+
 	# Localize the software.
 	localize.localize()
 	
 	if interface == "GUI":
+		# Import GUI only after i18n is initialized, otherwise many labels
+		# get frozen in English at module import time.
+		import GUI
 		app = GUI.Filters_GUI(0)
 		app.MainLoop()
 

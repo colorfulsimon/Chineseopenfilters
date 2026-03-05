@@ -23,10 +23,6 @@
 
 
 
-import string
-
-
-
 ########################################################################
 #                                                                      #
 # version                                                              #
@@ -59,19 +55,23 @@ class version(object):
 		try:
 			if len(args) == 1 and isinstance(args[0], str):
 				number, _, self.build = args[0].partition("-")
-				numbers = string.split(number, ".")
+				numbers = number.split(".")
 				self.major = int(numbers[0])
 				self.minor = int(numbers[1])
-				if len(numbers) == 2: self.revision = 0
-				elif len(numbers) == 3: self.revision = int(numbers[2])
-				else:	raise ValueError
-			
+				if len(numbers) == 2:
+					self.revision = 0
+				elif len(numbers) == 3:
+					self.revision = int(numbers[2])
+				else:
+					raise ValueError
 			else:
 				self.major = int(args[0])
 				self.minor = int(args[1])
-				if len(args) > 2: self.revision = int(args[2])
-				else: self.revision = 0
-		except:
+				if len(args) > 2:
+					self.revision = int(args[2])
+				else:
+					self.revision = 0
+		except Exception:
 			raise ValueError
 	
 	

@@ -79,7 +79,7 @@ class target_dialog(wx.Dialog):
 		  target    (optional) the target to be modified by the dialog when
 		            the dialog is used to modify an existing target."""
 		
-		wx.Dialog.__init__(self, parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.target = target
 		
@@ -121,11 +121,11 @@ class target_dialog(wx.Dialog):
 		
 		# Arrange it in a sizer.
 		angle_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		angle_sizer.Add(wx.StaticText(self, -1, "Angle:"),
+		angle_sizer.Add(wx.StaticText(self, -1, _("Angle:")),
 		                0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		angle_sizer.Add(self.angle_box,
 		                0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		angle_sizer.Add(wx.StaticText(self, -1, "degres"),
+		angle_sizer.Add(wx.StaticText(self, -1, _("degres")),
 		                0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		# Add it to the content sizer.
@@ -141,12 +141,12 @@ class target_dialog(wx.Dialog):
 		"""Add polarization choice to the dialog"""
 		
 		# Create the buttons.
-		self.s_polarized_button = wx.RadioButton(self, -1, "s", style = wx.RB_GROUP)
-		self.p_polarized_button = wx.RadioButton(self, -1, "p")
+		self.s_polarized_button = wx.RadioButton(self, -1, _("s"), style = wx.RB_GROUP)
+		self.p_polarized_button = wx.RadioButton(self, -1, _("p"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_polarization_radio_button, self.s_polarized_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_polarization_radio_button, self.p_polarized_button)
 		if self.allow_arbitrary_polarization:
-			self.unpolarized_button = wx.RadioButton(self, -1, "unpolarized")
+			self.unpolarized_button = wx.RadioButton(self, -1, _("unpolarized"))
 			self.other_polarizations_button = wx.RadioButton(self, -1, "")
 			self.other_polarizations_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, 90.0, self.other_polarizations_button.GetValue))
 			self.Bind(wx.EVT_RADIOBUTTON, self.on_polarization_radio_button, self.unpolarized_button)
@@ -155,7 +155,7 @@ class target_dialog(wx.Dialog):
 		
 		# Arrange them in a sizer.
 		polarization_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		polarization_sizer.Add(wx.StaticText(self, -1, "Polarization:"),
+		polarization_sizer.Add(wx.StaticText(self, -1, _("Polarization:")),
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		polarization_sizer.Add(self.s_polarized_button,
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -168,7 +168,7 @@ class target_dialog(wx.Dialog):
 														 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 			polarization_sizer.Add(self.other_polarizations_box,
 														 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-			polarization_sizer.Add(wx.StaticText(self, -1, "degres"),
+			polarization_sizer.Add(wx.StaticText(self, -1, _("degres")),
 														 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		# Add it to the content sizer.
@@ -183,12 +183,12 @@ class target_dialog(wx.Dialog):
 	def add_direction_choice(self):
 		"""Add direction radio buttons to the dialog"""
 		
-		self.normal_direction_button = wx.RadioButton(self, -1, "normal", style = wx.RB_GROUP)
-		self.reverse_direction_button = wx.RadioButton(self, -1, "reverse")
+		self.normal_direction_button = wx.RadioButton(self, -1, _("normal"), style = wx.RB_GROUP)
+		self.reverse_direction_button = wx.RadioButton(self, -1, _("reverse"))
 		
 		# Arrange it in a sizer.
 		direction_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		direction_sizer.Add(wx.StaticText(self, -1, "Direction:"),
+		direction_sizer.Add(wx.StaticText(self, -1, _("Direction:")),
 		                    0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		direction_sizer.Add(self.normal_direction_button,
 		                    0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -212,11 +212,11 @@ class target_dialog(wx.Dialog):
 		
 		# Arrange it in a sizer.
 		wavelength_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		wavelength_sizer.Add(wx.StaticText(self, -1, "Wavelength:"),
+		wavelength_sizer.Add(wx.StaticText(self, -1, _("Wavelength:")),
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		wavelength_sizer.Add(self.wavelength_box,
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelength_sizer.Add(wx.StaticText(self, -1, "nm"),
+		wavelength_sizer.Add(wx.StaticText(self, -1, _("nm")),
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		# Add it to the content sizer.
@@ -267,7 +267,7 @@ class target_dialog(wx.Dialog):
 		# Radio boxes to specify if only the data points are used, or if
 		# the spectrum should be interpolated over a range of wavelength.
 		self.wavelength_range_button = wx.RadioButton(self, -1, "", style = wx.RB_GROUP)
-		self.wavelength_point_button = wx.RadioButton(self, -1, "only at definition points")
+		self.wavelength_point_button = wx.RadioButton(self, -1, _("only at definition points"))
 		
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_wavelength_range_radio_button, self.wavelength_range_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_wavelength_range_radio_button, self.wavelength_point_button)
@@ -283,21 +283,21 @@ class target_dialog(wx.Dialog):
 		
 		# Arrange them in a sizer.
 		wavelengths_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		wavelengths_sizer.Add(wx.StaticText(self, -1, "Wavelengths:"),
+		wavelengths_sizer.Add(wx.StaticText(self, -1, _("Wavelengths:")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		wavelengths_sizer.Add(self.wavelength_range_button,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		wavelengths_sizer.Add(self.from_wavelength_box,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelengths_sizer.Add(wx.StaticText(self, -1, "to"),
+		wavelengths_sizer.Add(wx.StaticText(self, -1, _("to")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		wavelengths_sizer.Add(self.to_wavelength_box,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelengths_sizer.Add(wx.StaticText(self, -1, "by"),
+		wavelengths_sizer.Add(wx.StaticText(self, -1, _("by")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		wavelengths_sizer.Add(self.by_wavelength_box,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		wavelengths_sizer.Add(wx.StaticText(self, -1, "nm"),
+		wavelengths_sizer.Add(wx.StaticText(self, -1, _("nm")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		wavelengths_sizer.Add(self.wavelength_point_button,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
@@ -324,7 +324,7 @@ class target_dialog(wx.Dialog):
 		self.points_grid = wx.grid.Grid(self, -1, size = (400, 100), style = wx.SUNKEN_BORDER)
 		self.points_grid.CreateGrid(0, 3)
 		self.points_grid.SetColSize(0, 80)
-		self.points_grid.SetColLabelValue(0, "Wavelength")
+		self.points_grid.SetColLabelValue(0, _("Wavelength"))
 		self.points_grid.SetColSize(1, 80)
 		self.points_grid.SetColLabelValue(1, self.data_column_title)
 		self.points_grid.SetColSize(2, 80)
@@ -334,7 +334,7 @@ class target_dialog(wx.Dialog):
 		
 		# Put the nb points box in a sizer.
 		nb_points_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_points_sizer.Add(wx.StaticText(self, -1, "Nb definition points:"),
+		nb_points_sizer.Add(wx.StaticText(self, -1, _("Nb definition points:")),
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		nb_points_sizer.Add(self.nb_points_box,
 		                       0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -358,11 +358,11 @@ class target_dialog(wx.Dialog):
 		
 		# Arrange them in a sizer.
 		illuminant_and_observer_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		illuminant_and_observer_sizer.Add(wx.StaticText(self, -1, "Illuminant:"),
+		illuminant_and_observer_sizer.Add(wx.StaticText(self, -1, _("Illuminant:")),
 		                                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		illuminant_and_observer_sizer.Add(self.illuminant_choice,
 		                                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		illuminant_and_observer_sizer.Add(wx.StaticText(self, -1, "Observer:"),
+		illuminant_and_observer_sizer.Add(wx.StaticText(self, -1, _("Observer:")),
 		                                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		illuminant_and_observer_sizer.Add(self.observer_choice,
 		                                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -380,12 +380,12 @@ class target_dialog(wx.Dialog):
 		"""Add color buttons and boxes to the dialog"""
 		
 		# Radio buttons to specify the color space.
-		self.XYZ_button = wx.RadioButton(self, -1, "XYZ", style = wx.RB_GROUP)
-		self.xyY_button = wx.RadioButton(self, -1, "xyY")
-		self.Luv_button = wx.RadioButton(self, -1, "L*u*v*")
-		self.Lab_button = wx.RadioButton(self, -1, "L*a*b*")
-		self.LChuv_button = wx.RadioButton(self, -1, "L*C*h(u*v*)")
-		self.LChab_button = wx.RadioButton(self, -1, "L*C*h(a*b*)")
+		self.XYZ_button = wx.RadioButton(self, -1, _("XYZ"), style = wx.RB_GROUP)
+		self.xyY_button = wx.RadioButton(self, -1, _("xyY"))
+		self.Luv_button = wx.RadioButton(self, -1, _("L*u*v*"))
+		self.Lab_button = wx.RadioButton(self, -1, _("L*a*b*"))
+		self.LChuv_button = wx.RadioButton(self, -1, _("L*C*h(u*v*)"))
+		self.LChab_button = wx.RadioButton(self, -1, _("L*C*h(a*b*)"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_color_space, self.XYZ_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_color_space, self.xyY_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_color_space, self.Luv_button)
@@ -462,13 +462,13 @@ class target_dialog(wx.Dialog):
 	def add_inequality_choice(self):
 		"""Add inequality radio buttons to the dialog"""
 		
-		self.smaller_button = wx.RadioButton(self, -1, "smaller than", style = wx.RB_GROUP)
-		self.equal_button = wx.RadioButton(self, -1, "equal to")
-		self.larger_button = wx.RadioButton(self, -1, "larger than")
+		self.smaller_button = wx.RadioButton(self, -1, _("smaller than"), style = wx.RB_GROUP)
+		self.equal_button = wx.RadioButton(self, -1, _("equal to"))
+		self.larger_button = wx.RadioButton(self, -1, _("larger than"))
 		
 		# Arrange it in a sizer.
 		inequality_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		inequality_sizer.Add(wx.StaticText(self, -1, "Condition:"),
+		inequality_sizer.Add(wx.StaticText(self, -1, _("Condition:")),
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		inequality_sizer.Add(self.smaller_button,
 		                     0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -646,44 +646,44 @@ class target_dialog(wx.Dialog):
 			new_color = None
 		
 		if color_space == color.XYZ:
-			self.first_text.SetLabel("X:")
-			self.second_text.SetLabel("Y:")
-			self.third_text.SetLabel("Z:")
+			self.first_text.SetLabel(_("X:"))
+			self.second_text.SetLabel(_("Y:"))
+			self.third_text.SetLabel(_("Z:"))
 			self.first_box.SetValidator(float_validator(0.0, None))
 			self.second_box.SetValidator(float_validator(0.0, 100.0))
 			self.third_box.SetValidator(float_validator(0.0, None))
 		elif color_space == color.xyY:
-			self.first_text.SetLabel("x:")
-			self.second_text.SetLabel("y:")
-			self.third_text.SetLabel("Y:")
+			self.first_text.SetLabel(_("x:"))
+			self.second_text.SetLabel(_("y:"))
+			self.third_text.SetLabel(_("Y:"))
 			self.first_box.SetValidator(float_validator(0.0, 1.0))
 			self.second_box.SetValidator(float_validator(0.0, 1.0))
 			self.third_box.SetValidator(float_validator(0.0, 100.0))
 		elif color_space == color.Luv:
-			self.first_text.SetLabel("L*:")
-			self.second_text.SetLabel("u*:")
-			self.third_text.SetLabel("v*:")
+			self.first_text.SetLabel(_("L*:"))
+			self.second_text.SetLabel(_("u*:"))
+			self.third_text.SetLabel(_("v*:"))
 			self.first_box.SetValidator(float_validator(0.0, 100.0))
 			self.second_box.SetValidator(float_validator(None, None))
 			self.third_box.SetValidator(float_validator(None, None))
 		elif color_space == color.Lab:
-			self.first_text.SetLabel("L*:")
-			self.second_text.SetLabel("a*:")
-			self.third_text.SetLabel("b*:")
+			self.first_text.SetLabel(_("L*:"))
+			self.second_text.SetLabel(_("a*:"))
+			self.third_text.SetLabel(_("b*:"))
 			self.first_box.SetValidator(float_validator(0.0, 100.0))
 			self.second_box.SetValidator(float_validator(None, None))
 			self.third_box.SetValidator(float_validator(None, None))
 		elif color_space == color.LChuv:
-			self.first_text.SetLabel("L*:")
-			self.second_text.SetLabel("C*:")
-			self.third_text.SetLabel("h:")
+			self.first_text.SetLabel(_("L*:"))
+			self.second_text.SetLabel(_("C*:"))
+			self.third_text.SetLabel(_("h:"))
 			self.first_box.SetValidator(float_validator(0.0, 100.0))
 			self.second_box.SetValidator(float_validator(None, None))
 			self.third_box.SetValidator(float_validator(None, None))
 		elif color_space == color.LChab:
-			self.first_text.SetLabel("L*:")
-			self.second_text.SetLabel("C*:")
-			self.third_text.SetLabel("h:")
+			self.first_text.SetLabel(_("L*:"))
+			self.second_text.SetLabel(_("C*:"))
+			self.third_text.SetLabel(_("h:"))
 			self.first_box.SetValidator(float_validator(0.0, 100.0))
 			self.second_box.SetValidator(float_validator(None, None))
 			self.third_box.SetValidator(float_validator(None, None))
@@ -1807,8 +1807,8 @@ class read_target_from_file_dialog(target_dialog):
 		self.file_browse_button = wx.lib.filebrowsebutton.FileBrowseButton(self, -1, size=(450, -1), labelText = "Input file:")
 		
 		# Radio buttons to describe the file.
-		self.two_columns_button = wx.RadioButton(self, -1, "two columns", style = wx.RB_GROUP)
-		self.three_columns_button = wx.RadioButton(self, -1, "three columns")
+		self.two_columns_button = wx.RadioButton(self, -1, _("two columns"), style = wx.RB_GROUP)
+		self.three_columns_button = wx.RadioButton(self, -1, _("three columns"))
 		
 		# A text box for the number of header lines.
 		self.header_lines_box = wx.TextCtrl(self, -1, "", validator = int_validator(0))
@@ -1816,23 +1816,23 @@ class read_target_from_file_dialog(target_dialog):
 		# Radio buttons and a box for the multiplicative factor.
 		self.unit_multiplicative_factor_button = wx.RadioButton(self, -1, "1", style = wx.RB_GROUP)
 		self.percent_multiplicative_factor_button = wx.RadioButton(self, -1, "%")
-		self.radian_multiplicative_factor_button = wx.RadioButton(self, -1, "180/pi")
+		self.radian_multiplicative_factor_button = wx.RadioButton(self, -1, _("180/pi"))
 		self.other_multiplicative_factor_button = wx.RadioButton(self, -1, "")
 		self.other_multiplicative_factor_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(condition = self.other_multiplicative_factor_button.GetValue))
 		self.other_multiplicative_factor_box.Bind(wx.EVT_TEXT, self.on_other_multiplicative_factor_box)
 		
 		# Radio buttons for the kind of target.
-		self.reflection_spectrum_button = wx.RadioButton(self, -1, "reflection spectrum", style = wx.RB_GROUP)
-		self.transmission_spectrum_button = wx.RadioButton(self, -1, "transmission spectrum")
-		self.absorption_spectrum_button = wx.RadioButton(self, -1, "absorption spectrum")
-		self.reflection_phase_spectrum_button = wx.RadioButton(self, -1, "reflection phase spectrum")
-		self.transmission_phase_spectrum_button = wx.RadioButton(self, -1, "transmission phase spectrum")
-		self.reflection_GD_spectrum_button = wx.RadioButton(self, -1, "reflection GD spectrum")
-		self.transmission_GD_spectrum_button = wx.RadioButton(self, -1, "transmission GD spectrum")
-		self.reflection_GDD_spectrum_button = wx.RadioButton(self, -1, "reflection GDD spectrum")
-		self.transmission_GDD_spectrum_button = wx.RadioButton(self, -1, "transmission GDD spectrum")
-		self.reflection_color_button = wx.RadioButton(self, -1, "reflection color")
-		self.transmission_color_button = wx.RadioButton(self, -1, "transmission color")
+		self.reflection_spectrum_button = wx.RadioButton(self, -1, _("reflection spectrum"), style = wx.RB_GROUP)
+		self.transmission_spectrum_button = wx.RadioButton(self, -1, _("transmission spectrum"))
+		self.absorption_spectrum_button = wx.RadioButton(self, -1, _("absorption spectrum"))
+		self.reflection_phase_spectrum_button = wx.RadioButton(self, -1, _("reflection phase spectrum"))
+		self.transmission_phase_spectrum_button = wx.RadioButton(self, -1, _("transmission phase spectrum"))
+		self.reflection_GD_spectrum_button = wx.RadioButton(self, -1, _("reflection GD spectrum"))
+		self.transmission_GD_spectrum_button = wx.RadioButton(self, -1, _("transmission GD spectrum"))
+		self.reflection_GDD_spectrum_button = wx.RadioButton(self, -1, _("reflection GDD spectrum"))
+		self.transmission_GDD_spectrum_button = wx.RadioButton(self, -1, _("transmission GDD spectrum"))
+		self.reflection_color_button = wx.RadioButton(self, -1, _("reflection color"))
+		self.transmission_color_button = wx.RadioButton(self, -1, _("transmission color"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_kind, self.reflection_spectrum_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_kind, self.transmission_spectrum_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_kind, self.absorption_spectrum_button)
@@ -1855,14 +1855,14 @@ class read_target_from_file_dialog(target_dialog):
 		sizer_3_1_4 = wx.BoxSizer(wx.HORIZONTAL)
 		sizer_3_1_5 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		sizer_1.Add(wx.StaticText(self, -1, "File format:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("File format:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(self.two_columns_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		sizer_1.Add(self.three_columns_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		sizer_1.Add(wx.StaticText(self, -1, "Header lines:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		sizer_1.Add(wx.StaticText(self, -1, _("Header lines:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		sizer_1.Add(self.header_lines_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		sizer_2.Add(wx.StaticText(self, -1, "Multiplicative factor:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_2.Add(wx.StaticText(self, -1, _("Multiplicative factor:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_2.Add(self.unit_multiplicative_factor_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		sizer_2.Add(self.percent_multiplicative_factor_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		sizer_2.Add(self.radian_multiplicative_factor_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -1891,7 +1891,7 @@ class read_target_from_file_dialog(target_dialog):
 		sizer_3_1.Add(sizer_3_1_4, 0, wx.ALIGN_LEFT|wx.TOP, 5)
 		sizer_3_1.Add(sizer_3_1_5, 0, wx.ALIGN_LEFT|wx.TOP, 5)
 		
-		sizer_3.Add(wx.StaticText(self, -1, "Target:"), 0, wx.ALIGN_LEFT|wx.ALIGN_TOP)
+		sizer_3.Add(wx.StaticText(self, -1, _("Target:")), 0, wx.ALIGN_LEFT|wx.ALIGN_TOP)
 		sizer_3.Add(sizer_3_1, 0, wx.ALIGN_LEFT|wx.ALIGN_TOP)
 		
 		self.content_sizer.Add(self.file_browse_button, 0, wx.ALIGN_LEFT)

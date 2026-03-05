@@ -30,6 +30,17 @@ import materials
 import color
 
 
+def _validator_is_silent():
+	"""Compatibility helper for wx Classic and wxPython Phoenix."""
+	try:
+		return wx.Validator_IsSilent()
+	except AttributeError:
+		try:
+			return wx.Validator.IsSilent()
+		except AttributeError:
+			return False
+
+
 
 ########################################################################
 #                                                                      #
@@ -181,7 +192,7 @@ class int_validator(wx.PyValidator):
 					event.Skip()
 					return
 		
-		if not wx.Validator_IsSilent(): wx.Bell()
+		if not _validator_is_silent(): wx.Bell()
 		
 		# Since event.Skip() is not called, the event is not passed to the
 		# control.
@@ -234,7 +245,7 @@ class int_validator(wx.PyValidator):
 					error = True
 		
 		if error:
-			if not wx.Validator_IsSilent(): wx.Bell()
+			if not _validator_is_silent(): wx.Bell()
 			window.SetFocus()
 			window.SetSelection(0, len(answer))
 			window.Refresh()
@@ -459,7 +470,7 @@ class float_validator(wx.PyValidator):
 					event.Skip()
 					return
 		
-		if not wx.Validator_IsSilent(): wx.Bell()
+		if not _validator_is_silent(): wx.Bell()
 		
 		# Since event.Skip() is not called, the event is not passed to the
 		# control.
@@ -525,7 +536,7 @@ class float_validator(wx.PyValidator):
 						error = True
 		
 		if error:
-			if not wx.Validator_IsSilent(): wx.Bell()
+			if not _validator_is_silent(): wx.Bell()
 			window.SetFocus()
 			window.SetSelection(0, len(answer))
 			window.Refresh()
@@ -694,7 +705,7 @@ class material_validator(wx.PyValidator):
 		# If an error occured, set the focus to the control and return
 		# False.
 		if error:
-			if not wx.Validator_IsSilent():
+			if not _validator_is_silent():
 				wx.Bell()
 			window.SetFocus()
 			window.SetSelection(0, len(answer))
@@ -818,7 +829,7 @@ class illuminant_validator(wx.PyValidator):
 		try:
 			color.get_illuminant(window.GetStringSelection())
 		except color.color_error as error:
-			wx.MessageBox("An error occured while reading illuminant file.\n\n%s" % error, "Illuminant error", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox("An error occured while reading illuminant file.\n\n%s" % error, _("Illuminant error"), wx.ICON_ERROR|wx.OK)
 			window.SetFocus()
 			window.Refresh()
 			return False
@@ -940,7 +951,7 @@ class observer_validator(wx.PyValidator):
 		try:
 			color.get_observer(window.GetStringSelection())
 		except color.color_error as error:
-			wx.MessageBox("An error occured while reading observer file.\n\n%s" % error, "Observer error", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox("An error occured while reading observer file.\n\n%s" % error, _("Observer error"), wx.ICON_ERROR|wx.OK)
 			window.SetFocus()
 			window.Refresh()
 			return False

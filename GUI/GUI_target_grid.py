@@ -137,38 +137,38 @@ class target_grid(wx.grid.Grid):
 		
 		# The first column is for the materials.
 		self.SetColSize(0, 120)
-		self.SetColLabelValue(0, "Kind")
+		self.SetColLabelValue(0, _("Kind"))
 		
 		# The second column is for the angle.
 		self.SetColSize(1, 60)
-		self.SetColLabelValue(1, "Angle\n(degrees)")
+		self.SetColLabelValue(1, _("Angle\n(degrees)"))
 		
 		# The third column is for the polarization.
 		self.SetColSize(2, 100)
-		self.SetColLabelValue(2, "Polarization\n(degrees)")
+		self.SetColLabelValue(2, _("Polarization\n(degrees)"))
 		
 		# The fifth column is for the wavelength.
 		self.SetColSize(3, 100)
-		self.SetColLabelValue(3, "Wavelength(s)\n(nm)")
+		self.SetColLabelValue(3, _("Wavelength(s)\n(nm)"))
 		
 		# The sixth column is for the target value.
 		self.SetColSize(4, 120)
-		self.SetColLabelValue(4, "Value(s)")
+		self.SetColLabelValue(4, _("Value(s)"))
 		
 		# The seventh column is for the target tolerance.
 		self.SetColSize(5, 120)
-		self.SetColLabelValue(5, "Tolerance(s)")
+		self.SetColLabelValue(5, _("Tolerance(s)"))
 		
 		# Prepare the context menu.
 		self.context_menu = wx.Menu()
 		self.modify_ID = wx.NewId()
-		self.context_menu.Append(self.modify_ID, "&Modify")
+		self.context_menu.Append(self.modify_ID, _("&Modify"))
 		self.Bind(wx.EVT_MENU, self.on_modify, id = self.modify_ID)
 		self.copy_ID = wx.NewId()
-		self.context_menu.Append(self.copy_ID, "&Copy")
+		self.context_menu.Append(self.copy_ID, _("&Copy"))
 		self.Bind(wx.EVT_MENU, self.on_copy, id = self.copy_ID)
 		self.remove_ID = wx.NewId()
-		self.context_menu.Append(self.remove_ID, "&Remove")
+		self.context_menu.Append(self.remove_ID, _("&Remove"))
 		self.Bind(wx.EVT_MENU, self.on_remove, id = self.remove_ID)
 		
 		# Manage selection events to prevent selections.

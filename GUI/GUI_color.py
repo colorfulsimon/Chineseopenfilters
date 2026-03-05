@@ -80,14 +80,14 @@ class color_window(wx.Panel):
 		# Prepare context menu.
 		self.context_menu = wx.Menu()
 		self.rename_panel_ID = wx.NewId()
-		self.context_menu.Append(self.rename_panel_ID, "&Rename")
+		self.context_menu.Append(self.rename_panel_ID, _("&Rename"))
 		self.Bind(wx.EVT_MENU, self.on_rename_panel, id = self.rename_panel_ID)
 		self.remove_panel_ID = wx.NewId()
-		self.context_menu.Append(self.remove_panel_ID, "&Remove panel")
+		self.context_menu.Append(self.remove_panel_ID, _("&Remove panel"))
 		self.Bind(wx.EVT_MENU, self.on_remove_panel, id = self.remove_panel_ID)
 		self.context_menu.AppendSeparator()
 		self.remove_all_panels_ID = wx.NewId()
-		self.context_menu.Append(self.remove_all_panels_ID, "Remove &all panels")
+		self.context_menu.Append(self.remove_all_panels_ID, _("Remove &all panels"))
 		self.Bind(wx.EVT_MENU, self.on_remove_all_panels, id = self.remove_all_panels_ID)
 	
 	
@@ -153,8 +153,13 @@ class color_window(wx.Panel):
 		
 		for i in range(len(self.panels)):
 			if self.panels[i]:
-				self.panel_window_sizer.Remove(self.panels[i])
-				self.panels[i].Destroy()
+				panel = self.panels[i]
+				# wxPython Phoenix prefers Detach(window) over Remove(window).
+				if not self.panel_window_sizer.Detach(panel):
+					item = self.panel_window_sizer.GetItem(panel)
+					if item:
+						self.panel_window_sizer.Remove(item.GetId())
+				panel.Destroy()
 				self.panels[i] = None
 		
 		self.Layout()
@@ -171,8 +176,13 @@ class color_window(wx.Panel):
 		This method takes a single argument:
 		  nb                 the number of the panel."""
 		
-		self.panel_window_sizer.Remove(self.panels[nb])
-		self.panels[nb].Destroy()
+		panel = self.panels[nb]
+		if panel is not None:
+			if not self.panel_window_sizer.Detach(panel):
+				item = self.panel_window_sizer.GetItem(panel)
+				if item:
+					self.panel_window_sizer.Remove(item.GetId())
+			panel.Destroy()
 		self.panels[nb] = None
 		
 		self.Layout()
@@ -362,23 +372,23 @@ class color_panel(wx.Panel):
 		sizer_1 = wx.FlexGridSizer(0, 16, 5, 15)
 		
 		sizer_1.Add((-1,-1))
-		sizer_1.Add(wx.StaticText(self, -1, "X"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "Y"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "Z"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "x"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "y"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "L*"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "u*"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "v*"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "a*"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "b*"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "C*(u*v*)"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "h(u*v*)"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "C*(a*b*)"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		sizer_1.Add(wx.StaticText(self, -1, "h(a*b*)"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("X")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("Y")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("Z")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("x")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("y")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("L*")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("u*")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("v*")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("a*")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("b*")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("C*(u*v*)")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("h(u*v*)")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("C*(a*b*)")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("h(a*b*)")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add((-1,-1))
 		
-		sizer_1.Add(wx.StaticText(self, -1, "Reflection:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("Reflection:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(wx.StaticText(self, -1, "%.3f" % XYZ_R[0]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(wx.StaticText(self, -1, "%.3f" % XYZ_R[1]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(wx.StaticText(self, -1, "%.3f" % XYZ_R[2]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
@@ -395,7 +405,7 @@ class color_panel(wx.Panel):
 		sizer_1.Add(wx.StaticText(self, -1, "%.3f" % LChab_R[2]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(reflection_panel, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		
-		sizer_1.Add(wx.StaticText(self, -1, "Transmission:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("Transmission:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(wx.StaticText(self, -1, "%.3f" % XYZ_T[0]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(wx.StaticText(self, -1, "%.3f" % XYZ_T[1]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(wx.StaticText(self, -1, "%.3f" % XYZ_T[2]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
@@ -413,7 +423,7 @@ class color_panel(wx.Panel):
 		sizer_1.Add(transmission_panel, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		
 		# Create a button to show the locus.
-		self.locus_button = wx.Button(self, -1, "View locus")
+		self.locus_button = wx.Button(self, -1, _("View locus"))
 		self.locus_button.Bind(wx.EVT_BUTTON, self.on_locus_button)
 		
 		# Put in the static box.
@@ -560,14 +570,14 @@ class color_trajectory_panel(wx.Panel):
 		
 		sizer_1 = wx.FlexGridSizer(3, 2, 5, 15)
 		
-		sizer_1.Add(wx.StaticText(self, -1, "Reflection:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("Reflection:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(reflection_bar, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
-		sizer_1.Add(wx.StaticText(self, -1, "Transmission:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("Transmission:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(transmission_bar, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
 		# Create a button to show the locus.
-		self.locus_button = wx.Button(self, -1, "View locus")
+		self.locus_button = wx.Button(self, -1, _("View locus"))
 		self.locus_button.Bind(wx.EVT_BUTTON, self.on_locus_button)
 		
 		# Put in the static box.
@@ -849,11 +859,7 @@ class color_bar(wx.Window):
 			DC = wx.MemoryDC()
 			DC.SelectObject(self.buffer)
 		
-		DC.BeginDrawing()
-		
 		self.draw(DC)
-		
-		DC.EndDrawing()
 		
 		if not self.use_buffered_drawing:
 			wx.ClientDC(self).Blit(0, 0, self.width, self.height, DC, 0, 0)
@@ -900,7 +906,10 @@ class color_bar(wx.Window):
 			DC.DrawRectangle(left, 0, width, self.height)
 			
 			# Draw the color.
-			DC.SetBrush(wx.Brush(wx.Colour(RGB[0]*255.0, RGB[1]*255.0, RGB[2]*255.0)))
+			r = max(0, min(255, int(round(RGB[0]*255.0))))
+			g = max(0, min(255, int(round(RGB[1]*255.0))))
+			b = max(0, min(255, int(round(RGB[2]*255.0))))
+			DC.SetBrush(wx.Brush(wx.Colour(r, g, b)))
 			DC.DrawRectangle(left, self.border_width, width, single_color_height)
 		
 		# Draw the left and right borders. We do it after drawing the bar
@@ -966,7 +975,7 @@ class locus_dialog(wx.Dialog):
 		self.R_colors = R_colors
 		self.T_colors = T_colors
 		
-		wx.Dialog.__init__(self, self.parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, self.parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)

@@ -71,7 +71,7 @@ class update_event(wx.PyCommandEvent):
 		self.status = status
 	
 	def Clone(self):
-		self.__class__(self.GetId())
+		return self.__class__(self.GetId(), self.working, self.status)
 	
 	def get_working(self):
 		return self.working
@@ -113,7 +113,7 @@ class optimization_dialog(wx.Dialog):
 		
 		self.optimization = self.optimization_class(self.filter, self.targets, self)
 		
-		wx.Dialog.__init__(self, self.parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, self.parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -172,10 +172,10 @@ class optimization_dialog(wx.Dialog):
 		index profile and method specific informations"""
 		
 		# Create buttons.
-		self.go_button = wx.Button(self, -1, "&Go")
-		self.iterate_button = wx.Button(self, -1, "&Iterate")
-		self.stop_button = wx.Button(self, -1, "&Stop")
-		self.correlation_button = wx.Button(self, -1, "Correlation &Matrix")
+		self.go_button = wx.Button(self, -1, _("&Go"))
+		self.iterate_button = wx.Button(self, -1, _("&Iterate"))
+		self.stop_button = wx.Button(self, -1, _("&Stop"))
+		self.correlation_button = wx.Button(self, -1, _("Correlation &Matrix"))
 		self.ok_button = wx.Button(self, wx.ID_OK)
 		self.cancel_button = wx.Button(self, wx.ID_CANCEL)
 		self.Bind(wx.EVT_BUTTON, self.on_go_button, self.go_button)
@@ -201,17 +201,17 @@ class optimization_dialog(wx.Dialog):
 		if config.POWER_USER:
 			
 			# Create a button to save the values
-			self.save_values_button = wx.Button(self, -1, "Save values")
+			self.save_values_button = wx.Button(self, -1, _("Save values"))
 			self.Bind(wx.EVT_BUTTON, self.on_save_values, self.save_values_button)
 			
 			# Create a button to save the index profile
-			self.save_index_profile_button = wx.Button(self, -1, "Save index_profile")
+			self.save_index_profile_button = wx.Button(self, -1, _("Save index_profile"))
 			self.Bind(wx.EVT_BUTTON, self.on_save_index_profile, self.save_index_profile_button)
 			
 			# Create a button for saving information specific to the
 			# optimization method.
 			if self.specific_save_name:
-				self.specific_save_button = wx.Button(self, -1, "Save dMF")
+				self.specific_save_button = wx.Button(self, -1, _("Save dMF"))
 				self.Bind(wx.EVT_BUTTON, self.on_specific_save, self.specific_save_button)
 			
 			# Add it to the window.
@@ -329,7 +329,7 @@ class optimization_dialog(wx.Dialog):
 		
 		It shows a FileDialog and saves the spectra."""
 		
-		window = wx.FileDialog(self, "Save Values", os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Save Values"), os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
@@ -355,7 +355,7 @@ class optimization_dialog(wx.Dialog):
 		
 		It shows a FileDialog and saves the index profile."""
 		
-		window = wx.FileDialog(self, "Save Index Profile", os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Save Index Profile"), os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
@@ -539,7 +539,7 @@ class optimization_dialog(wx.Dialog):
 			# If the maximum iterations were reached, give the user the
 			# opportunity to continue.
 			elif self.optimization.get_max_iterations_reached():
-				self.go_button.SetLabel("&Continue")
+				self.go_button.SetLabel(_("&Continue"))
 				self.go_button.Enable()
 				self.iterate_button.Enable()
 				self.stop_button.Disable()
@@ -555,7 +555,7 @@ class optimization_dialog(wx.Dialog):
 			# Otherwise, enable everything except for the stop button. and make
 			# sure the label of the go button is go.
 			else:
-				self.go_button.SetLabel("&Go")
+				self.go_button.SetLabel(_("&Go"))
 				self.go_button.Enable()
 				self.iterate_button.Enable()
 				self.stop_button.Disable()
@@ -685,10 +685,10 @@ class optimization_refinement_dialog(optimization_dialog):
 			
 			# Put them in a sizer.
 			color_sizer = wx.FlexGridSizer(2, self.nb_color_targets+1, 5, 5)
-			color_sizer.Add(wx.StaticText(self.color_panel, -1, "Targets: "), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+			color_sizer.Add(wx.StaticText(self.color_panel, -1, _("Targets: ")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 			for i in range(self.nb_color_targets):
 				color_sizer.Add(self.color_target_borders[i], 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-			color_sizer.Add(wx.StaticText(self.color_panel, -1, "Results: "), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+			color_sizer.Add(wx.StaticText(self.color_panel, -1, _("Results: ")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 			for i in range(self.nb_color_targets):
 				color_sizer.Add(self.color_borders[i], 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 			
@@ -774,27 +774,27 @@ class optimization_refinement_dialog(optimization_dialog):
 		
 		# Text for the status, the number of iterations and chi square, ...
 		status_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		status_sizer.Add(wx.StaticText(self, -1, "Status: ", style = wx.ALIGN_LEFT), 0)
+		status_sizer.Add(wx.StaticText(self, -1, _("Status: "), style = wx.ALIGN_LEFT), 0)
 		self.status_text = wx.StaticText(self, -1, "%s" % "", style = wx.ALIGN_LEFT)
 		status_sizer.Add(self.status_text, 0)
 		iteration_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		iteration_sizer.Add(wx.StaticText(self, -1, "Iteration: ", style = wx.ALIGN_LEFT), 0)
+		iteration_sizer.Add(wx.StaticText(self, -1, _("Iteration: "), style = wx.ALIGN_LEFT), 0)
 		self.iteration_text = wx.StaticText(self, -1, "%i" % 0, style = wx.ALIGN_LEFT)
 		iteration_sizer.Add(self.iteration_text, 0)
 		chi_2_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		chi_2_sizer.Add(wx.StaticText(self, -1, "Chi square: ", style = wx.ALIGN_LEFT), 0)
+		chi_2_sizer.Add(wx.StaticText(self, -1, _("Chi square: "), style = wx.ALIGN_LEFT), 0)
 		self.chi_2_text = wx.StaticText(self, -1, "%.6f" % 0.0, style = wx.ALIGN_LEFT)
 		chi_2_sizer.Add(self.chi_2_text, 0)
 		norm_gradient_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		norm_gradient_sizer.Add(wx.StaticText(self, -1, "Gradient norm: ", style = wx.ALIGN_LEFT), 0)
+		norm_gradient_sizer.Add(wx.StaticText(self, -1, _("Gradient norm: "), style = wx.ALIGN_LEFT), 0)
 		self.norm_gradient_text = wx.StaticText(self, -1, "%.6f" % 0.0, style = wx.ALIGN_LEFT)
 		norm_gradient_sizer.Add(self.norm_gradient_text, 0)
 		nb_front_layers_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_front_layers_sizer.Add(wx.StaticText(self, -1, "Nb front layers: ", style = wx.ALIGN_LEFT), 0)
+		nb_front_layers_sizer.Add(wx.StaticText(self, -1, _("Nb front layers: "), style = wx.ALIGN_LEFT), 0)
 		self.nb_front_layers_text = wx.StaticText(self, -1, "%i" % 0, style = wx.ALIGN_LEFT)
 		nb_front_layers_sizer.Add(self.nb_front_layers_text, 0)
 		nb_back_layers_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_back_layers_sizer.Add(wx.StaticText(self, -1, "Nb back layers: ", style = wx.ALIGN_LEFT), 0)
+		nb_back_layers_sizer.Add(wx.StaticText(self, -1, _("Nb back layers: "), style = wx.ALIGN_LEFT), 0)
 		self.nb_back_layers_text = wx.StaticText(self, -1, "%i" % 0, style = wx.ALIGN_LEFT)
 		nb_back_layers_sizer.Add(self.nb_back_layers_text, 0)
 		
@@ -833,7 +833,7 @@ class optimization_refinement_dialog(optimization_dialog):
 		
 		# If the status does not change during work, do not update the
 		# dialog too often.
-		present_time = time.clock()
+		present_time = time.perf_counter()
 		if working and working == self.last_working and status == self.last_status and present_time - self.last_update_time < config.OPTIMIZATION_MIN_UPDATE_DELAY:
 			return
 		self.last_update_time = present_time
@@ -987,11 +987,11 @@ class optimization_needles_dialog(optimization_refinement_dialog):
 		optimization_refinement_dialog.add_content(self)
 		
 		# Create a check box for the automatic mode.
-		self.automatic_checkbox = wx.CheckBox(self, -1, "Au&tomatic")
+		self.automatic_checkbox = wx.CheckBox(self, -1, _("Au&tomatic"))
 		self.Bind(wx.EVT_CHECKBOX, self.on_automatic_checkbox, self.automatic_checkbox)
 		
 		# Create a button for the addition of needles.
-		self.add_needles_button = wx.Button(self, -1, "&Add")
+		self.add_needles_button = wx.Button(self, -1, _("&Add"))
 		self.Bind(wx.EVT_BUTTON, self.on_add_needles, self.add_needles_button)
 		
 		# A box for the number of needles.
@@ -1000,7 +1000,7 @@ class optimization_needles_dialog(optimization_refinement_dialog):
 		self.nb_needles_box.Bind(wx.EVT_KILL_FOCUS, self.on_nb_needles)
 		
 		# Create a button for the elimination of thin layers.
-		self.remove_layers_button = wx.Button(self, -1, "&Remove layers thinner than")
+		self.remove_layers_button = wx.Button(self, -1, _("&Remove layers thinner than"))
 		self.Bind(wx.EVT_BUTTON, self.on_remove_layers, self.remove_layers_button)
 		
 		# A box for the thickness of layers to remove.
@@ -1094,7 +1094,7 @@ class optimization_needles_dialog(optimization_refinement_dialog):
 		material_popup_window_sizer.Fit(self.material_popup_window)
 		
 		# And make a button to call the popup window.
-		self.materials_button = wx.Button(self, -1, "Select materials")
+		self.materials_button = wx.Button(self, -1, _("Select materials"))
 		self.Bind(wx.EVT_BUTTON, self.on_show_material_popup_window, self.materials_button)
 		
 		# Set default values.
@@ -1111,10 +1111,10 @@ class optimization_needles_dialog(optimization_refinement_dialog):
 		needles_sizer.Add(self.automatic_checkbox, 0, wx.ALIGN_CENTER_VERTICAL)
 		needles_sizer.Add(self.add_needles_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		needles_sizer.Add(self.nb_needles_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		needles_sizer.Add(wx.StaticText(self, -1, "needles"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		needles_sizer.Add(wx.StaticText(self, -1, _("needles")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		needles_sizer.Add(self.remove_layers_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		needles_sizer.Add(self.min_thickness_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		needles_sizer.Add(wx.StaticText(self, -1, "nm"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		needles_sizer.Add(wx.StaticText(self, -1, _("nm")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		needles_sizer.Add(self.materials_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		self.main_sizer.Add(needles_sizer, 0, wx.ALIGN_CENTER|wx.ALL, 10)
 	
@@ -1326,7 +1326,7 @@ class optimization_needles_dialog(optimization_refinement_dialog):
 		# If the last operation was the addition of needles, show dMF and
 		# the needles.
 		if just_added_needles and not self.last_just_added_needles:
-			self.last_update_time = time.clock()
+			self.last_update_time = time.perf_counter()
 			
 			depth, dMF_profile, needle_positions, needle_values = self.optimization.get_dMF_profile()
 			selected_needles = self.optimization.get_selected_needles()
@@ -1511,29 +1511,29 @@ class optimization_steps_dialog(optimization_refinement_dialog):
 		self.index_profile_plot.set_legend_position(TOP)
 		
 		# Create a check box for the automatic mode.
-		self.automatic_checkbox = wx.CheckBox(self, -1, "Au&tomatic")
+		self.automatic_checkbox = wx.CheckBox(self, -1, _("Au&tomatic"))
 		self.Bind(wx.EVT_CHECKBOX, self.on_automatic_checkbox, self.automatic_checkbox)
 		
 		# Create a button for the addition of steps.
-		self.add_steps_button = wx.Button(self, -1, "&Add")
+		self.add_steps_button = wx.Button(self, -1, _("&Add"))
 		self.Bind(wx.EVT_BUTTON, self.on_add_steps, self.add_steps_button)
 		
 		# A box for the number of steps.
-		self.nb_steps_box = wx.TextCtrl(self, -1, "", size = (50, -1), validator = int_validator(1, None))
+		self.nb_steps_box = wx.TextCtrl(self, -1, "", size = (50, -1), style = wx.TE_PROCESS_ENTER, validator = int_validator(1, None))
 		self.nb_steps_box.Bind(wx.EVT_TEXT_ENTER, self.on_nb_steps)
 		self.nb_steps_box.Bind(wx.EVT_KILL_FOCUS, self.on_nb_steps)
 		
 		# Create a button for the elimination of thin layers.
-		self.remove_layers_button = wx.Button(self, -1, "&Remove layers thinner than")
+		self.remove_layers_button = wx.Button(self, -1, _("&Remove layers thinner than"))
 		self.Bind(wx.EVT_BUTTON, self.on_remove_layers, self.remove_layers_button)
 		
 		# A box for the thickness of layers to remove.
-		self.min_thickness_box = wx.TextCtrl(self, -1, "", size = (50, -1), validator = float_validator(0.0, None))
+		self.min_thickness_box = wx.TextCtrl(self, -1, "", size = (50, -1), style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, None))
 		self.min_thickness_box.Bind(wx.EVT_TEXT_ENTER, self.on_min_thickness)
 		self.min_thickness_box.Bind(wx.EVT_KILL_FOCUS, self.on_min_thickness)
 		
 		# A box for the thickness of layers to remove.
-		self.min_delta_n_box = wx.TextCtrl(self, -1, "", size = (50, -1), validator = float_validator(0.0, None))
+		self.min_delta_n_box = wx.TextCtrl(self, -1, "", size = (50, -1), style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, None))
 		self.min_delta_n_box.Bind(wx.EVT_TEXT_ENTER, self.on_min_delta_n)
 		self.min_delta_n_box.Bind(wx.EVT_KILL_FOCUS, self.on_min_delta_n)
 		
@@ -1547,10 +1547,10 @@ class optimization_steps_dialog(optimization_refinement_dialog):
 		steps_sizer.Add(self.automatic_checkbox, 0, wx.ALIGN_CENTER_VERTICAL)
 		steps_sizer.Add(self.add_steps_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		steps_sizer.Add(self.nb_steps_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		steps_sizer.Add(wx.StaticText(self, -1, "steps"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		steps_sizer.Add(wx.StaticText(self, -1, _("steps")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		steps_sizer.Add(self.remove_layers_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		steps_sizer.Add(self.min_thickness_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		steps_sizer.Add(wx.StaticText(self, -1, "nm or an index difference smaller than"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		steps_sizer.Add(wx.StaticText(self, -1, _("nm or an index difference smaller than")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		steps_sizer.Add(self.min_delta_n_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		self.main_sizer.Add(steps_sizer, 0, wx.ALIGN_CENTER|wx.ALL, 10)
 	
@@ -1726,7 +1726,7 @@ class optimization_steps_dialog(optimization_refinement_dialog):
 		just_added_steps = self.optimization.get_just_added_steps()
 		
 		if just_added_steps and not self.last_just_added_steps:
-			self.last_update_time = time.clock()
+			self.last_update_time = time.perf_counter()
 			
 			depth, dMF_profile_up, dMF_profile_down, step_up_positions, step_up_values, step_down_positions, step_down_values = self.optimization.get_dMF_profile()
 			selected_steps_up, selected_steps_down = self.optimization.get_selected_steps()
@@ -1906,7 +1906,7 @@ class optimization_Fourier_dialog(optimization_dialog):
 		# If there is more than 1 target, indicate the only the first
 		# reflection spectrum target is considered.
 		if len(self.optimization.targets) > 1:
-			warning = wx.StaticText(self, -1, "Warning: only the first normal incidence reflection spectrum target is used!")
+			warning = wx.StaticText(self, -1, _("Warning: only the first normal incidence reflection spectrum target is used!"))
 			warning.SetForegroundColour("red")
 			self.main_sizer.Add(warning, 0, wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT, 10)
 		
@@ -1939,15 +1939,15 @@ class optimization_Fourier_dialog(optimization_dialog):
 		
 		# Text for the status, the number of iterations and chi square, ...
 		status_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		status_sizer.Add(wx.StaticText(self, -1, "Status: ", style = wx.ALIGN_LEFT), 0)
+		status_sizer.Add(wx.StaticText(self, -1, _("Status: "), style = wx.ALIGN_LEFT), 0)
 		self.status_text = wx.StaticText(self, -1, "%s" % "", style = wx.ALIGN_LEFT)
 		status_sizer.Add(self.status_text, 0)
 		iteration_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		iteration_sizer.Add(wx.StaticText(self, -1, "Iteration: ", style = wx.ALIGN_LEFT), 0)
+		iteration_sizer.Add(wx.StaticText(self, -1, _("Iteration: "), style = wx.ALIGN_LEFT), 0)
 		self.iteration_text = wx.StaticText(self, -1, "%i" % 0, style = wx.ALIGN_LEFT)
 		iteration_sizer.Add(self.iteration_text, 0)
 		chi_2_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		chi_2_sizer.Add(wx.StaticText(self, -1, "Chi square: ", style = wx.ALIGN_LEFT), 0)
+		chi_2_sizer.Add(wx.StaticText(self, -1, _("Chi square: "), style = wx.ALIGN_LEFT), 0)
 		self.chi_2_text = wx.StaticText(self, -1, "%.6f" % 0.0, style = wx.ALIGN_LEFT)
 		chi_2_sizer.Add(self.chi_2_text, 0)
 		
@@ -1992,13 +1992,13 @@ class optimization_Fourier_dialog(optimization_dialog):
 		
 		# Add them to a sizer.
 		Fourier_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		Fourier_sizer.Add(wx.StaticText(self, -1, "Material:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		Fourier_sizer.Add(wx.StaticText(self, -1, _("Material:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		Fourier_sizer.Add(self.material_choice, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		Fourier_sizer.Add(wx.StaticText(self, -1, "Q function:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
+		Fourier_sizer.Add(wx.StaticText(self, -1, _("Q function:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		Fourier_sizer.Add(self.Q_function_choice, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		Fourier_sizer.Add(wx.StaticText(self, -1, "Optical thickness:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
+		Fourier_sizer.Add(wx.StaticText(self, -1, _("Optical thickness:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
 		Fourier_sizer.Add(self.OT_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		Fourier_sizer.Add(wx.StaticText(self, -1, "nm"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		Fourier_sizer.Add(wx.StaticText(self, -1, _("nm")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		# Put everything in the main sizer.
 		self.main_sizer.Add(self.target_notebook, 0, wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT, 10)
@@ -2220,7 +2220,7 @@ class correlation_dialog(wx.Dialog):
 		self.parent = parent
 		self.optimization = optimization
 		
-		wx.Dialog.__init__(self, parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)

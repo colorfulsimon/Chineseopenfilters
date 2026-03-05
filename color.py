@@ -302,8 +302,7 @@ class illuminants(object):
 		The method takes no arguments and return a list of all the
 		illuminants in alphabetic order."""
 		
-		illuminant_names = self.illuminants.keys()
-		illuminant_names.sort()
+		illuminant_names = sorted(self.illuminants.keys())
 		
 		return illuminant_names
 	
@@ -386,8 +385,7 @@ class observers(object):
 		The method takes no arguments and return a list of all the obervers
 		in alphabetic order."""
 		
-		observer_names = self.observers.keys()
-		observer_names.sort()
+		observer_names = sorted(self.observers.keys())
 		
 		return observer_names
 	
@@ -1766,7 +1764,7 @@ def read_observer(observer_name):
 	file_name = os.path.join(observers_directory, file_name)
 	
 	try:
-		observer_file = open(file_name, "r")
+		observer_file = open(file_name, "r", encoding = "latin-1")
 	except IOError:
 		raise color_error(observer_name, "Impossible to open observer file")
 	
@@ -1844,7 +1842,7 @@ def read_illuminant(illuminant_name):
 	file_name = os.path.join(illuminants_directory, file_name)
 	
 	try:
-		illuminant_file = open(file_name, "r")
+		illuminant_file = open(file_name, "r", encoding = "latin-1")
 	except IOError:
 		raise color_error(illuminant_name, "Impossible to open illuminant file")
 	

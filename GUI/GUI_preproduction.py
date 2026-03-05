@@ -69,7 +69,7 @@ class progress_event(wx.PyCommandEvent):
 		self.progress = progress
 	
 	def Clone(self):
-		self.__class__(self.GetId())
+		return self.__class__(self.GetId(), self.progress)
 	
 	def get_progress(self):
 		return self.progress
@@ -92,6 +92,9 @@ class finished_event(wx.PyCommandEvent):
 	
 	def __init__(self, windowID):
 		wx.PyCommandEvent.__init__(self, self.eventType, windowID)
+
+	def Clone(self):
+		return self.__class__(self.GetId())
 
 
 
@@ -155,7 +158,7 @@ class random_errors_dialog(wx.Dialog):
 		self.wavelengths = self.analyser.get_wavelengths()
 		self.nb_wavelengths = len(self.wavelengths)
 		
-		wx.Dialog.__init__(self, self.parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, self.parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -189,18 +192,18 @@ class random_errors_dialog(wx.Dialog):
 		
 		# A static box for the kind of data and the conditions of the
 		# simulation.
-		data_static_box = wx.StaticBox(self, -1, "Data type")
+		data_static_box = wx.StaticBox(self, -1, _("Data type"))
 		
-		self.reflection_box = wx.CheckBox(self, -1, "reflection")
-		self.transmission_box = wx.CheckBox(self, -1, "transmission")
-		self.absorption_box = wx.CheckBox(self, -1, "absorption")
-		self.reflection_phase_box = wx.CheckBox(self, -1, "reflection phase")
-		self.transmission_phase_box = wx.CheckBox(self, -1, "transmission phase")
-		self.reflection_GD_box = wx.CheckBox(self, -1, "reflection GD")
-		self.transmission_GD_box = wx.CheckBox(self, -1, "transmission GD")
-		self.reflection_GDD_box = wx.CheckBox(self, -1, "reflection GDD")
-		self.transmission_GDD_box = wx.CheckBox(self, -1, "transmission GDD")
-		self.color_box = wx.CheckBox(self, -1, "color")
+		self.reflection_box = wx.CheckBox(self, -1, _("reflection"))
+		self.transmission_box = wx.CheckBox(self, -1, _("transmission"))
+		self.absorption_box = wx.CheckBox(self, -1, _("absorption"))
+		self.reflection_phase_box = wx.CheckBox(self, -1, _("reflection phase"))
+		self.transmission_phase_box = wx.CheckBox(self, -1, _("transmission phase"))
+		self.reflection_GD_box = wx.CheckBox(self, -1, _("reflection GD"))
+		self.transmission_GD_box = wx.CheckBox(self, -1, _("transmission GD"))
+		self.reflection_GDD_box = wx.CheckBox(self, -1, _("reflection GDD"))
+		self.transmission_GDD_box = wx.CheckBox(self, -1, _("transmission GDD"))
+		self.color_box = wx.CheckBox(self, -1, _("color"))
 		self.Bind(wx.EVT_CHECKBOX, self.on_data_type, self.reflection_box)
 		self.Bind(wx.EVT_CHECKBOX, self.on_data_type, self.transmission_box)
 		self.Bind(wx.EVT_CHECKBOX, self.on_data_type, self.absorption_box)
@@ -226,9 +229,9 @@ class random_errors_dialog(wx.Dialog):
 		self.angle_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, 90.0, include_maximum = False))
 		self.angle_box.Bind(wx.EVT_KILL_FOCUS, self.on_angle)
 		
-		self.s_polarized_button = wx.RadioButton(self, -1, "s", style = wx.RB_GROUP)
-		self.p_polarized_button = wx.RadioButton(self, -1, "p")
-		self.unpolarized_button = wx.RadioButton(self, -1, "unpolarized")
+		self.s_polarized_button = wx.RadioButton(self, -1, _("s"), style = wx.RB_GROUP)
+		self.p_polarized_button = wx.RadioButton(self, -1, _("p"))
+		self.unpolarized_button = wx.RadioButton(self, -1, _("unpolarized"))
 		self.other_polarizations_button = wx.RadioButton(self, -1, "")
 		self.other_polarizations_box = wx.TextCtrl(self, -1, "", style = wx.TE_PROCESS_ENTER, validator = float_validator(0.0, 90.0, ))
 		self.other_polarizations_box.SetValidator(float_validator(0.0, 90.0, lambda: self.other_polarizations_button.GetValue() or self.other_polarizations_box.GetValue()))
@@ -246,7 +249,7 @@ class random_errors_dialog(wx.Dialog):
 		self.Bind(wx.EVT_CHOICE, self.on_observer_choice, self.observer_choice)
 		
 		# A static box for the errors being simulated.
-		error_static_box = wx.StaticBox(self, -1, "Errors")
+		error_static_box = wx.StaticBox(self, -1, _("Errors"))
 		
 		self.percentage_thickness_button = wx.RadioButton(self, -1, "", style = wx.RB_GROUP)
 		self.percentage_thickness_box = wx.TextCtrl(self, -1, "", validator = float_validator(0.0, 100.0))
@@ -257,21 +260,21 @@ class random_errors_dialog(wx.Dialog):
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_thickness_error_type, self.physical_thickness_button)
 		self.physical_thickness_box.Bind(wx.EVT_KILL_FOCUS, self.on_physical_thickness)
 		
-		self.uniform_button = wx.RadioButton(self, -1, "uniform", style = wx.RB_GROUP)
-		self.normal_button = wx.RadioButton(self, -1, "normal")
+		self.uniform_button = wx.RadioButton(self, -1, _("uniform"), style = wx.RB_GROUP)
+		self.normal_button = wx.RadioButton(self, -1, _("normal"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_distribution, self.uniform_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_distribution, self.normal_button)
 		
 		self.nb_tests_box = wx.TextCtrl(self, -1, "", validator = int_validator(2, None))
 		self.nb_tests_box.Bind(wx.EVT_KILL_FOCUS, self.on_nb_tests)
 		
-		self.all_results_box = wx.CheckBox(self, -1, "all results")
-		self.mean_box = wx.CheckBox(self, -1, "mean")
+		self.all_results_box = wx.CheckBox(self, -1, _("all results"))
+		self.mean_box = wx.CheckBox(self, -1, _("mean"))
 		self.plus_minus_n_std_devs_box = wx.CheckBox(self, -1, "+/-")
 		self.nb_std_devs_box = wx.TextCtrl(self, -1, "", validator = float_validator(0.0, None))
-		self.min_max_box = wx.CheckBox(self, -1, "worst case")
-		self.expected_result_box = wx.CheckBox(self, -1, "design")
-		self.targets_box = wx.CheckBox(self, -1, "targets")
+		self.min_max_box = wx.CheckBox(self, -1, _("worst case"))
+		self.expected_result_box = wx.CheckBox(self, -1, _("design"))
+		self.targets_box = wx.CheckBox(self, -1, _("targets"))
 		self.Bind(wx.EVT_CHECKBOX, self.on_show, self.all_results_box)
 		self.Bind(wx.EVT_CHECKBOX, self.on_show, self.mean_box)
 		self.Bind(wx.EVT_CHECKBOX, self.on_show, self.plus_minus_n_std_devs_box)
@@ -363,7 +366,7 @@ class random_errors_dialog(wx.Dialog):
 		# operating systems.
 		for data_type, plot in self.plots.items():
 			self.result_notebook.AddPage(plot, data_holder.DATA_TYPE_NAMES[data_type])
-		self.shown_plots = self.plots.values()
+		self.shown_plots = list(self.plots.values())
 		
 		data_box_sizer = wx.StaticBoxSizer(data_static_box, wx.VERTICAL)
 		
@@ -384,7 +387,7 @@ class random_errors_dialog(wx.Dialog):
 		data_type_sizer_3.Add(self.color_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
 		data_type_sizer = wx.FlexGridSizer(3, 2, 8, 10)
-		data_type_sizer.Add(wx.StaticText(self, -1, "Data types:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		data_type_sizer.Add(wx.StaticText(self, -1, _("Data types:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		data_type_sizer.Add(data_type_sizer_1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		data_type_sizer.Add((0, 0))
 		data_type_sizer.Add(data_type_sizer_2, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
@@ -392,10 +395,10 @@ class random_errors_dialog(wx.Dialog):
 		data_type_sizer.Add(data_type_sizer_3, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
 		data_properties_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
-		data_properties_sizer_1.Add(wx.StaticText(self, -1, "Angle:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		data_properties_sizer_1.Add(wx.StaticText(self, -1, _("Angle:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		data_properties_sizer_1.Add(self.angle_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
-		data_properties_sizer_1.Add(wx.StaticText(self, -1, "degres"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		data_properties_sizer_1.Add(wx.StaticText(self, -1, "Polarization:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25)
+		data_properties_sizer_1.Add(wx.StaticText(self, -1, _("degres")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		data_properties_sizer_1.Add(wx.StaticText(self, -1, _("Polarization:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25)
 		data_properties_sizer_1.Add(self.s_polarized_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		data_properties_sizer_1.Add(self.p_polarized_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		data_properties_sizer_1.Add(self.unpolarized_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
@@ -403,9 +406,9 @@ class random_errors_dialog(wx.Dialog):
 		data_properties_sizer_1.Add(self.other_polarizations_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		data_properties_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
-		data_properties_sizer_2.Add(wx.StaticText(self, -1, "Illuminant:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		data_properties_sizer_2.Add(wx.StaticText(self, -1, _("Illuminant:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		data_properties_sizer_2.Add(self.illuminant_choice, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
-		data_properties_sizer_2.Add(wx.StaticText(self, -1, "Observer:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25)
+		data_properties_sizer_2.Add(wx.StaticText(self, -1, _("Observer:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25)
 		data_properties_sizer_2.Add(self.observer_choice, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		
 		data_box_sizer.Add(data_type_sizer, 0,  wx.ALIGN_LEFT|wx.TOP|wx.LEFT|wx.RIGHT, 5)
@@ -415,20 +418,20 @@ class random_errors_dialog(wx.Dialog):
 		error_box_sizer = wx.StaticBoxSizer(error_static_box, wx.VERTICAL)
 		
 		variation_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		variation_sizer.Add(wx.StaticText(self, -1, "Vary thickness by:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		variation_sizer.Add(wx.StaticText(self, -1, _("Vary thickness by:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		variation_sizer.Add(self.percentage_thickness_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		variation_sizer.Add(self.percentage_thickness_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		variation_sizer.Add(wx.StaticText(self, -1, "%"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		variation_sizer.Add(self.physical_thickness_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		variation_sizer.Add(self.physical_thickness_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		variation_sizer.Add(wx.StaticText(self, -1, "nm"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		variation_sizer.Add(wx.StaticText(self, -1, _("nm")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		distribution_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		distribution_sizer.Add(wx.StaticText(self, -1, "Distribution:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		distribution_sizer.Add(wx.StaticText(self, -1, _("Distribution:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		distribution_sizer.Add(self.uniform_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		distribution_sizer.Add(self.normal_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		
-		distribution_sizer.Add(wx.StaticText(self, -1, "Nb. tests:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25)
+		distribution_sizer.Add(wx.StaticText(self, -1, _("Nb. tests:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25)
 		distribution_sizer.Add(self.nb_tests_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		error_box_sizer.Add(variation_sizer, 0,  wx.ALIGN_LEFT|wx.TOP|wx.LEFT|wx.RIGHT, 5)
@@ -439,7 +442,7 @@ class random_errors_dialog(wx.Dialog):
 		show_sizer_1.Add(self.mean_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		show_sizer_1.Add(self.plus_minus_n_std_devs_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		show_sizer_1.Add(self.nb_std_devs_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		show_sizer_1.Add(wx.StaticText(self, -1, "standard deviations"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		show_sizer_1.Add(wx.StaticText(self, -1, _("standard deviations")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		show_sizer_1.Add(self.min_max_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		
 		show_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -447,7 +450,7 @@ class random_errors_dialog(wx.Dialog):
 		show_sizer_2.Add(self.targets_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
 		
 		show_sizer = wx.FlexGridSizer(2, 2, 5, 10)
-		show_sizer.Add(wx.StaticText(self, -1, "Show:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		show_sizer.Add(wx.StaticText(self, -1, _("Show:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		show_sizer.Add(show_sizer_1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		show_sizer.Add((0, 0))
 		show_sizer.Add(show_sizer_2, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
@@ -507,11 +510,11 @@ class random_errors_dialog(wx.Dialog):
 		"""Add buttons to the dialog"""
 		
 		# Create buttons.
-		self.simulate_button = wx.Button(self, -1, "S&imulate")
+		self.simulate_button = wx.Button(self, -1, _("S&imulate"))
 		self.stop_button = wx.Button(self, wx.ID_STOP)
-		self.save_button = wx.Button(self, -1, "&Save statistics")
-		self.save_all_button = wx.Button(self, -1, "Save &all results")
-		self.save_figure_button = wx.Button(self, -1, "Save &figure")
+		self.save_button = wx.Button(self, -1, _("&Save statistics"))
+		self.save_all_button = wx.Button(self, -1, _("Save &all results"))
+		self.save_figure_button = wx.Button(self, -1, _("Save &figure"))
 		self.close_button = wx.Button(self, wx.ID_CLOSE)
 		self.Bind(wx.EVT_BUTTON, self.on_simulate, self.simulate_button)
 		self.Bind(wx.EVT_BUTTON, self.on_stop, self.stop_button)
@@ -956,7 +959,7 @@ class random_errors_dialog(wx.Dialog):
 		It shows a FileDialog and saves the results of the preproduction
 		analysis."""
 		
-		window = wx.FileDialog(self, "Save preproduction analysis", os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Save preproduction analysis"), os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
@@ -987,7 +990,7 @@ class random_errors_dialog(wx.Dialog):
 		It shows a FileDialog and saves all the results of the
 		preproduction analysis."""
 		
-		window = wx.FileDialog(self, "Save preproduction analysis", os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Save preproduction analysis"), os.getcwd(), "", style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
@@ -1018,7 +1021,7 @@ class random_errors_dialog(wx.Dialog):
 		It shows a FileDialog and saves the currently shown figure of the
 		preproduction analysis."""
 		
-		window = wx.FileDialog(self, "Save preproduction analysis figure", os.getcwd(), "", GUI_plot.FIGURE_WILDCARD, style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
+		window = wx.FileDialog(self, _("Save preproduction analysis figure"), os.getcwd(), "", GUI_plot.FIGURE_WILDCARD, style = wx.SAVE|wx.OVERWRITE_PROMPT|wx.CHANGE_DIR)
 		
 		answer = window.ShowModal()
 		if answer == wx.ID_OK:
@@ -1029,9 +1032,9 @@ class random_errors_dialog(wx.Dialog):
 			try:
 				self.result_notebook.GetCurrentPage().save_to_file(filename)
 			except KeyError:
-				wx.MessageBox("Invalid file extension.", "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox(_("Invalid file extension."), _("Error"), wx.ICON_ERROR|wx.OK)
 			except IOError as error:
-				wx.MessageBox("Exportation failed.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("Exportation failed.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 			
 			self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 	
@@ -1082,8 +1085,9 @@ class random_errors_dialog(wx.Dialog):
 		This method takes a single argument:
 		  event              the event."""
 		
-		if not self.simulating and self.analyser.get_results():
-			if self.result_notebook.GetPage(event.GetSelection()) != self.color_panel:
+		selection = event.GetSelection()
+		if not self.simulating and self.analyser.get_results() and selection != wx.NOT_FOUND:
+			if self.result_notebook.GetPage(selection) != self.color_panel:
 				self.save_figure_button.Enable()
 			else:
 				self.save_figure_button.Disable()
@@ -1235,15 +1239,17 @@ class random_errors_dialog(wx.Dialog):
 		
 		position = 0
 		for data_type, plot in self.plots.items():
-			if data_type in data_types:
-				if plot not in self.shown_plots:
-					self.result_notebook.InsertPage(position, plot, data_holder.DATA_TYPE_NAMES[data_type])
-					self.shown_plots.insert(position, plot)
+			page_index = self.result_notebook.GetPageIndex(plot)
+			should_show = data_type in data_types
+			if should_show:
+				if page_index == wx.NOT_FOUND:
+					insert_at = min(position, self.result_notebook.GetPageCount())
+					self.result_notebook.InsertPage(insert_at, plot, data_holder.DATA_TYPE_NAMES[data_type])
 				position += 1
-			else:
-				if plot in self.shown_plots:
-					self.result_notebook.RemovePage(position)
-					self.shown_plots.pop(position)
+			elif page_index != wx.NOT_FOUND:
+				self.result_notebook.RemovePage(page_index)
+		
+		self.shown_plots = [plot for data_type, plot in self.plots.items() if data_type in data_types]
 		
 		if data_holder.COLOR in data_types:
 			self.illuminant_choice.Enable()
@@ -1503,7 +1509,10 @@ class color_error_panel(wx.Panel):
 			self.R_colors = []
 			self.T_colors = []
 			
-			self.main_sizer.Remove(self.subpanel)
+			if not self.main_sizer.Detach(self.subpanel):
+				item = self.main_sizer.GetItem(self.subpanel)
+				if item:
+					self.main_sizer.Remove(item.GetId())
 			self.subpanel.Destroy()
 			self.subpanel = None
 	
@@ -1533,7 +1542,10 @@ class color_error_panel(wx.Panel):
 		                     results (a list of two elements)."""
 		
 		if self.subpanel:
-			self.main_sizer.Remove(self.subpanel)
+			if not self.main_sizer.Detach(self.subpanel):
+				item = self.main_sizer.GetItem(self.subpanel)
+				if item:
+					self.main_sizer.Remove(item.GetId())
 			self.subpanel.Destroy()
 		
 		self.subpanel = wx.Panel(self, style = wx.NO_BORDER)
@@ -1557,13 +1569,13 @@ class color_error_panel(wx.Panel):
 		subpanel_sizer_1 = wx.FlexGridSizer(0, 6, 5, 15)
 		
 		subpanel_sizer_1.Add((-1,-1))
-		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "design"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "mean"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "std. dev."), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "max. Delta E"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
-		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "worst results"), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, _("design")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, _("mean")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, _("std. dev.")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, _("max. Delta E")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
+		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, _("worst results")), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		
-		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "Reflection:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, _("Reflection:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		subpanel_sizer_1.Add(GUI_color.color_bar([expected_result[0]], self.subpanel, size = (20, 20)), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		subpanel_sizer_1.Add(GUI_color.color_bar([mean[0]], self.subpanel, size = (20, 20)), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "%.3f" % std_dev[0]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
@@ -1574,7 +1586,7 @@ class color_error_panel(wx.Panel):
 		subpanel_sizer_1_1.Add(GUI_color.color_bar([self.R_colors[-1]], self.subpanel, size = (20, 20)), 0)
 		subpanel_sizer_1.Add(subpanel_sizer_1_1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		
-		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "Transmission:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, _("Transmission:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		subpanel_sizer_1.Add(GUI_color.color_bar([expected_result[1]], self.subpanel, size = (20, 20)), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		subpanel_sizer_1.Add(GUI_color.color_bar([mean[1]], self.subpanel, size = (20, 20)), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)
 		subpanel_sizer_1.Add(wx.StaticText(self.subpanel, -1, "%.3f" % std_dev[1]), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL)

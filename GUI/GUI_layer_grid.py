@@ -73,68 +73,68 @@ class layer_grid(wx.grid.Grid):
 		
 		# The first column is for the materials.
 		self.SetColSize(0, 75)
-		self.SetColLabelValue(0, "Material")
+		self.SetColLabelValue(0, _("Material"))
 		
 		# The second column is for the thickness.
 		self.SetColSize(1, 65)
-		self.SetColLabelValue(1, "Thickness\n(nm)")
+		self.SetColLabelValue(1, _("Thickness\n(nm)"))
 		
 		# The third column is for the thickness.
 		self.SetColSize(2, 65)
-		self.SetColLabelValue(2, "Index")
+		self.SetColLabelValue(2, _("Index"))
 		
 		# The fourth column is for the optical thickness.
 		self.SetColSize(3, 65)
-		self.SetColLabelValue(3, "OT")
+		self.SetColLabelValue(3, _("OT"))
 		
 		# The fifth column determines if the layer should be refined
 		# during optimization.
 		self.SetColSize(4, 60)
-		self.SetColLabelValue(4, "Refine\nthickness")
+		self.SetColLabelValue(4, _("Refine\nthickness"))
 		self.SetColFormatBool(4)
 		
 		# The sixth column determines if the layer should be refined
 		# during optimization.
 		self.SetColSize(5, 60)
-		self.SetColLabelValue(5, "Refine\nindex")
+		self.SetColLabelValue(5, _("Refine\nindex"))
 		self.SetColFormatBool(5)
 		
 		# The seventh column determines if the OT should be preserved
 		# during optimization.
 		self.SetColSize(6, 60)
-		self.SetColLabelValue(6, "Preserve\nOT")
+		self.SetColLabelValue(6, _("Preserve\nOT"))
 		self.SetColFormatBool(6)
 		
 		# The eightht column determines if needles should be added in
 		# the layer during optimization.
 		self.SetColSize(7, 60)
-		self.SetColLabelValue(7, "Add\nneedles")
+		self.SetColLabelValue(7, _("Add\nneedles"))
 		self.SetColFormatBool(7)
 		
 		# The ninth column determines if steps should be added in
 		# the layer during optimization.
 		self.SetColSize(8, 60)
-		self.SetColLabelValue(8, "Add\nsteps")
+		self.SetColLabelValue(8, _("Add\nsteps"))
 		self.SetColFormatBool(8)
 		
 		# The tenth column is for the description of the layer.
 		self.SetColSize(9, 150)
-		self.SetColLabelValue(9, "Description")
+		self.SetColLabelValue(9, _("Description"))
 		
 		# Prepare the context menu.
 		self.context_menu = wx.Menu()
 		self.modify_ID = wx.NewId()
-		self.context_menu.Append(self.modify_ID, "&Modify")
+		self.context_menu.Append(self.modify_ID, _("&Modify"))
 		self.Bind(wx.EVT_MENU, self.on_modify, id = self.modify_ID)
 		self.remove_ID = wx.NewId()
-		self.context_menu.Append(self.remove_ID, "&Remove layer")
+		self.context_menu.Append(self.remove_ID, _("&Remove layer"))
 		self.Bind(wx.EVT_MENU, self.on_remove, id = self.remove_ID)
 		self.context_menu.AppendSeparator()
 		self.select_all_ID = wx.NewId()
-		self.context_menu.Append(self.select_all_ID, "&Select all")
+		self.context_menu.Append(self.select_all_ID, _("&Select all"))
 		self.Bind(wx.EVT_MENU, self.on_select_or_unselect_all, id = self.select_all_ID)
 		self.unselect_all_ID = wx.NewId()
-		self.context_menu.Append(self.unselect_all_ID, "&Unselect all")
+		self.context_menu.Append(self.unselect_all_ID, _("&Unselect all"))
 		self.Bind(wx.EVT_MENU, self.on_select_or_unselect_all, id = self.unselect_all_ID)
 		
 		# Manage the selected cells.
@@ -645,11 +645,11 @@ class layer_grid(wx.grid.Grid):
 		# possibility to remove all selected layers.
 		if len(rows) == 1:
 			self.context_menu.Enable(self.modify_ID, True)
-			self.context_menu.SetLabel(self.remove_ID, "&Remove layer")
+			self.context_menu.SetLabel(self.remove_ID, _("&Remove layer"))
 			self.context_menu.Enable(self.remove_ID, True)
 		else:
 			self.context_menu.Enable(self.modify_ID, False)
-			self.context_menu.SetLabel(self.remove_ID, "&Remove selected layers")
+			self.context_menu.SetLabel(self.remove_ID, _("&Remove selected layers"))
 			self.context_menu.Enable(self.remove_ID, True)
 		
 		# If the whole selection is in columns 4 to 8 and there is more

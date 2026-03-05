@@ -1743,22 +1743,22 @@ class plot(wx.Window):
 		# Prepare the context menu.
 		self.context_menu = wx.Menu()
 		self.set_properties_ID = wx.NewId()
-		self.context_menu.Append(self.set_properties_ID, "&Set properties")
+		self.context_menu.Append(self.set_properties_ID, _("&Set properties"))
 		self.Bind(wx.EVT_MENU, self.on_set_properties, id = self.set_properties_ID)
 		self.context_menu.AppendSeparator()
 		self.view_data_ID = wx.NewId()
-		self.context_menu.Append(self.view_data_ID, "&View data")
+		self.context_menu.Append(self.view_data_ID, _("&View data"))
 		self.Bind(wx.EVT_MENU, self.on_view_data, id = self.view_data_ID)
 		self.rename_ID = wx.NewId()
-		self.context_menu.Append(self.rename_ID, "&Rename")
+		self.context_menu.Append(self.rename_ID, _("&Rename"))
 		self.Bind(wx.EVT_MENU, self.on_rename, id = self.rename_ID)
 		self.submenu_ID = wx.NewId()
 		self.remove_curve_ID = wx.NewId()
-		self.context_menu.Append(self.remove_curve_ID, "&Remove curve")
+		self.context_menu.Append(self.remove_curve_ID, _("&Remove curve"))
 		self.Bind(wx.EVT_MENU, self.on_remove_curve, id = self.remove_curve_ID)
 		self.context_menu.AppendSeparator()
 		self.remove_all_curves_ID = wx.NewId()
-		self.context_menu.Append(self.remove_all_curves_ID, "Remove &all curves")
+		self.context_menu.Append(self.remove_all_curves_ID, _("Remove &all curves"))
 		self.Bind(wx.EVT_MENU, self.on_remove_all_curves, id = self.remove_all_curves_ID)
 		
 		# When a right click is done, a menu can be poped up. Variables
@@ -3460,12 +3460,12 @@ class rename_dialog(wx.Dialog):
 		self.name_box = wx.TextCtrl(self, -1, old_name)
 		
 		name_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		name_sizer.Add(wx.StaticText(self, -1, "Name: "), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		name_sizer.Add(wx.StaticText(self, -1, _("Name: ")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		name_sizer.Add(self.name_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
 		buttons = wx.BoxSizer(wx.HORIZONTAL)
-		buttons.Add(wx.Button(self, wx.ID_OK, "Ok"), 0)
-		buttons.Add(wx.Button(self, wx.ID_CANCEL, "Cancel"), 0, wx.LEFT, 20)
+		buttons.Add(wx.Button(self, wx.ID_OK, _("Ok")), 0)
+		buttons.Add(wx.Button(self, wx.ID_CANCEL, _("Cancel")), 0, wx.LEFT, 20)
 		
 		main_sizer.Add(name_sizer, 0, wx.ALIGN_CENTER|wx.TOP|wx.LEFT|wx.RIGHT, 20)
 		main_sizer.Add(buttons, 0, wx.ALIGN_CENTER|wx.ALL, 20)
@@ -3610,15 +3610,15 @@ class properties_dialog(wx.Dialog):
 		
 		self.SetAutoLayout(True)
 		
-		axis_box = wx.StaticBox(self, -1, "Axis" )
+		axis_box = wx.StaticBox(self, -1, _("Axis") )
 		
 		axis_sizer = wx.BoxSizer(wx.VERTICAL)
 		axis_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		axis_sizer_2 = wx.FlexGridSizer(0, 4, 5, 5)
 		axis_sizer_3 = wx.FlexGridSizer(0, 3, 5, 5)
 		
-		self.auto_button = wx.RadioButton(self, -1, "automatic", style = wx.RB_GROUP)
-		self.manual_button = wx.RadioButton(self, -1, "manual")
+		self.auto_button = wx.RadioButton(self, -1, _("automatic"), style = wx.RB_GROUP)
+		self.manual_button = wx.RadioButton(self, -1, _("manual"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_mode_selection, self.auto_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_mode_selection, self.manual_button)
 		
@@ -3631,36 +3631,36 @@ class properties_dialog(wx.Dialog):
 		self.Bind(wx.EVT_TEXT, self.on_value, self.y_from_box)
 		self.Bind(wx.EVT_TEXT, self.on_value, self.y_to_box)
 		
-		self.x_linear_button = wx.RadioButton(self, -1, "linear", style = wx.RB_GROUP)
-		self.x_log_button = wx.RadioButton(self, -1, "logarithmic")
+		self.x_linear_button = wx.RadioButton(self, -1, _("linear"), style = wx.RB_GROUP)
+		self.x_log_button = wx.RadioButton(self, -1, _("logarithmic"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_x_scaling_selection, self.x_linear_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_x_scaling_selection, self.x_log_button)
 		
-		self.y_linear_button = wx.RadioButton(self, -1, "linear", style = wx.RB_GROUP)
-		self.y_log_button = wx.RadioButton(self, -1, "logarithmic")
+		self.y_linear_button = wx.RadioButton(self, -1, _("linear"), style = wx.RB_GROUP)
+		self.y_log_button = wx.RadioButton(self, -1, _("logarithmic"))
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_y_scaling_selection, self.y_linear_button)
 		self.Bind(wx.EVT_RADIOBUTTON, self.on_y_scaling_selection, self.y_log_button)
 		
-		self.grid_box = wx.CheckBox(self, -1, "Show grid")
+		self.grid_box = wx.CheckBox(self, -1, _("Show grid"))
 		
 		axis_sizer_1.Add(self.auto_button, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_1.Add(self.manual_button, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		axis_sizer_2.Add(wx.StaticText(self, -1, "x range: from"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		axis_sizer_2.Add(wx.StaticText(self, -1, _("x range: from")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_2.Add(self.x_from_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-		axis_sizer_2.Add(wx.StaticText(self, -1, "to"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		axis_sizer_2.Add(wx.StaticText(self, -1, _("to")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_2.Add(self.x_to_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
-		axis_sizer_2.Add(wx.StaticText(self, -1, "y range: from"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		axis_sizer_2.Add(wx.StaticText(self, -1, _("y range: from")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_2.Add(self.y_from_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-		axis_sizer_2.Add(wx.StaticText(self, -1, "to"), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		axis_sizer_2.Add(wx.StaticText(self, -1, _("to")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_2.Add(self.y_to_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
-		axis_sizer_3.Add(wx.StaticText(self, -1, "x scaling: "), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		axis_sizer_3.Add(wx.StaticText(self, -1, _("x scaling: ")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_3.Add(self.x_linear_button, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_3.Add(self.x_log_button, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
-		axis_sizer_3.Add(wx.StaticText(self, -1, "y scaling: "), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		axis_sizer_3.Add(wx.StaticText(self, -1, _("y scaling: ")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_3.Add(self.y_linear_button, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		axis_sizer_3.Add(self.y_log_button, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
@@ -3712,8 +3712,8 @@ class properties_dialog(wx.Dialog):
 		
 		# Adding the buttons.
 		buttons = wx.BoxSizer(wx.HORIZONTAL)
-		buttons.Add(wx.Button(self, wx.ID_OK, "Ok", validator = properties_dialog_validator()), 0, wx.ALL, 10)
-		buttons.Add(wx.Button(self, wx.ID_CANCEL, "Cancel"), 0, wx.ALL, 10)
+		buttons.Add(wx.Button(self, wx.ID_OK, _("Ok"), validator = properties_dialog_validator()), 0, wx.ALL, 10)
+		buttons.Add(wx.Button(self, wx.ID_CANCEL, _("Cancel")), 0, wx.ALL, 10)
 		
 		border = wx.BoxSizer(wx.VERTICAL)
 		border.Add(axis_box_sizer, 0, wx.GROW|wx.ALL, 10)

@@ -1793,8 +1793,7 @@ class material_catalog(object):
 		
 		# Get the material names and sort them in a case insensitive
 		# manner.
-		material_names = self.materials.keys()
-		material_names.sort(key = str.upper)
+		material_names = sorted(self.materials.keys(), key = str.upper)
 		
 		return material_names
 	

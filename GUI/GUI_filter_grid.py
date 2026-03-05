@@ -69,34 +69,34 @@ class filter_grid(wx.grid.Grid):
 		
 		# The first column is for the materials.
 		self.SetColSize(0, 60)
-		self.SetColLabelValue(0, "Nb front\nlayers")
+		self.SetColLabelValue(0, _("Nb front\nlayers"))
 		
 		# The second column is for the angle.
 		self.SetColSize(1, 100)
-		self.SetColLabelValue(1, "Front\nthickness (nm)")
+		self.SetColLabelValue(1, _("Front\nthickness (nm)"))
 		
 		# The third column is for the polarization.
 		self.SetColSize(2, 60)
-		self.SetColLabelValue(2, "Nb back\nlayers")
+		self.SetColLabelValue(2, _("Nb back\nlayers"))
 		
 		# The fifth column is for the wavelength.
 		self.SetColSize(3, 100)
-		self.SetColLabelValue(3, "Back\nthickness (nm)")
+		self.SetColLabelValue(3, _("Back\nthickness (nm)"))
 		
 		# The sixth column is for the filter value.
 		self.SetColSize(4, 600)
-		self.SetColLabelValue(4, "Description")
+		self.SetColLabelValue(4, _("Description"))
 		
 		# Prepare the context menu.
 		self.context_menu = wx.Menu()
 		self.modify_ID = wx.NewId()
-		self.context_menu.Append(self.modify_ID, "&Modify")
+		self.context_menu.Append(self.modify_ID, _("&Modify"))
 		self.Bind(wx.EVT_MENU, self.on_modify, id = self.modify_ID)
 		self.copy_ID = wx.NewId()
-		self.context_menu.Append(self.copy_ID, "&Copy")
+		self.context_menu.Append(self.copy_ID, _("&Copy"))
 		self.Bind(wx.EVT_MENU, self.on_copy, id = self.copy_ID)
 		self.remove_ID = wx.NewId()
-		self.context_menu.Append(self.remove_ID, "&Remove")
+		self.context_menu.Append(self.remove_ID, _("&Remove"))
 		self.Bind(wx.EVT_MENU, self.on_remove, id = self.remove_ID)
 		
 		# Manage selection events to prevent selections.

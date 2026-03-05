@@ -176,7 +176,7 @@ class stack_dialog(layer_dialog):
 		
 		material_catalog = self.filter.get_material_catalog()
 		
-		stack_static_box = wx.StaticBox(self, -1, "Stack" )
+		stack_static_box = wx.StaticBox(self, -1, _("Stack") )
 		
 		# Adding the text box for specifying the stack formula.
 		self.formula_box = wx.TextCtrl(self, -1, "", size=(-1, 75), style=wx.TE_MULTILINE, validator = formula_validator())
@@ -184,7 +184,7 @@ class stack_dialog(layer_dialog):
 		stack_sizer_1 = wx.FlexGridSizer(3, self.nb_material_boxes+1, 5, 5)
 		
 		# Adding the text boxes for specifying the symbols.
-		stack_sizer_1.Add(wx.StaticText(self , -1, "Symbols:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		stack_sizer_1.Add(wx.StaticText(self , -1, _("Symbols:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		
 		self.symbol_box_IDs = []
 		self.symbol_boxes = []
@@ -198,7 +198,7 @@ class stack_dialog(layer_dialog):
 			stack_sizer_1.Add(self.symbol_boxes[i], 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
 		# Adding the text boxes for specifying the materials.
-		stack_sizer_1.Add(wx.StaticText(self , -1, "Materials:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+		stack_sizer_1.Add(wx.StaticText(self , -1, _("Materials:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		
 		self.material_box_IDs = []
 		self.material_boxes = []
@@ -214,7 +214,7 @@ class stack_dialog(layer_dialog):
 		
 		# Adding the radio buttons and text boxes for specifying the
 		# indices.
-		stack_sizer_1.Add(wx.StaticText(self , -1, "Index:"), 0, wx.ALIGN_RIGHT|wx.ALIGN_TOP)
+		stack_sizer_1.Add(wx.StaticText(self , -1, _("Index:")), 0, wx.ALIGN_RIGHT|wx.ALIGN_TOP)
 		
 		self.index_min_buttons = []
 		self.index_max_buttons = []
@@ -224,8 +224,8 @@ class stack_dialog(layer_dialog):
 		
 		for i in range(self.nb_material_boxes):
 			self.index_box_IDs.append(wx.NewId())
-			self.index_min_buttons.append(wx.RadioButton(self, -1, "min", style = wx.RB_GROUP))
-			self.index_max_buttons.append(wx.RadioButton(self, -1, "max"))
+			self.index_min_buttons.append(wx.RadioButton(self, -1, _("min"), style = wx.RB_GROUP))
+			self.index_max_buttons.append(wx.RadioButton(self, -1, _("max")))
 			self.index_buttons.append(wx.RadioButton(self, -1, ""))
 			self.index_boxes.append(wx.TextCtrl(self, self.index_box_IDs[i], "", size = (50, -1), style = wx.TE_PROCESS_ENTER))
 			

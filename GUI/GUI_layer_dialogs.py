@@ -73,7 +73,7 @@ class layer_dialog(wx.Dialog):
 		self.filter = filter
 		self.description = description
 		
-		wx.Dialog.__init__(self, parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetValidator(self.validator())
 		
@@ -233,11 +233,11 @@ class layer_dialog(wx.Dialog):
 		
 		position_box_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		position_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Side:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-		position_box_sizer_1.Add(self.front_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		position_box_sizer_1.Add(self.back_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		position_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Side:")), 0, wx.ALIGN_CENTER_VERTICAL)
+		position_box_sizer_1.Add(self.front_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		position_box_sizer_1.Add(self.back_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		position_box_sizer.Add(position_box_sizer_1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		position_box_sizer.Add(position_box_sizer_1, 0)
 		
 		# Adding radio buttons and a text box for specifying the
 		# position.
@@ -254,19 +254,19 @@ class layer_dialog(wx.Dialog):
 			
 			position_box_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 			
-			position_box_sizer_2.Add(wx.StaticText(self, -1, builtins._("Position:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
-			position_box_sizer_2.Add(self.top_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-			position_box_sizer_2.Add(self.bottom_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-			position_box_sizer_2.Add(self.other_position_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-			position_box_sizer_2.Add(self.other_position_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+			position_box_sizer_2.Add(wx.StaticText(self, -1, builtins._("Position:")), 0, wx.ALIGN_CENTER_VERTICAL)
+			position_box_sizer_2.Add(self.top_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+			position_box_sizer_2.Add(self.bottom_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+			position_box_sizer_2.Add(self.other_position_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+			position_box_sizer_2.Add(self.other_position_box, 0, wx.ALIGN_CENTER_VERTICAL)
 			
-			position_box_sizer.Add(position_box_sizer_2, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.TOP, 5)
+			position_box_sizer.Add(position_box_sizer_2, 0, wx.TOP, 5)
 		
 		# Arrange buttons in the static box.
 		position_static_box_sizer = wx.StaticBoxSizer(position_static_box, wx.VERTICAL)
 		position_static_box_sizer.Add(position_box_sizer, 0, wx.ALL, 5)
 		
-		self.main_sizer.Add(position_static_box_sizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT|wx.RIGHT, 10)
+		self.main_sizer.Add(position_static_box_sizer, 0, wx.GROW|wx.TOP|wx.LEFT|wx.RIGHT, 10)
 		
 		nb_front_layers = self.filter.get_nb_layers(FRONT)
 		nb_back_layers = self.filter.get_nb_layers(BACK)
@@ -652,30 +652,30 @@ class simple_layer_dialog(layer_dialog):
 		
 		# Adding the text box for specifying the material.
 		self.create_material_box()
-		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Material:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-		layer_box_sizer_1.Add(self.material_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Material:")), 1, wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_1.Add(self.material_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		thickness_list = [builtins._("nm"), builtins._("nm OT"), builtins._("QWOT")]
 		
 		# Adding the text box for specifying the thickness.
 		self.create_thickness_box()
 		self.thickness_choice = wx.Choice(self, -1, (-1, -1), choices = thickness_list)
-		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Thickness:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
-		layer_box_sizer_1.Add(self.thickness_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		layer_box_sizer_1.Add(self.thickness_choice, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Thickness:")), 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 20)
+		layer_box_sizer_1.Add(self.thickness_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		layer_box_sizer_1.Add(self.thickness_choice, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		self.Bind(wx.EVT_CHOICE, self.on_choice, self.thickness_choice)
 		
 		# Adding the text box for specifying the index. The value is
 		# validated only when the index box is editable.
 		self.create_index_box()
-		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Index:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-		layer_box_sizer_1.Add(self.index_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		layer_box_sizer_1.Add(wx.StaticText(self, -1, builtins._("Index:")), 1, wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_1.Add(self.index_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		# Arrange in the static box.
 		layer_box_sizer = wx.StaticBoxSizer(layer_static_box, wx.VERTICAL)
-		layer_box_sizer.Add(layer_box_sizer_1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+		layer_box_sizer.Add(layer_box_sizer_1, 0, wx.ALL, 5)
 		
-		self.main_sizer.Add(layer_box_sizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT|wx.RIGHT, 10)
+		self.main_sizer.Add(layer_box_sizer, 0, wx.GROW|wx.TOP|wx.LEFT|wx.RIGHT, 10)
 		
 		# The default values.
 		if self.description:
@@ -978,21 +978,21 @@ class import_layer_dialog(layer_dialog):
 		
 		# A text box for the number of header lines.
 		self.header_lines_box = wx.TextCtrl(self, -1, "", validator = int_validator(0))
-		layer_box_sizer_2.Add(wx.StaticText(self, -1, builtins._("Nb header lines:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-		layer_box_sizer_2.Add(self.header_lines_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		layer_box_sizer_1.Add(layer_box_sizer_2, 0, wx.ALIGN_LEFT|wx.TOP, 5)
+		layer_box_sizer_2.Add(wx.StaticText(self, -1, builtins._("Nb header lines:")), 1, wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_2.Add(self.header_lines_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		layer_box_sizer_1.Add(layer_box_sizer_2, 0, wx.TOP, 5)
 		
 		# Adding the text box for specifying the material.
 		self.create_material_box(MATERIAL_MIXTURE)
-		layer_box_sizer_3.Add(wx.StaticText(self, -1, builtins._("Material:")), 1, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-		layer_box_sizer_3.Add(self.material_box, 1, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		layer_box_sizer_1.Add(layer_box_sizer_3, 0, wx.ALIGN_LEFT|wx.TOP, 5)
+		layer_box_sizer_3.Add(wx.StaticText(self, -1, builtins._("Material:")), 1, wx.ALIGN_CENTER_VERTICAL)
+		layer_box_sizer_3.Add(self.material_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
+		layer_box_sizer_1.Add(layer_box_sizer_3, 0, wx.TOP, 5)
 		
 		# Arrange in the static box.
 		layer_box_sizer = wx.StaticBoxSizer(layer_static_box, wx.VERTICAL)
-		layer_box_sizer.Add(layer_box_sizer_1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+		layer_box_sizer.Add(layer_box_sizer_1, 0, wx.ALL, 5)
 		
-		self.main_sizer.Add(layer_box_sizer, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT|wx.RIGHT, 10)
+		self.main_sizer.Add(layer_box_sizer, 0, wx.GROW|wx.TOP|wx.LEFT|wx.RIGHT, 10)
 		
 		# The default values.
 		self.header_lines_box.SetValue("0")

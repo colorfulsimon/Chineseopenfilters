@@ -68,7 +68,7 @@ class user_material_directory_dialog(wx.Dialog):
 		  message                (optional) a message to show in the
 		                         dialog."""
 		
-		wx.Dialog.__init__(self, parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -76,7 +76,7 @@ class user_material_directory_dialog(wx.Dialog):
 		
 		if message: message += " "
 		
-		message += "Make sure you select a directory where you have write privileges (such as inside your home directory)."
+		message += _("Make sure you select a directory where you have write privileges (such as inside your home directory).")
 		
 		static_text = wx.StaticText(self, -1, message)
 		self.main_sizer.Add(static_text, 0, wx.EXPAND|wx.ALIGN_LEFT|wx.TOP|wx.LEFT|wx.RIGHT, 10)
@@ -145,7 +145,7 @@ class manage_materials_dialog(wx.Dialog):
 		                       modified (for example, not while a project
 		                       is opened)."""
 		
-		wx.Dialog.__init__(self, parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.allow_modifications = allow_modifications
 		
@@ -177,13 +177,13 @@ class manage_materials_dialog(wx.Dialog):
 		self.material_grid = wx.grid.Grid(self, -1, size = (650, 400), style = wx.SUNKEN_BORDER)
 		self.material_grid.CreateGrid(0, 4)
 		self.material_grid.SetColSize(0, 240)
-		self.material_grid.SetColLabelValue(0, "Material")
+		self.material_grid.SetColLabelValue(0, _("Material"))
 		self.material_grid.SetColSize(1, 100)
-		self.material_grid.SetColLabelValue(1, "Kind")
+		self.material_grid.SetColLabelValue(1, _("Kind"))
 		self.material_grid.SetColSize(2, 100)
-		self.material_grid.SetColLabelValue(2, "Dispersion")
+		self.material_grid.SetColLabelValue(2, _("Dispersion"))
 		self.material_grid.SetColSize(3, 100)
-		self.material_grid.SetColLabelValue(3, "Location")
+		self.material_grid.SetColLabelValue(3, _("Location"))
 		
 		# Disable resizing and editing of the grid.
 		self.material_grid.DisableDragColSize()
@@ -193,14 +193,14 @@ class manage_materials_dialog(wx.Dialog):
 		
 		self.main_sizer.Add(self.material_grid, 0, wx.TOP|wx.LEFT|wx.RIGHT, 10)
 		
-		static_text = wx.StaticText(self, -1, "Grayed out materials are default materials overwritten by user materials with the same name.")
+		static_text = wx.StaticText(self, -1, _("Grayed out materials are default materials overwritten by user materials with the same name."))
 		self.main_sizer.Add(static_text, 0, wx.EXPAND|wx.ALIGN_LEFT|wx.ALL, 10)
 		static_text.Wrap(600)
 		
-		self.view_modify_button = wx.Button(self, wx.NewId(), "View/Modify")
+		self.view_modify_button = wx.Button(self, wx.NewId(), _("View/Modify"))
 		self.new_button = wx.Button(self, wx.ID_NEW)
 		self.copy_button = wx.Button(self, wx.ID_COPY)
-		self.import_button = wx.Button(self, wx.NewId(), "Import from text file")
+		self.import_button = wx.Button(self, wx.NewId(), _("Import from text file"))
 		self.remove_button = wx.Button(self, wx.ID_REMOVE)
 		self.close_button = wx.Button(self, wx.ID_CLOSE)
 		self.Bind(wx.EVT_BUTTON, self.on_view_modify, self.view_modify_button)
@@ -243,13 +243,13 @@ class manage_materials_dialog(wx.Dialog):
 		# Prepare the context menu.
 		self.context_menu = wx.Menu()
 		self.view_modify_ID = wx.NewId()
-		self.context_menu.Append(self.view_modify_ID, "&View/Modify")
+		self.context_menu.Append(self.view_modify_ID, _("&View/Modify"))
 		self.Bind(wx.EVT_MENU, self.on_view_modify, id = self.view_modify_ID)
 		self.copy_ID = wx.NewId()
-		self.context_menu.Append(self.copy_ID, "&Copy")
+		self.context_menu.Append(self.copy_ID, _("&Copy"))
 		self.Bind(wx.EVT_MENU, self.on_copy, id = self.copy_ID)
 		self.remove_ID = wx.NewId()
-		self.context_menu.Append(self.remove_ID, "&Remove")
+		self.context_menu.Append(self.remove_ID, _("&Remove"))
 		self.Bind(wx.EVT_MENU, self.on_remove, id = self.remove_ID)
 	
 	
@@ -504,7 +504,7 @@ class manage_materials_dialog(wx.Dialog):
 				try:
 					user_catalog.add_material(material)
 				except:
-					wx.MessageBox("Cannot write material. Check permissions to the user material directory.", "Error", wx.ICON_ERROR|wx.OK)
+					wx.MessageBox(_("Cannot write material. Check permissions to the user material directory."), _("Error"), wx.ICON_ERROR|wx.OK)
 			
 			window.Destroy()
 			
@@ -548,7 +548,7 @@ class manage_materials_dialog(wx.Dialog):
 				try:
 					user_catalog.add_material(material)
 				except:
-					wx.MessageBox("Cannot write material. Check permissions to the user material directory.", "Error", wx.ICON_ERROR|wx.OK)
+					wx.MessageBox(_("Cannot write material. Check permissions to the user material directory."), _("Error"), wx.ICON_ERROR|wx.OK)
 			
 			window.Destroy()
 			
@@ -577,7 +577,7 @@ class manage_materials_dialog(wx.Dialog):
 			try:
 				material = window.get_material()
 			except materials.material_error as error:
-				wx.MessageBox("An error occured while importing the material.\n\n%s" % error, "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox("An error occured while importing the material.\n\n%s" % error, _("Error"), wx.ICON_ERROR|wx.OK)
 		
 		window.Destroy()
 		
@@ -591,7 +591,7 @@ class manage_materials_dialog(wx.Dialog):
 				try:
 					user_catalog.add_material(material)
 				except:
-					wx.MessageBox("Cannot write material. Check permissions to the user material directory.", "Error", wx.ICON_ERROR|wx.OK)
+					wx.MessageBox(_("Cannot write material. Check permissions to the user material directory."), _("Error"), wx.ICON_ERROR|wx.OK)
 			
 			window.Destroy()
 			
@@ -616,7 +616,7 @@ class manage_materials_dialog(wx.Dialog):
 		try:
 			catalog.remove_material(self.materials[row][1])
 		except (OSError, IOError):
-			wx.MessageBox("Cannot delete the material. Check permissions to the user material directory.", "Error", wx.ICON_ERROR|wx.OK)
+			wx.MessageBox(_("Cannot delete the material. Check permissions to the user material directory."), _("Error"), wx.ICON_ERROR|wx.OK)
 		
 		self.reset_grid()
 	
@@ -649,9 +649,9 @@ class manage_materials_dialog(wx.Dialog):
 		row = self.material_grid.GetGridCursorRow()
 		
 		if self.catalogs[self.materials[row][0]].is_default_material_catalog() or not self.allow_modifications:
-			self.context_menu.SetLabel(self.view_modify_ID, "&View")
+			self.context_menu.SetLabel(self.view_modify_ID, _("&View"))
 		else:
-			self.context_menu.SetLabel(self.view_modify_ID, "&View/Modify")
+			self.context_menu.SetLabel(self.view_modify_ID, _("&View/Modify"))
 		
 		if self.materials[row][2]:
 			if self.catalogs[self.materials[row][0]].is_default_material_catalog():
@@ -715,7 +715,7 @@ class manage_materials_dialog(wx.Dialog):
 			try:
 				catalog.add_material(material)
 			except (OSError, IOError):
-				wx.MessageBox("Cannot write modified material. Check permissions to the user material directory.", "Error", wx.ICON_ERROR|wx.OK)
+				wx.MessageBox(_("Cannot write modified material. Check permissions to the user material directory."), _("Error"), wx.ICON_ERROR|wx.OK)
 			else:
 				self.materials[row] = (self.materials[row][0], self.materials[row][1], material)
 		
@@ -737,10 +737,10 @@ class manage_materials_dialog(wx.Dialog):
 		
 		if self.has_user_catalog and self.allow_modifications:
 			if self.catalogs[self.materials[row][0]].is_default_material_catalog():
-				self.view_modify_button.SetLabel("View")
+				self.view_modify_button.SetLabel(_("View"))
 				self.remove_button.Disable()
 			else:
-				self.view_modify_button.SetLabel("View/Modify")
+				self.view_modify_button.SetLabel(_("View/Modify"))
 				self.remove_button.Enable()
 			self.new_button.Enable()
 			if self.materials[row][2]:
@@ -749,7 +749,7 @@ class manage_materials_dialog(wx.Dialog):
 				self.copy_button.Disable()
 			self.import_button.Enable()
 		else:
-			self.view_modify_button.SetLabel("View")
+			self.view_modify_button.SetLabel(_("View"))
 			self.view_modify_button.Enable()
 			self.new_button.Disable()
 			self.copy_button.Disable()
@@ -801,7 +801,7 @@ class material_dialog(wx.Dialog):
 		
 		title = self.title + " - " + self.material.get_name()
 		
-		wx.Dialog.__init__(self, parent, -1, title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -810,7 +810,7 @@ class material_dialog(wx.Dialog):
 		self.description_box = wx.TextCtrl(self, -1, "", size = (-1, -1))
 		
 		description_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		description_sizer.Add(wx.StaticText(self, -1, "Description:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		description_sizer.Add(wx.StaticText(self, -1, _("Description:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		description_sizer.Add(self.description_box, 1, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT|wx.ALIGN_RIGHT|wx.LEFT, 5)
 		self.main_sizer.Add(description_sizer, 0, wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT, 10)
 		
@@ -1091,9 +1091,9 @@ class material_constant_dialog(material_dialog):
 		
 		properties_sizer = wx.BoxSizer(wx.HORIZONTAL)
 		
-		properties_sizer.Add(wx.StaticText(self, -1, "n:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer.Add(wx.StaticText(self, -1, _("n:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer.Add(self.n_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		properties_sizer.Add(wx.StaticText(self, -1, "k:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		properties_sizer.Add(wx.StaticText(self, -1, _("k:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		properties_sizer.Add(self.k_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		self.main_sizer.Add(properties_sizer, 0, wx.TOP|wx.LEFT|wx.RIGHT, 10)
@@ -1256,13 +1256,13 @@ class material_table_dialog(material_dialog):
 		self.grid = wx.grid.Grid(self, -1, size = (600, 200), style = wx.SUNKEN_BORDER)
 		self.grid.CreateGrid(0, 3)
 		self.grid.SetColSize(0, 140)
-		self.grid.SetColLabelValue(0, "Wavelength (nm)")
+		self.grid.SetColLabelValue(0, _("Wavelength (nm)"))
 		self.grid.SetColSize(1, 100)
-		self.grid.SetColLabelValue(1, "n")
+		self.grid.SetColLabelValue(1, _("n"))
 		self.grid.SetColSize(2, 100)
-		self.grid.SetColLabelValue(2, "k")
+		self.grid.SetColLabelValue(2, _("k"))
 		
-		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.on_cell_change)
+		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.on_cell_change)
 		
 		# Disable resizing of the grid.
 		self.grid.DisableDragColSize()
@@ -1273,7 +1273,7 @@ class material_table_dialog(material_dialog):
 		
 		# Put the nb points box in a sizer.
 		nb_wvls_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_wvls_sizer.Add(wx.StaticText(self, -1, "Nb wavelengths:"),
+		nb_wvls_sizer.Add(wx.StaticText(self, -1, _("Nb wavelengths:")),
 		                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		nb_wvls_sizer.Add(self.nb_wvls_box,
 		                  0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -1526,18 +1526,18 @@ class material_Cauchy_dialog(material_dialog):
 		properties_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		properties_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		properties_sizer_1.Add(wx.StaticText(self, -1, "A:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_1.Add(wx.StaticText(self, -1, _("A:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1.Add(self.A_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		properties_sizer_1.Add(wx.StaticText(self, -1, "B:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		properties_sizer_1.Add(wx.StaticText(self, -1, _("B:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		properties_sizer_1.Add(self.B_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		properties_sizer_1.Add(wx.StaticText(self, -1, "C:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		properties_sizer_1.Add(wx.StaticText(self, -1, _("C:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		properties_sizer_1.Add(self.C_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		properties_sizer_2.Add(wx.StaticText(self, -1, "A_k:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_2.Add(wx.StaticText(self, -1, _("A_k:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_2.Add(self.A_k_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		properties_sizer_2.Add(wx.StaticText(self, -1, "Exponent:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		properties_sizer_2.Add(wx.StaticText(self, -1, _("Exponent:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		properties_sizer_2.Add(self.exponent_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		properties_sizer_2.Add(wx.StaticText(self, -1, "Edge:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		properties_sizer_2.Add(wx.StaticText(self, -1, _("Edge:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		properties_sizer_2.Add(self.edge_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		properties_sizer.Add(properties_sizer_1, 0)
@@ -1747,22 +1747,22 @@ class material_Sellmeier_dialog(material_dialog):
 		properties_sizer_1_6 = wx.BoxSizer(wx.HORIZONTAL)
 		properties_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		properties_sizer_1_1.Add(wx.StaticText(self, -1, "B1:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_1_1.Add(wx.StaticText(self, -1, _("B1:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1_1.Add(self.B1_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		properties_sizer_1_2.Add(wx.StaticText(self, -1, "B2:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_1_2.Add(wx.StaticText(self, -1, _("B2:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1_2.Add(self.B2_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		properties_sizer_1_3.Add(wx.StaticText(self, -1, "B3:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_1_3.Add(wx.StaticText(self, -1, _("B3:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1_3.Add(self.B3_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		properties_sizer_1_4.Add(wx.StaticText(self, -1, "C1:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_1_4.Add(wx.StaticText(self, -1, _("C1:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1_4.Add(self.C1_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		properties_sizer_1_5.Add(wx.StaticText(self, -1, "C2:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_1_5.Add(wx.StaticText(self, -1, _("C2:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1_5.Add(self.C2_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		properties_sizer_1_6.Add(wx.StaticText(self, -1, "C3:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_1_6.Add(wx.StaticText(self, -1, _("C3:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1_6.Add(self.C3_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		properties_sizer_1.Add(properties_sizer_1_1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
@@ -1772,11 +1772,11 @@ class material_Sellmeier_dialog(material_dialog):
 		properties_sizer_1.Add(properties_sizer_1_5, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_1.Add(properties_sizer_1_6, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		
-		properties_sizer_2.Add(wx.StaticText(self, -1, "A_k:"), 0, wx.ALIGN_CENTER_VERTICAL)
+		properties_sizer_2.Add(wx.StaticText(self, -1, _("A_k:")), 0, wx.ALIGN_CENTER_VERTICAL)
 		properties_sizer_2.Add(self.A_k_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		properties_sizer_2.Add(wx.StaticText(self, -1, "Exponent:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		properties_sizer_2.Add(wx.StaticText(self, -1, _("Exponent:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		properties_sizer_2.Add(self.exponent_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
-		properties_sizer_2.Add(wx.StaticText(self, -1, "Edge:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
+		properties_sizer_2.Add(wx.StaticText(self, -1, _("Edge:")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 15)
 		properties_sizer_2.Add(self.edge_box, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		properties_sizer.Add(properties_sizer_1, 0)
@@ -1982,13 +1982,13 @@ class material_mixture_constant_dialog(material_mixture_dialog):
 		self.grid = wx.grid.Grid(self, -1, size = (600, 200), style = wx.SUNKEN_BORDER)
 		self.grid.CreateGrid(0, 3)
 		self.grid.SetColSize(0, 80)
-		self.grid.SetColLabelValue(0, "Mixture")
+		self.grid.SetColLabelValue(0, _("Mixture"))
 		self.grid.SetColSize(1, 100)
-		self.grid.SetColLabelValue(1, "n")
+		self.grid.SetColLabelValue(1, _("n"))
 		self.grid.SetColSize(2, 100)
-		self.grid.SetColLabelValue(2, "k")
+		self.grid.SetColLabelValue(2, _("k"))
 		
-		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.on_cell_change)
+		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.on_cell_change)
 		
 		# Disable resizing of the grid.
 		self.grid.DisableDragColSize()
@@ -1999,7 +1999,7 @@ class material_mixture_constant_dialog(material_mixture_dialog):
 		
 		# Put the nb points box in a sizer.
 		nb_mixtures_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_mixtures_sizer.Add(wx.StaticText(self, -1, "Nb mixtures:"),
+		nb_mixtures_sizer.Add(wx.StaticText(self, -1, _("Nb mixtures:")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		nb_mixtures_sizer.Add(self.nb_mixtures_box,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -2255,10 +2255,10 @@ class material_mixture_table_dialog(material_mixture_dialog):
 		self.grid = wx.grid.Grid(self, -1, size = (600, 200), style = wx.SUNKEN_BORDER)
 		self.grid.CreateGrid(1, 1)
 		self.grid.SetColSize(0, 120)
-		self.grid.SetColLabelValue(0, "Wavelength")
+		self.grid.SetColLabelValue(0, _("Wavelength"))
 		self.grid.SetRowLabelValue(0, "Mixture")
 		
-		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.on_cell_change)
+		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.on_cell_change)
 		
 		# Disable resizing of the grid.
 		self.grid.DisableDragColSize()
@@ -2269,14 +2269,14 @@ class material_mixture_table_dialog(material_mixture_dialog):
 		
 		# Put the nb points box in a sizer.
 		nb_mixtures_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_mixtures_sizer.Add(wx.StaticText(self, -1, "Nb mixtures:"),
+		nb_mixtures_sizer.Add(wx.StaticText(self, -1, _("Nb mixtures:")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		nb_mixtures_sizer.Add(self.nb_mixtures_box,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
 		# Put the nb points box in a sizer.
 		nb_wavelengths_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_wavelengths_sizer.Add(wx.StaticText(self, -1, "Nb wavelengths:"),
+		nb_wavelengths_sizer.Add(wx.StaticText(self, -1, _("Nb wavelengths:")),
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		nb_wavelengths_sizer.Add(self.nb_wvls_box,
 		                         0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -2607,21 +2607,21 @@ class material_mixture_Cauchy_dialog(material_mixture_dialog):
 		self.grid = wx.grid.Grid(self, -1, size = (600, 200), style = wx.SUNKEN_BORDER)
 		self.grid.CreateGrid(0, 7)
 		self.grid.SetColSize(0, 80)
-		self.grid.SetColLabelValue(0, "Mixture")
+		self.grid.SetColLabelValue(0, _("Mixture"))
 		self.grid.SetColSize(1, 100)
-		self.grid.SetColLabelValue(1, "A")
+		self.grid.SetColLabelValue(1, _("A"))
 		self.grid.SetColSize(2, 100)
-		self.grid.SetColLabelValue(2, "B")
+		self.grid.SetColLabelValue(2, _("B"))
 		self.grid.SetColSize(3, 100)
-		self.grid.SetColLabelValue(3, "C")
+		self.grid.SetColLabelValue(3, _("C"))
 		self.grid.SetColSize(4, 100)
-		self.grid.SetColLabelValue(4, "A_k")
+		self.grid.SetColLabelValue(4, _("A_k"))
 		self.grid.SetColSize(5, 100)
-		self.grid.SetColLabelValue(5, "exponent")
+		self.grid.SetColLabelValue(5, _("exponent"))
 		self.grid.SetColSize(6, 100)
-		self.grid.SetColLabelValue(6, "edge")
+		self.grid.SetColLabelValue(6, _("edge"))
 		
-		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.on_cell_change)
+		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.on_cell_change)
 		
 		# Disable resizing of the grid.
 		self.grid.DisableDragColSize()
@@ -2632,7 +2632,7 @@ class material_mixture_Cauchy_dialog(material_mixture_dialog):
 		
 		# Put the nb points box in a sizer.
 		nb_mixtures_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_mixtures_sizer.Add(wx.StaticText(self, -1, "Nb mixtures:"),
+		nb_mixtures_sizer.Add(wx.StaticText(self, -1, _("Nb mixtures:")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		nb_mixtures_sizer.Add(self.nb_mixtures_box,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -2892,27 +2892,27 @@ class material_mixture_Sellmeier_dialog(material_mixture_dialog):
 		self.grid = wx.grid.Grid(self, -1, size = (600, 200), style = wx.SUNKEN_BORDER)
 		self.grid.CreateGrid(0, 10)
 		self.grid.SetColSize(0, 80)
-		self.grid.SetColLabelValue(0, "Mixture")
+		self.grid.SetColLabelValue(0, _("Mixture"))
 		self.grid.SetColSize(1, 100)
-		self.grid.SetColLabelValue(1, "B1")
+		self.grid.SetColLabelValue(1, _("B1"))
 		self.grid.SetColSize(2, 100)
-		self.grid.SetColLabelValue(2, "C1")
+		self.grid.SetColLabelValue(2, _("C1"))
 		self.grid.SetColSize(3, 100)
-		self.grid.SetColLabelValue(3, "B2")
+		self.grid.SetColLabelValue(3, _("B2"))
 		self.grid.SetColSize(4, 100)
-		self.grid.SetColLabelValue(4, "C2")
+		self.grid.SetColLabelValue(4, _("C2"))
 		self.grid.SetColSize(5, 100)
-		self.grid.SetColLabelValue(5, "B3")
+		self.grid.SetColLabelValue(5, _("B3"))
 		self.grid.SetColSize(6, 100)
-		self.grid.SetColLabelValue(6, "C3")
+		self.grid.SetColLabelValue(6, _("C3"))
 		self.grid.SetColSize(7, 100)
-		self.grid.SetColLabelValue(7, "A_k")
+		self.grid.SetColLabelValue(7, _("A_k"))
 		self.grid.SetColSize(8, 100)
-		self.grid.SetColLabelValue(8, "exponent")
+		self.grid.SetColLabelValue(8, _("exponent"))
 		self.grid.SetColSize(9, 100)
-		self.grid.SetColLabelValue(9, "edge")
+		self.grid.SetColLabelValue(9, _("edge"))
 		
-		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.on_cell_change)
+		self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGED, self.on_cell_change)
 		
 		# Disable resizing of the grid.
 		self.grid.DisableDragColSize()
@@ -2923,7 +2923,7 @@ class material_mixture_Sellmeier_dialog(material_mixture_dialog):
 		
 		# Put the nb points box in a sizer.
 		nb_mixtures_sizer = wx.BoxSizer(wx.HORIZONTAL)
-		nb_mixtures_sizer.Add(wx.StaticText(self, -1, "Nb mixtures:"),
+		nb_mixtures_sizer.Add(wx.StaticText(self, -1, _("Nb mixtures:")),
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		nb_mixtures_sizer.Add(self.nb_mixtures_box,
 		                      0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
@@ -3236,7 +3236,7 @@ class new_material_dialog(wx.Dialog):
 		else:
 			title = "New material"
 		
-		wx.Dialog.__init__(self, parent, -1, title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -3245,28 +3245,28 @@ class new_material_dialog(wx.Dialog):
 		self.name_box = wx.TextCtrl(self, -1, "", validator = new_material_name_validator(catalog))
 		self.name_box.SetMaxLength(251)
 		
-		self.regular_button = wx.RadioButton(self, -1, "regular", style = wx.RB_GROUP)
-		self.mixture_button = wx.RadioButton(self, -1, "mixture")
+		self.regular_button = wx.RadioButton(self, -1, _("regular"), style = wx.RB_GROUP)
+		self.mixture_button = wx.RadioButton(self, -1, _("mixture"))
 		
-		self.constant_button = wx.RadioButton(self, -1, "constant", style = wx.RB_GROUP)
-		self.table_button = wx.RadioButton(self, -1, "table")
-		self.Cauchy_button = wx.RadioButton(self, -1, "Cauchy")
-		self.Sellmeier_button = wx.RadioButton(self, -1, "Sellmeier")
+		self.constant_button = wx.RadioButton(self, -1, _("constant"), style = wx.RB_GROUP)
+		self.table_button = wx.RadioButton(self, -1, _("table"))
+		self.Cauchy_button = wx.RadioButton(self, -1, _("Cauchy"))
+		self.Sellmeier_button = wx.RadioButton(self, -1, _("Sellmeier"))
 		
 		sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
 		sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
 		sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		sizer_1.Add(wx.StaticText(self, -1, "Name:"),
+		sizer_1.Add(wx.StaticText(self, -1, _("Name:")),
 		            0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(self.name_box, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		
-		sizer_2.Add(wx.StaticText(self, -1, "Kind:"),
+		sizer_2.Add(wx.StaticText(self, -1, _("Kind:")),
 		            0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_2.Add(self.regular_button, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_2.Add(self.mixture_button, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		
-		sizer_3.Add(wx.StaticText(self, -1, "Model:"),
+		sizer_3.Add(wx.StaticText(self, -1, _("Model:")),
 		            0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_3.Add(self.constant_button, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_3.Add(self.table_button, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
@@ -3386,7 +3386,7 @@ class import_material_dialog(wx.Dialog):
 		This method takes 1 argument:
 		  parent    the parent window."""
 		
-		wx.Dialog.__init__(self, parent, -1, self.title, style = wx.CAPTION)
+		wx.Dialog.__init__(self, parent, -1, _(self.title), style = wx.CAPTION)
 		
 		self.SetAutoLayout(True)
 		self.main_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -3407,8 +3407,8 @@ class import_material_dialog(wx.Dialog):
 			self.unit_radio_buttons[unit] = unit_radio_button
 			self.Bind(wx.EVT_RADIOBUTTON, self.on_unit_radio_button, unit_radio_button)
 		
-		self.refractive_index_button = wx.RadioButton(self, -1, "refractive index", style = wx.RB_GROUP)
-		self.relative_permittivity_button = wx.RadioButton(self, -1, "relative permittivity")
+		self.refractive_index_button = wx.RadioButton(self, -1, _("refractive index"), style = wx.RB_GROUP)
+		self.relative_permittivity_button = wx.RadioButton(self, -1, _("relative permittivity"))
 		
 		content_sizer = wx.BoxSizer(wx.VERTICAL)
 		
@@ -3418,20 +3418,20 @@ class import_material_dialog(wx.Dialog):
 		sizer_4 = wx.BoxSizer(wx.HORIZONTAL)
 		sizer_5 = wx.BoxSizer(wx.HORIZONTAL)
 		
-		sizer_1.Add(wx.StaticText(self, -1, "Name:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_1.Add(wx.StaticText(self, -1, _("Name:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_1.Add(self.name_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		sizer_2.Add(wx.StaticText(self, -1, "Description:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_2.Add(wx.StaticText(self, -1, _("Description:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_2.Add(self.description_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		sizer_3.Add(wx.StaticText(self, -1, "Header lines:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_3.Add(wx.StaticText(self, -1, _("Header lines:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_3.Add(self.nb_header_lines_box, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		sizer_4.Add(wx.StaticText(self, -1, "Wavelength units:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_4.Add(wx.StaticText(self, -1, _("Wavelength units:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		for unit in units.WAVELENGTH_UNITS:
 			sizer_4.Add(self.unit_radio_buttons[unit], 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		
-		sizer_5.Add(wx.StaticText(self, -1, "Refractive index format:"), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
+		sizer_5.Add(wx.StaticText(self, -1, _("Refractive index format:")), 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL)
 		sizer_5.Add(self.refractive_index_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		sizer_5.Add(self.relative_permittivity_button, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5)
 		

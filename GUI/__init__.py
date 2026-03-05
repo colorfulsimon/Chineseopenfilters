@@ -25,6 +25,24 @@
 
 import wx
 
+# Compatibility aliases for wxPython Phoenix file dialog flags.
+if not hasattr(wx, "OPEN"):
+	wx.OPEN = wx.FD_OPEN
+if not hasattr(wx, "SAVE"):
+	wx.SAVE = wx.FD_SAVE
+if not hasattr(wx, "OVERWRITE_PROMPT"):
+	wx.OVERWRITE_PROMPT = wx.FD_OVERWRITE_PROMPT
+if not hasattr(wx, "CHANGE_DIR"):
+	wx.CHANGE_DIR = wx.FD_CHANGE_DIR
+
+# wxPython Phoenix is stricter about invalid sizer flags than the legacy
+# wx used by upstream OpenFilters. During migration we disable the runtime
+# consistency assertions to keep dialogs usable.
+try:
+	wx.SizerFlags.DisableConsistencyChecks()
+except AttributeError:
+	pass
+
 from . import GUI_calculate
 from . import GUI_color
 from . import GUI_filter_grid
