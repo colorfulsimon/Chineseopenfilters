@@ -46,6 +46,25 @@ N_class = N
 
 
 two_pi = 2.0*math.pi
+_MAX_HYPERBOLIC_ARG = 700.0
+
+
+def _safe_complex_trig(z):
+	"""Return sin(z), cos(z) while avoiding overflow for huge imaginary parts."""
+
+	imag = z.imag
+	if imag > _MAX_HYPERBOLIC_ARG:
+		imag = _MAX_HYPERBOLIC_ARG
+	elif imag < -_MAX_HYPERBOLIC_ARG:
+		imag = -_MAX_HYPERBOLIC_ARG
+
+	cosh_imag = math.cosh(imag)
+	sinh_imag = math.sinh(imag)
+	real = z.real
+
+	sin_z = complex(math.sin(real) * cosh_imag, math.cos(real) * sinh_imag)
+	cos_z = complex(math.cos(real) * cosh_imag, -math.sin(real) * sinh_imag)
+	return sin_z, cos_z
 
 
 
@@ -219,9 +238,10 @@ class dM(matrices):
 			
 			dphi = k*N_s
 			phi = dphi*thickness
-			j_cos_phi_dphi = 1.0j*cmath.cos(phi)*dphi
-			
-			self.s[i][0] = self.s[i][3] = self.p[i][0] = self.p[i][3] = -cmath.sin(phi)*dphi
+			sin_phi, cos_phi = _safe_complex_trig(phi)
+			j_cos_phi_dphi = 1.0j*cos_phi*dphi
+
+			self.s[i][0] = self.s[i][3] = self.p[i][0] = self.p[i][3] = -sin_phi*dphi
 			self.s[i][1] = j_cos_phi_dphi/N_s
 			self.p[i][1] = j_cos_phi_dphi/N_p
 			self.s[i][2] = N_s*j_cos_phi_dphi
@@ -266,10 +286,10 @@ class dM(matrices):
 			dN_s = N.N[i]/N_s
 			dN_p = dN_s * (2.0 - dN_s*dN_s)
 			dphi = k*thickness*dN_s
-			sin_phi = cmath.sin(phi)
+			sin_phi, cos_phi = _safe_complex_trig(phi)
 			j_sin_phi_dN_s = 1.0j*sin_phi*dN_s
 			j_sin_phi_dN_p = 1.0j*sin_phi*dN_p
-			j_cos_phi_dphi = 1.0j*cmath.cos(phi)*dphi
+			j_cos_phi_dphi = 1.0j*cos_phi*dphi
 			
 			self.s[i][0] = self.s[i][3] = self.p[i][0] = self.p[i][3] = -sin_phi*dphi * dN.N[i]
 			self.s[i][1] = (j_cos_phi_dphi/N_s - j_sin_phi_dN_s/(N_s*N_s)) * dN.N[i]
@@ -347,10 +367,10 @@ class dM(matrices):
 			dphi_dN = k*thickness*dN_s;
 			dphi_dd = k*N_s;
 			dphi_dn_0 = dphi_dN*dN.N[i] + dphi_dd*dd_dn_0;
-			sin_phi = cmath.sin(phi);
+			sin_phi, cos_phi = _safe_complex_trig(phi)
 			j_sin_phi_dN_s_dn_0 = 1.0j*sin_phi*dN_s*dN.N[i];
 			j_sin_phi_dN_p_dn_0 = 1.0j*sin_phi*dN_p*dN.N[i];
-			j_cos_phi_dphi_dn_0 = 1.0j*cmath.cos(phi)*dphi_dn_0;
+			j_cos_phi_dphi_dn_0 = 1.0j*cos_phi*dphi_dn_0;
 
 			self.s[i][0] = self.s[i][3] = self.p[i][0] = self.p[i][3] = -sin_phi*dphi_dn_0;
 			self.s[i][1] = j_cos_phi_dphi_dn_0/N_s - j_sin_phi_dN_s_dn_0/(N_s*N_s);

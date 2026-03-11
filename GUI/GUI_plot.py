@@ -2556,8 +2556,23 @@ class plot(wx.Window):
 					else:
 						lines[-1].append(i)
 						line_lengths[-1] += 2*self.font_size+extent[i]
-			
-			self.legend_height = limited_int((1.5*nb_lines-0.5+1)*self.font_size)
+
+			# Keep a minimum drawable area for the axes: with many curves,
+			# an unconstrained legend can consume the whole panel.
+			min_space_for_axes = 6.0 * self.font_size
+			max_legend_height = max(0.0, height - min_space_for_axes)
+			max_lines = int(math.floor((max_legend_height / float(self.font_size) - 0.5) / 1.5))
+			if max_lines < 0:
+				max_lines = 0
+			if nb_lines > max_lines:
+				nb_lines = max_lines
+				lines = lines[:nb_lines]
+				line_lengths = line_lengths[:nb_lines]
+
+			if nb_lines:
+				self.legend_height = limited_int((1.5*nb_lines-0.5+1)*self.font_size)
+			else:
+				self.legend_height = 0
 			self.legend_width = width
 		
 		# Draw the legend.

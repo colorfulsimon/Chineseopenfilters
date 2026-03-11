@@ -1239,7 +1239,7 @@ class random_errors_dialog(wx.Dialog):
 		
 		position = 0
 		for data_type, plot in self.plots.items():
-			page_index = self.result_notebook.GetPageIndex(plot)
+			page_index = self.result_notebook.FindPage(plot)
 			should_show = data_type in data_types
 			if should_show:
 				if page_index == wx.NOT_FOUND:
