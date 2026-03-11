@@ -319,25 +319,21 @@ class main_window(wx.Frame):
 		# generate noisy warnings at startup.
 		system = platform.system()
 		icon = None
-		if system == "Windows" and main_directory.main_is_frozen():
+		if system == "Darwin":
+			# On macOS, the app icon should come from the bundle metadata.
+			# Loading .ico/.icns through wx can emit warnings on some builds.
+			icon = None
+		elif system == "Windows" and main_directory.main_is_frozen():
 			executable_name = os.path.join(directory, "OpenFilters.exe")
 			if os.path.exists(executable_name):
 				icon = wx.Icon(executable_name, wx.BITMAP_TYPE_ICO)
 		else:
 			resource_dir = os.path.normpath(os.path.join(os.path.dirname(sys.executable), "..", "Resources"))
 			candidates = []
-			if system == "Darwin":
-				candidates = [
-					os.path.join(directory, "OpenFilters.icns"),
-					os.path.join(resource_dir, "OpenFilters.icns"),
-					os.path.join(directory, "OpenFilters.ico"),
-					os.path.join(resource_dir, "OpenFilters.ico"),
-				]
-			else:
-				candidates = [
-					os.path.join(directory, "OpenFilters.ico"),
-					os.path.join(directory, "OpenFilters.icns"),
-				]
+			candidates = [
+				os.path.join(directory, "OpenFilters.ico"),
+				os.path.join(directory, "OpenFilters.icns"),
+			]
 			for icon_filename in candidates:
 				if os.path.exists(icon_filename):
 					icon = wx.Icon(icon_filename, wx.BITMAP_TYPE_ANY)
