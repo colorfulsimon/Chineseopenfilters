@@ -1,0 +1,11 @@
+build_artifacts/
+dist/
+build/
+*.spec
+__pycache__/
+GUI/__pycache__/
+abeles/__pycache__/
+config/__pycache__/
+moremath/__pycache__/
+modules/__pycache__/
+
