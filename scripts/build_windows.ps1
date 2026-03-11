@@ -15,6 +15,7 @@ pyinstaller `
   --windowed `
   --name $AppName `
   --icon (Join-Path $Root "OpenFilters.ico") `
+  --paths $Root `
   --distpath $DistDir `
   --workpath $WorkDir `
   --specpath $SpecDir `
@@ -32,4 +33,3 @@ Compress-Archive -Path (Join-Path $DistDir "$AppName\*") -DestinationPath $ZipPa
 
 Write-Host "Windows package ready:"
 Write-Host "  $ZipPath"
-

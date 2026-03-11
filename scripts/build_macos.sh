@@ -26,6 +26,7 @@ pyinstaller \
   --windowed \
   --name "${APP_NAME}" \
   --icon "${ROOT_DIR}/OpenFilters.icns" \
+  --paths "${ROOT_DIR}" \
   --distpath "${DIST_DIR}" \
   --workpath "${WORK_DIR}" \
   --specpath "${SPEC_DIR}" \
@@ -51,4 +52,3 @@ hdiutil create \
 
 echo "macOS package ready:"
 echo "  ${DMG_PATH}"
-

@@ -61,13 +61,21 @@ def get_main_directory():
 	
 	
 	if main_is_frozen():
-		system = platform.system()
-		if system == "Windows":
-			pathname = os.path.dirname(sys.executable)
-		elif system == "Darwin":
-			pathname = os.environ["RESOURCEPATH"]
+		# PyInstaller provides an extraction/runtime directory.
+		if hasattr(sys, "_MEIPASS"):
+			pathname = sys._MEIPASS
 		else:
-			raise ValueError("Unknown operating system.")
+			system = platform.system()
+			if system == "Windows":
+				pathname = os.path.dirname(sys.executable)
+			elif system == "Darwin":
+				pathname = os.environ.get("RESOURCEPATH")
+				if not pathname:
+					pathname = os.path.normpath(
+						os.path.join(os.path.dirname(sys.executable), "..", "Resources")
+					)
+			else:
+				pathname = os.path.dirname(sys.executable)
 	
 	else:
 		pathname = os.path.dirname(__file__)
