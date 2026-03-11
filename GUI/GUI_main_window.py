@@ -314,17 +314,37 @@ class main_window(wx.Frame):
 		# startup is sometimes screwed up.
 		directory = main_directory.get_main_directory()
 		
-		# Set the icon. If the program is interpreted or ran on a Mac,
-		# read the icon from the ico file, if if was compiled with
-		# py2exe, load the ressource.
+		# Set the icon when available. On macOS app bundles already carry
+		# an icon, so failing to load a standalone .ico/.icns should not
+		# generate noisy warnings at startup.
 		system = platform.system()
+		icon = None
 		if system == "Windows" and main_directory.main_is_frozen():
 			executable_name = os.path.join(directory, "OpenFilters.exe")
-			icon = wx.Icon(executable_name, wx.BITMAP_TYPE_ICO)
+			if os.path.exists(executable_name):
+				icon = wx.Icon(executable_name, wx.BITMAP_TYPE_ICO)
 		else:
-			icon_filename = os.path.join(directory, "OpenFilters.ico")
-			icon = wx.Icon(icon_filename, wx.BITMAP_TYPE_ICO)
-		self.SetIcon(icon)
+			resource_dir = os.path.normpath(os.path.join(os.path.dirname(sys.executable), "..", "Resources"))
+			candidates = []
+			if system == "Darwin":
+				candidates = [
+					os.path.join(directory, "OpenFilters.icns"),
+					os.path.join(resource_dir, "OpenFilters.icns"),
+					os.path.join(directory, "OpenFilters.ico"),
+					os.path.join(resource_dir, "OpenFilters.ico"),
+				]
+			else:
+				candidates = [
+					os.path.join(directory, "OpenFilters.ico"),
+					os.path.join(directory, "OpenFilters.icns"),
+				]
+			for icon_filename in candidates:
+				if os.path.exists(icon_filename):
+					icon = wx.Icon(icon_filename, wx.BITMAP_TYPE_ANY)
+					if icon.IsOk():
+						break
+		if icon and icon.IsOk():
+			self.SetIcon(icon)
 		
 		self.Bind(wx.EVT_CLOSE, self.on_quit)
 		self.Bind(wx.EVT_SIZE, self.on_size)
